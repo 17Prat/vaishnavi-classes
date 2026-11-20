@@ -1,0 +1,53 @@
+version: '3.8'
+
+services:
+  # FeeFlow FastAPI Backend
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: feeflow-backend
+    ports:
+      - "8000:8000"
+    environment:
+      - DATABASE_URL=postgresql+asyncpg://feeflow_user:feeflow_password@postgres:5432/feeflow_db
+      - SECRET_KEY=feeflow-super-secret-jwt-key-change-in-production-2026-secure-token
+    volumes:
+      - ./backend/receipts_storage:/app/receipts_storage
+    depends_on:
+      postgres:
+        condition: service_healthy
+
+  # FeeFlow Next.js Frontend
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: feeflow-frontend
+    ports:
+      - "3000:3000"
+    environment:
+      - NEXT_PUBLIC_API_URL=http://backend:8000/api/v1
+    depends_on:
+      - backend
+
+  # PostgreSQL Service (can be replaced with Neon Cloud URL)
+  postgres:
+    image: postgres:16-alpine
+    container_name: feeflow-postgres
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_USER: feeflow_user
+      POSTGRES_PASSWORD: feeflow_password
+      POSTGRES_DB: feeflow_db
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U feeflow_user -d feeflow_db"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+volumes:
+  postgres_data:
