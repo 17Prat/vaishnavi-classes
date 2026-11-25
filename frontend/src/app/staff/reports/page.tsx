@@ -3,7 +3,7 @@
 import React, { useState, useEffect } from "react";
 import { DashboardLayout } from "@/components/layout/DashboardLayout";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
-import { apiFetch } from "@/lib/api";
+import { apiFetch, API_BASE_URL } from "@/lib/api";
 import { formatCurrency } from "@/lib/utils";
 import { BarChart3, Download } from "lucide-react";
 
@@ -33,7 +33,7 @@ export default function StaffReportsPage() {
             </p>
           </div>
           <a
-            href="http://127.0.0.1:8000/api/v1/reports/export/csv?report_type=payments"
+            href={`${API_BASE_URL}/reports/export/csv?report_type=payments`}
             target="_blank"
             rel="noreferrer"
             className="inline-flex items-center gap-1.5 px-3 py-2 bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg text-xs font-semibold shadow-xs"

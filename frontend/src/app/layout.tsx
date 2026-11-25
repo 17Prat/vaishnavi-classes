@@ -1,16 +1,15 @@
 import type { Metadata, Viewport } from "next";
-import { Inter } from "next/font/google";
 import "./globals.css";
 import { AuthProvider } from "@/lib/auth";
-
-const inter = Inter({ subsets: ["latin"] });
+import { FloatingWhatsAppButton } from "@/components/whatsapp/FloatingWhatsAppButton";
 
 export const metadata: Metadata = {
-  title: "FeeFlow — Production Fee Management System",
-  description: "Enterprise multi-role fee collection, installment tracking, automated receipts & instant WhatsApp reminders.",
+  title: "Vaishnavi Classes — Fee Management System",
+  description: "Official Portal for Vaishnavi Classes (Since 1996): course admissions, fee collection, installment tracking, and verified receipts.",
   manifest: "/manifest.json",
   icons: {
-    icon: "/favicon.ico",
+    icon: "/logo.png",
+    apple: "/logo.png",
   },
 };
 
@@ -32,9 +31,10 @@ export default function RootLayout({
       <head>
         <link rel="apple-touch-icon" href="/icon-192.png" />
       </head>
-      <body className={inter.className}>
+      <body className="font-sans antialiased selection:bg-indigo-500 selection:text-white">
         <AuthProvider>
           {children}
+          <FloatingWhatsAppButton />
         </AuthProvider>
       </body>
     </html>

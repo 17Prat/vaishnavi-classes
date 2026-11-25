@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { useAuth } from "@/lib/auth";
 import { Sidebar } from "@/components/layout/Sidebar";
@@ -15,10 +15,15 @@ interface DashboardLayoutProps {
 
 export function DashboardLayout({ children, allowedRoles }: DashboardLayoutProps) {
   const { user, isLoading } = useAuth();
+  const [mounted, setMounted] = useState(false);
   const router = useRouter();
 
   useEffect(() => {
-    if (!isLoading) {
+    setMounted(true);
+  }, []);
+
+  useEffect(() => {
+    if (mounted && !isLoading) {
       if (!user) {
         router.push("/login");
       } else if (allowedRoles && !allowedRoles.includes(user.role)) {
@@ -26,14 +31,20 @@ export function DashboardLayout({ children, allowedRoles }: DashboardLayoutProps
         router.push(`/${user.role}`);
       }
     }
-  }, [user, isLoading, allowedRoles, router]);
+  }, [user, isLoading, allowedRoles, router, mounted]);
 
-  if (isLoading || !user) {
+  // Prevent SSR hydration mismatch by showing consistent server loader until client mounted
+  if (!mounted || isLoading || !user) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-slate-50">
         <div className="flex flex-col items-center gap-3">
-          <div className="h-9 w-9 rounded-full border-3 border-indigo-600 border-t-transparent animate-spin" />
-          <p className="text-sm font-medium text-slate-500">Loading FeeFlow...</p>
+          <img
+            src="/logo.png"
+            alt="Vaishnavi Classes"
+            className="h-14 w-14 rounded-2xl shadow-md border border-slate-200"
+          />
+          <div className="h-5 w-5 rounded-full border-2 border-indigo-600 border-t-transparent animate-spin" />
+          <p className="text-xs font-semibold text-slate-700">Loading Vaishnavi Classes...</p>
         </div>
       </div>
     );

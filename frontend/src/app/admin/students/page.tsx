@@ -7,7 +7,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
 import { Dialog, DialogHeader, DialogTitle, DialogDescription, DialogFooter } from "@/components/ui/dialog";
-import { apiFetch } from "@/lib/api";
+import { apiFetch, API_BASE_URL } from "@/lib/api";
 import { formatCurrency, formatDate } from "@/lib/utils";
 import { Student, Course, Batch, FeePlan } from "@/types";
 import { RecordPaymentModal } from "@/components/payments/RecordPaymentModal";
@@ -134,7 +134,7 @@ export default function AdminStudentsPage() {
           </div>
           <div className="flex items-center gap-2">
             <a
-              href="http://127.0.0.1:8000/api/v1/students/export/csv"
+              href={`${API_BASE_URL}/students/export/csv`}
               target="_blank"
               rel="noreferrer"
               className="inline-flex items-center gap-1.5 px-3 py-2 bg-white border border-slate-200 hover:bg-slate-50 text-slate-700 rounded-lg text-xs font-semibold shadow-xs"

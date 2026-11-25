@@ -62,8 +62,12 @@ class PaymentOut(BaseModel):
 
 class ReminderRequest(BaseModel):
     student_id: str
-    template_type: str # upcoming_fee, due_today, overdue_fee, partial_payment, payment_confirmation
+    template_type: str # upcoming_fee, due_today, overdue_fee, partial_payment, payment_confirmation, custom
     installment_id: Optional[str] = None
+    recipient_phone: Optional[str] = None
+    custom_message: Optional[str] = None
+    custom_amount: Optional[float] = None
+    custom_due_date: Optional[str] = None
 
 class ReminderOut(BaseModel):
     id: str

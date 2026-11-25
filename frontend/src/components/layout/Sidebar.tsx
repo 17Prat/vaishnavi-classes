@@ -19,7 +19,8 @@ import {
   Wallet,
   Sparkles,
   ShieldCheck,
-  FileSpreadsheet
+  FileSpreadsheet,
+  MessageCircleQuestion
 } from "lucide-react";
 
 export function Sidebar() {
@@ -32,6 +33,7 @@ export function Sidebar() {
 
   const adminNav = [
     { label: "Dashboard", href: "/admin", icon: LayoutDashboard },
+    { label: "Website Enquiries", href: "/admin/enquiries", icon: MessageCircleQuestion },
     { label: "Students", href: "/admin/students", icon: Users },
     { label: "Staff & Roles", href: "/admin/staff", icon: UserCheck },
     { label: "Academic", href: "/admin/academic", icon: GraduationCap },
@@ -67,16 +69,18 @@ export function Sidebar() {
   return (
     <aside className="hidden lg:flex w-64 flex-col fixed inset-y-0 left-0 bg-white border-r border-slate-200 z-30 shadow-sm">
       {/* Brand */}
-      <div className="h-16 flex items-center px-6 border-b border-slate-100 gap-3">
-        <div className="h-9 w-9 rounded-xl bg-gradient-to-tr from-indigo-600 to-purple-600 flex items-center justify-center text-white shadow-md shadow-indigo-200">
-          <Sparkles className="h-5 w-5" />
-        </div>
-        <div>
-          <span className="font-bold text-lg tracking-tight bg-gradient-to-r from-indigo-700 to-purple-700 bg-clip-text text-transparent">
-            FeeFlow
+      <div className="h-16 flex items-center px-4 border-b border-slate-100 gap-3">
+        <img
+          src="/logo.png"
+          alt="Vaishnavi Classes"
+          className="h-10 w-10 rounded-xl object-cover shadow-sm border border-slate-200 flex-shrink-0"
+        />
+        <div className="min-w-0">
+          <span className="font-bold text-sm tracking-tight text-slate-900 block leading-tight truncate">
+            Vaishnavi Classes
           </span>
-          <span className="text-[10px] block font-semibold text-slate-400 tracking-wider uppercase">
-            {role} Portal
+          <span className="text-[10px] block font-semibold text-indigo-600 tracking-wider uppercase">
+            Since 1996 • {role}
           </span>
         </div>
       </div>
@@ -115,7 +119,7 @@ export function Sidebar() {
           <ShieldCheck className="h-4 w-4 text-emerald-600 shrink-0" />
           <div className="truncate">
             <p className="text-xs font-semibold text-slate-800 truncate">
-              {user.institute_name || "Apex Institute"}
+              {user.institute_name || "Vaishnavi Classes"}
             </p>
             <p className="text-[10px] text-slate-500 font-mono">
               ID: {user.login_id}

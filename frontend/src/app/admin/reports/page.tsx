@@ -5,7 +5,7 @@ import { DashboardLayout } from "@/components/layout/DashboardLayout";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { apiFetch } from "@/lib/api";
+import { apiFetch, API_BASE_URL } from "@/lib/api";
 import { formatCurrency, formatDate } from "@/lib/utils";
 import { BarChart3, Download, FileSpreadsheet, AlertTriangle } from "lucide-react";
 
@@ -44,7 +44,7 @@ export default function AdminReportsPage() {
           </div>
           <div className="flex items-center gap-2">
             <a
-              href="http://127.0.0.1:8000/api/v1/reports/export/csv?report_type=payments"
+              href={`${API_BASE_URL}/reports/export/csv?report_type=payments`}
               target="_blank"
               rel="noreferrer"
               className="inline-flex items-center gap-1.5 px-3 py-2 bg-white border border-slate-200 hover:bg-slate-50 text-slate-700 rounded-lg text-xs font-semibold shadow-xs"
@@ -52,7 +52,7 @@ export default function AdminReportsPage() {
               <Download className="h-3.5 w-3.5" /> Payments CSV
             </a>
             <a
-              href="http://127.0.0.1:8000/api/v1/reports/export/csv?report_type=fee_ledger"
+              href={`${API_BASE_URL}/reports/export/csv?report_type=fee_ledger`}
               target="_blank"
               rel="noreferrer"
               className="inline-flex items-center gap-1.5 px-3 py-2 bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg text-xs font-semibold shadow-xs"

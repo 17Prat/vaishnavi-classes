@@ -8,14 +8,14 @@ import { Input } from "@/components/ui/input";
 import { Building2, Save, CheckCircle2, ShieldCheck, QrCode } from "lucide-react";
 
 export default function AdminSettingsPage() {
-  const [name, setName] = useState("Apex Institute of Science & Technology");
-  const [code, setCode] = useState("APEX01");
-  const [email, setEmail] = useState("contact@apexinstitute.edu");
-  const [phone, setPhone] = useState("+91 98234 56789");
-  const [address, setAddress] = useState("742 Evergreen Road, Tech Hub Campus, Pune, MH 411001");
+  const [name, setName] = useState("Vaishnavi Classes");
+  const [code, setCode] = useState("VAISHNAVI01");
+  const [email, setEmail] = useState("contact@vaishnaviclasses.com");
+  const [phone, setPhone] = useState("+91 98765 43210");
+  const [address, setAddress] = useState("Main Campus, Vaishnavi Classes");
   const [currencySymbol, setCurrencySymbol] = useState("₹");
-  const [upiId, setUpiId] = useState("apexinstitute@upi");
-  const [receiptPrefix, setReceiptPrefix] = useState("REC-2026-");
+  const [upiId, setUpiId] = useState("vaishnaviclasses@upi");
+  const [receiptPrefix, setReceiptPrefix] = useState("REC-");
   const [saved, setSaved] = useState(false);
 
   const handleSave = (e: React.FormEvent) => {

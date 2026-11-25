@@ -1,7 +1,7 @@
 {
-  "name": "FeeFlow Fee Management System",
-  "short_name": "FeeFlow",
-  "description": "Production Fee Management System for Admins, Staff, and Students",
+  "name": "Vaishnavi Classes — Fee Management System",
+  "short_name": "Vaishnavi Classes",
+  "description": "Official Fee Management Portal for Vaishnavi Classes (Since 1996)",
   "start_url": "/",
   "display": "standalone",
   "background_color": "#ffffff",

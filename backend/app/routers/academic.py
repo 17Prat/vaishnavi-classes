@@ -67,6 +67,15 @@ async def create_course(
         duration_months=payload.duration_months
     )
     db.add(course)
+    await db.flush()
+
+    # Automatically create a default standard class for this course so batches work instantly
+    sc = SchoolClass(
+        course_id=course.id,
+        name=f"{course.name} (Main)",
+        code=f"{course.code}-SEC"
+    )
+    db.add(sc)
     await db.commit()
     await db.refresh(course)
     return course
@@ -148,8 +157,32 @@ async def create_batch(
     current_user: User = Depends(require_roles(["admin"])),
     db: AsyncSession = Depends(get_db)
 ):
+    # Verify or resolve class_id
+    sc_res = await db.execute(select(SchoolClass).where(SchoolClass.id == payload.class_id))
+    sc = sc_res.scalar_one_or_none()
+    target_class_id = payload.class_id
+
+    if not sc:
+        # Check if caller passed a course_id
+        c_res = await db.execute(select(Course).where(Course.id == payload.class_id))
+        course = c_res.scalar_one_or_none()
+        if course:
+            sc_first = await db.execute(select(SchoolClass).where(SchoolClass.course_id == course.id))
+            found_sc = sc_first.scalars().first()
+            if not found_sc:
+                found_sc = SchoolClass(
+                    course_id=course.id,
+                    name=f"{course.name} (Main)",
+                    code=f"{course.code}-SEC"
+                )
+                db.add(found_sc)
+                await db.flush()
+            target_class_id = found_sc.id
+        else:
+            raise HTTPException(status_code=404, detail="Selected Class or Course not found")
+
     b = Batch(
-        class_id=payload.class_id,
+        class_id=target_class_id,
         name=payload.name,
         code=payload.code,
         max_capacity=payload.max_capacity

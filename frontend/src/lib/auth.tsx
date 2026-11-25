@@ -16,14 +16,14 @@ interface AuthContextType {
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export function AuthProvider({ children }: { children: React.ReactNode }) {
-  const [user, setUser] = useState<User | null>(null);
   const [token, setToken] = useState<string | null>(null);
+  const [user, setUser] = useState<User | null>(null);
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    // Load stored token & user
-    const savedToken = localStorage.getItem("feeflow_token");
-    const savedUser = localStorage.getItem("feeflow_user");
+    // Validate / refresh from localStorage after client mounts
+    const savedToken = localStorage.getItem("vaishnavi_token") || localStorage.getItem("feeflow_token");
+    const savedUser = localStorage.getItem("vaishnavi_user") || localStorage.getItem("feeflow_user");
 
     if (savedToken && savedUser) {
       try {
@@ -32,6 +32,10 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       } catch {
         localStorage.removeItem("feeflow_token");
         localStorage.removeItem("feeflow_user");
+        localStorage.removeItem("vaishnavi_token");
+        localStorage.removeItem("vaishnavi_user");
+        setToken(null);
+        setUser(null);
       }
     }
     setIsLoading(false);

@@ -3,7 +3,7 @@
 import React, { useState, useEffect } from "react";
 import { DashboardLayout } from "@/components/layout/DashboardLayout";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
-import { apiFetch } from "@/lib/api";
+import { apiFetch, getReceiptPdfUrl } from "@/lib/api";
 import { formatCurrency, formatDate } from "@/lib/utils";
 import { Receipt } from "@/types";
 import { Receipt as ReceiptIcon, Download, QrCode } from "lucide-react";
@@ -69,7 +69,7 @@ export default function StudentReceiptsPage() {
 
                   <div className="pt-2">
                     <a
-                      href={`http://127.0.0.1:8000/receipts-pdf/${r.receipt_number}.pdf`}
+                      href={getReceiptPdfUrl(r.receipt_number)}
                       target="_blank"
                       rel="noreferrer"
                       className="w-full flex items-center justify-center gap-1.5 py-2 bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg font-semibold shadow-xs transition-colors"

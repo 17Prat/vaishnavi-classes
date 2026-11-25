@@ -1,0 +1,16 @@
+services:
+  - type: web
+    name: vaishnavi-classes-backend
+    env: python
+    rootDir: backend
+    buildCommand: pip install --no-cache-dir -r requirements.txt greenlet
+    startCommand: uvicorn app.main:app --host 0.0.0.0 --port $PORT
+    envVars:
+      - key: SECRET_KEY
+        generateValue: true
+      - key: BUSINESS_WHATSAPP_NUMBER
+        value: "919664257346"
+      - key: DEFAULT_INSTITUTE_NAME
+        value: "Vaishnavi Classes"
+      - key: CORS_ORIGINS
+        value: "*"

@@ -6,7 +6,7 @@ import { DashboardLayout } from "@/components/layout/DashboardLayout";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { apiFetch } from "@/lib/api";
+import { apiFetch, getReceiptPdfUrl } from "@/lib/api";
 import { formatCurrency, formatDate } from "@/lib/utils";
 import { useAuth } from "@/lib/auth";
 import { FeeLedger, Payment, Receipt } from "@/types";
@@ -192,7 +192,7 @@ export default function StudentDashboardPage() {
                         <span className="text-slate-500 text-[11px]">{formatDate(r.generated_at)} • {formatCurrency(r.amount_paid)}</span>
                       </div>
                       <a
-                        href={`http://127.0.0.1:8000/receipts-pdf/${r.receipt_number}.pdf`}
+                        href={getReceiptPdfUrl(r.receipt_number)}
                         target="_blank"
                         rel="noreferrer"
                         className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-indigo-50 hover:bg-indigo-100 text-indigo-700 rounded-lg text-xs font-semibold transition-colors"

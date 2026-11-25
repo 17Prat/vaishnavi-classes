@@ -8,7 +8,7 @@ import { Charts } from "@/components/dashboard/Charts";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { apiFetch } from "@/lib/api";
+import { apiFetch, getReceiptPdfUrl } from "@/lib/api";
 import { formatCurrency, formatDate } from "@/lib/utils";
 import { DashboardSummary, Payment } from "@/types";
 import { RecordPaymentModal } from "@/components/payments/RecordPaymentModal";
@@ -185,7 +185,7 @@ export default function AdminDashboardPage() {
                         <td className="py-3 px-3 text-right">
                           {p.receipt_number ? (
                             <a
-                              href={`http://127.0.0.1:8000/receipts-pdf/${p.receipt_number}.pdf`}
+                              href={getReceiptPdfUrl(p.receipt_number)}
                               target="_blank"
                               rel="noreferrer"
                               className="inline-flex items-center gap-1 text-indigo-600 hover:text-indigo-800 font-medium text-xs"

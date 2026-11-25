@@ -5,7 +5,7 @@ import { DashboardLayout } from "@/components/layout/DashboardLayout";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { apiFetch } from "@/lib/api";
+import { apiFetch, getReceiptPdfUrl } from "@/lib/api";
 import { formatCurrency, formatDate } from "@/lib/utils";
 import { Payment, Student } from "@/types";
 import { RecordPaymentModal } from "@/components/payments/RecordPaymentModal";
@@ -84,7 +84,7 @@ export default function StaffPaymentsPage() {
                       <td className="py-3 px-4 text-right">
                         {p.receipt_number && (
                           <a
-                            href={`http://127.0.0.1:8000/receipts-pdf/${p.receipt_number}.pdf`}
+                            href={getReceiptPdfUrl(p.receipt_number)}
                             target="_blank"
                             rel="noreferrer"
                             className="inline-flex items-center gap-1 text-indigo-600 hover:text-indigo-800 font-semibold text-xs"

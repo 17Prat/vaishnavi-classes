@@ -4,9 +4,10 @@ import React, { useState } from "react";
 import { Dialog, DialogHeader, DialogTitle, DialogDescription, DialogFooter } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { apiFetch } from "@/lib/api";
+import { apiFetch, BACKEND_BASE_URL } from "@/lib/api";
 import { Student } from "@/types";
-import { CheckCircle2, Download, ExternalLink } from "lucide-react";
+import { CheckCircle2, Download, ExternalLink, MessageSquareShare } from "lucide-react";
+import { WhatsAppModal } from "@/components/reminders/WhatsAppModal";
 
 interface RecordPaymentModalProps {
   open: boolean;
@@ -31,6 +32,8 @@ export function RecordPaymentModal({
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const [successResult, setSuccessResult] = useState<{ receipt_number: string; pdf_url: string } | null>(null);
+  const [showWhatsApp, setShowWhatsApp] = useState(false);
+  const selectedStudent = students.find((s) => s.id === studentId);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -90,16 +93,23 @@ export function RecordPaymentModal({
               Receipt No: <span className="font-mono font-semibold text-slate-800">{successResult.receipt_number}</span>
             </p>
           </div>
-          <div className="flex justify-center gap-3 pt-2">
+          <div className="flex flex-wrap justify-center gap-2 pt-2">
             <a
-              href={`http://127.0.0.1:8000${successResult.pdf_url}`}
+              href={`${BACKEND_BASE_URL}${successResult.pdf_url}`}
               target="_blank"
               rel="noreferrer"
-              className="inline-flex items-center gap-2 px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg text-sm font-medium shadow-sm transition-colors"
+              className="inline-flex items-center gap-1.5 px-3 py-2 bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg text-xs font-semibold shadow-sm transition-colors"
             >
-              <Download className="h-4 w-4" /> Download PDF Receipt
+              <Download className="h-3.5 w-3.5" /> PDF Receipt
             </a>
-            <Button variant="outline" onClick={handleClose}>Done</Button>
+            <Button
+              type="button"
+              onClick={() => setShowWhatsApp(true)}
+              className="bg-emerald-600 hover:bg-emerald-700 text-white text-xs gap-1.5 font-semibold"
+            >
+              <MessageSquareShare className="h-3.5 w-3.5" /> WhatsApp Receipt
+            </Button>
+            <Button variant="outline" size="sm" onClick={handleClose}>Done</Button>
           </div>
         </div>
       ) : (
@@ -188,6 +198,17 @@ export function RecordPaymentModal({
             </Button>
           </DialogFooter>
         </form>
+      )}
+
+      {showWhatsApp && selectedStudent && (
+        <WhatsAppModal
+          open={showWhatsApp}
+          onOpenChange={setShowWhatsApp}
+          studentId={selectedStudent.id}
+          studentName={selectedStudent.full_name}
+          phone={selectedStudent.guardian_phone || selectedStudent.phone || ""}
+          initialTemplate="payment_confirmation"
+        />
       )}
     </Dialog>
   );

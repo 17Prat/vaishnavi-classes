@@ -42,14 +42,16 @@ export default function LoginPage() {
       <div className="w-full max-w-md">
         {/* Branding header */}
         <div className="text-center mb-6">
-          <div className="h-12 w-12 rounded-2xl bg-gradient-to-tr from-indigo-600 to-purple-600 flex items-center justify-center text-white shadow-lg shadow-indigo-200 mx-auto mb-3">
-            <Sparkles className="h-6 w-6" />
-          </div>
+          <img
+            src="/logo.png"
+            alt="Vaishnavi Classes"
+            className="h-24 w-24 rounded-2xl shadow-xl mx-auto mb-3 object-cover border-2 border-white ring-4 ring-indigo-100"
+          />
           <h2 className="text-2xl font-bold tracking-tight text-slate-900">
-            FeeFlow Management System
+            Vaishnavi Classes
           </h2>
-          <p className="text-xs text-slate-500 mt-1">
-            Sign in to access your institutional fee portal
+          <p className="text-xs text-indigo-700 font-semibold mt-1">
+            Since 1996 • Official Fee Management Portal
           </p>
         </div>
 
@@ -107,42 +109,24 @@ export default function LoginPage() {
             {/* Quick Demo Credentials Switcher */}
             <div className="mt-6 pt-5 border-t border-slate-100">
               <p className="text-[11px] font-bold text-slate-500 uppercase tracking-wider mb-2.5 text-center">
-                Instant One-Click Demo Logins
+                Master Admin Login
               </p>
-              <div className="grid grid-cols-3 gap-2">
-                <button
-                  type="button"
-                  onClick={() => setDemoCredentials("ADM0001", "admin123")}
-                  className="p-2.5 rounded-xl border border-indigo-200 bg-indigo-50/50 hover:bg-indigo-100/60 transition-colors text-left group"
-                >
-                  <div className="flex items-center gap-1.5 text-indigo-700 font-bold text-xs">
-                    <Building2 className="h-3.5 w-3.5" /> Admin
-                  </div>
-                  <p className="text-[10px] text-slate-500 font-mono mt-0.5">ADM0001</p>
-                </button>
-
-                <button
-                  type="button"
-                  onClick={() => setDemoCredentials("STF0001", "staff123")}
-                  className="p-2.5 rounded-xl border border-emerald-200 bg-emerald-50/50 hover:bg-emerald-100/60 transition-colors text-left group"
-                >
-                  <div className="flex items-center gap-1.5 text-emerald-700 font-bold text-xs">
-                    <UserCheck className="h-3.5 w-3.5" /> Staff
-                  </div>
-                  <p className="text-[10px] text-slate-500 font-mono mt-0.5">STF0001</p>
-                </button>
-
-                <button
-                  type="button"
-                  onClick={() => setDemoCredentials("STU0001", "student123")}
-                  className="p-2.5 rounded-xl border border-purple-200 bg-purple-50/50 hover:bg-purple-100/60 transition-colors text-left group"
-                >
-                  <div className="flex items-center gap-1.5 text-purple-700 font-bold text-xs">
-                    <GraduationCap className="h-3.5 w-3.5" /> Student
-                  </div>
-                  <p className="text-[10px] text-slate-500 font-mono mt-0.5">STU0001</p>
-                </button>
-              </div>
+              <button
+                type="button"
+                onClick={() => setDemoCredentials("ADM0001", "admin123")}
+                className="w-full p-3 rounded-xl border border-indigo-200 bg-indigo-50/70 hover:bg-indigo-100/80 transition-colors flex items-center justify-between group"
+              >
+                <div className="flex items-center gap-2 text-indigo-700 font-bold text-xs">
+                  <Building2 className="h-4 w-4" /> Admin Account (Vaishnavi Classes)
+                </div>
+                <div className="text-right">
+                  <span className="text-xs font-mono font-bold text-slate-800">ADM0001</span>
+                  <span className="text-[10px] text-slate-500 block">Password: admin123</span>
+                </div>
+              </button>
+              <p className="text-[11px] text-slate-400 text-center mt-2">
+                Log in as Admin to add your courses, staff members, and students.
+              </p>
             </div>
           </CardContent>
           <CardFooter className="justify-center border-t border-slate-100 py-3 bg-slate-50/50 rounded-b-2xl">

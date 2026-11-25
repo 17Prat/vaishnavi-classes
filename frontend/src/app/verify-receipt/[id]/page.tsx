@@ -2,7 +2,7 @@
 
 import React, { useEffect, useState } from "react";
 import { useParams } from "next/navigation";
-import { apiFetch } from "@/lib/api";
+import { apiFetch, getReceiptPdfUrl } from "@/lib/api";
 import { formatCurrency } from "@/lib/utils";
 import { CheckCircle2, XCircle, Download, ShieldCheck, Building2 } from "lucide-react";
 
@@ -91,7 +91,7 @@ export default function VerifyReceiptPage() {
 
             <div className="pt-2">
               <a
-                href={`http://127.0.0.1:8000/receipts-pdf/${data.receipt_number}.pdf`}
+                href={getReceiptPdfUrl(data.receipt_number)}
                 target="_blank"
                 rel="noreferrer"
                 className="w-full flex items-center justify-center gap-2 py-3 bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl text-sm font-semibold shadow-md transition-colors"

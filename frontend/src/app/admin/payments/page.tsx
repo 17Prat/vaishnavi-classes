@@ -5,18 +5,20 @@ import { DashboardLayout } from "@/components/layout/DashboardLayout";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { apiFetch } from "@/lib/api";
+import { apiFetch, getReceiptPdfUrl } from "@/lib/api";
 import { formatCurrency, formatDate } from "@/lib/utils";
 import { Payment, Student } from "@/types";
 import { RecordPaymentModal } from "@/components/payments/RecordPaymentModal";
 import { VerifyPaymentModal } from "@/components/payments/VerifyPaymentModal";
-import { CreditCard, CheckCircle2, ShieldAlert, Download, RotateCcw } from "lucide-react";
+import { WhatsAppModal } from "@/components/reminders/WhatsAppModal";
+import { CreditCard, CheckCircle2, ShieldAlert, Download, RotateCcw, MessageSquareShare } from "lucide-react";
 
 export default function AdminPaymentsPage() {
   const [payments, setPayments] = useState<Payment[]>([]);
   const [students, setStudents] = useState<Student[]>([]);
   const [showRecordModal, setShowRecordModal] = useState(false);
   const [selectedVerifyPayment, setSelectedVerifyPayment] = useState<Payment | null>(null);
+  const [waPaymentStudent, setWaPaymentStudent] = useState<{ id: string; name: string; phone: string } | null>(null);
 
   const loadData = async () => {
     try {
@@ -180,14 +182,32 @@ export default function AdminPaymentsPage() {
                       </td>
                       <td className="py-3 px-4 text-right space-x-1">
                         {p.receipt_number && (
-                          <a
-                            href={`http://127.0.0.1:8000/receipts-pdf/${p.receipt_number}.pdf`}
-                            target="_blank"
-                            rel="noreferrer"
-                            className="inline-flex items-center gap-1 px-2.5 py-1 bg-indigo-50 text-indigo-700 hover:bg-indigo-100 rounded-lg text-xs font-semibold"
-                          >
-                            <Download className="h-3 w-3" /> PDF
-                          </a>
+                          <>
+                            <a
+                              href={getReceiptPdfUrl(p.receipt_number)}
+                              target="_blank"
+                              rel="noreferrer"
+                              className="inline-flex items-center gap-1 px-2.5 py-1 bg-indigo-50 text-indigo-700 hover:bg-indigo-100 rounded-lg text-xs font-semibold"
+                            >
+                              <Download className="h-3 w-3" /> PDF
+                            </a>
+                            <Button
+                              size="sm"
+                              variant="outline"
+                              onClick={() => {
+                                const st = students.find((s) => s.id === p.student_id);
+                                setWaPaymentStudent({
+                                  id: p.student_id,
+                                  name: p.student_name,
+                                  phone: st?.guardian_phone || st?.phone || "",
+                                });
+                              }}
+                              className="h-7 text-[11px] px-2 border-emerald-300 text-emerald-700 hover:bg-emerald-50"
+                              title="Send WhatsApp Receipt"
+                            >
+                              <MessageSquareShare className="h-3 w-3 mr-1" /> WhatsApp
+                            </Button>
+                          </>
                         )}
                         {p.status === "verified" && (
                           <Button
@@ -223,6 +243,17 @@ export default function AdminPaymentsPage() {
         onOpenChange={(op) => !op && setSelectedVerifyPayment(null)}
         onSuccess={loadData}
       />
+
+      {waPaymentStudent && (
+        <WhatsAppModal
+          open={!!waPaymentStudent}
+          onOpenChange={(op) => !op && setWaPaymentStudent(null)}
+          studentId={waPaymentStudent.id}
+          studentName={waPaymentStudent.name}
+          phone={waPaymentStudent.phone}
+          initialTemplate="payment_confirmation"
+        />
+      )}
     </DashboardLayout>
   );
 }

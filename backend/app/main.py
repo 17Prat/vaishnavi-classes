@@ -9,7 +9,7 @@ from app.services.seed_service import seed_initial_data
 from app.routers import (
     auth, dashboard, academic, students, staff,
     fees, payments, receipts, reminders, chat,
-    reports, notifications
+    reports, notifications, enquiries
 )
 
 @asynccontextmanager
@@ -58,6 +58,18 @@ app.include_router(reminders.router, prefix=settings.API_V1_STR)
 app.include_router(chat.router, prefix=settings.API_V1_STR)
 app.include_router(reports.router, prefix=settings.API_V1_STR)
 app.include_router(notifications.router, prefix=settings.API_V1_STR)
+app.include_router(enquiries.router, prefix=settings.API_V1_STR)
+
+@app.get("/")
+async def root():
+    return {
+        "service": settings.PROJECT_NAME,
+        "version": settings.VERSION,
+        "docs": "/docs",
+        "health": "/health",
+        "frontend": "http://localhost:3000",
+        "message": "Vaishnavi Classes Backend API is running. Access the user interface at http://localhost:3000"
+    }
 
 @app.get("/health")
 @app.get("/api/v1/health")

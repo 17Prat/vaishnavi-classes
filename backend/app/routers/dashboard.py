@@ -140,25 +140,30 @@ async def get_dashboard_charts(
             target=25000.0
         ))
 
-    # Monthly collection
-    monthly_items = [
-        CollectionTrendItem(period="Jan", collected=185000.0, target=200000.0),
-        CollectionTrendItem(period="Feb", collected=210000.0, target=200000.0),
-        CollectionTrendItem(period="Mar", collected=245000.0, target=220000.0),
-        CollectionTrendItem(period="Apr", collected=190000.0, target=220000.0),
-        CollectionTrendItem(period="May", collected=280000.0, target=250000.0),
-        CollectionTrendItem(period="Jun", collected=320000.0, target=300000.0),
-    ]
+    # Monthly collection calculated from real verified payments
+    monthly_items = []
+    month_names = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]
+    for m_idx in range(1, 13):
+        m_name = month_names[m_idx - 1]
+        r_m = await db.execute(
+            select(func.coalesce(func.sum(Payment.amount), 0)).where(
+                and_(
+                    Payment.institute_id == inst_id,
+                    Payment.status == "verified",
+                    func.strftime("%m", Payment.payment_date) == f"{m_idx:02d}" if "sqlite" in str(db.bind.url) else func.extract("month", Payment.payment_date) == m_idx
+                )
+            )
+        )
+        amt_m = r_m.scalar() or 0
+        monthly_items.append(CollectionTrendItem(period=m_name, collected=float(amt_m), target=0.0))
 
-    # Payment methods breakdown
+    # Payment methods breakdown from actual database records
     r_methods = await db.execute(
         select(Payment.payment_method, func.sum(Payment.amount))
         .where(and_(Payment.institute_id == inst_id, Payment.status == "verified"))
         .group_by(Payment.payment_method)
     )
     methods_dict = {row[0]: float(row[1]) for row in r_methods.all()}
-    if not methods_dict:
-        methods_dict = {"upi": 13750.0, "bank_transfer": 45000.0}
 
     return CollectionTrendOut(
         daily=daily_items,

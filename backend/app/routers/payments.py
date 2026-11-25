@@ -3,7 +3,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select, and_, func
 from sqlalchemy.orm import selectinload
 from typing import List, Optional
-from datetime import date, datetime
+from datetime import date, datetime, timedelta
 from decimal import Decimal
 from app.database import get_db
 from app.models.payment import Payment, PaymentAllocation, Receipt
@@ -170,11 +170,54 @@ async def record_payment(
     if not student:
         raise HTTPException(status_code=404, detail="Student not found")
 
-    if not student.fee_assignments:
-        raise HTTPException(status_code=400, detail="Student has no assigned fee plan")
-
-    fee_asgn = student.fee_assignments[0]
     pay_amount = Decimal(str(payload.amount))
+
+    if not student.fee_assignments:
+        # Check or create a standard fee plan for the institute
+        from app.models.fee import FeePlan
+        fp_res = await db.execute(select(FeePlan).where(FeePlan.institute_id == current_user.institute_id))
+        fee_plan = fp_res.scalars().first()
+        if not fee_plan:
+            fee_plan = FeePlan(
+                institute_id=current_user.institute_id,
+                name="General Tuition & Admission Plan",
+                description="Standard classes fee structure",
+                tuition_fee=pay_amount,
+                total_amount=pay_amount,
+                installment_frequency="full",
+                number_of_installments=1,
+                is_active=True
+            )
+            db.add(fee_plan)
+            await db.flush()
+
+        fee_asgn = StudentFeeAssignment(
+            student_id=student.id,
+            fee_plan_id=fee_plan.id,
+            base_amount=pay_amount,
+            discount_amount=Decimal("0.00"),
+            scholarship_amount=Decimal("0.00"),
+            net_payable=pay_amount,
+            total_paid=Decimal("0.00"),
+            remaining_balance=pay_amount,
+            status="pending"
+        )
+        db.add(fee_asgn)
+        await db.flush()
+
+        inst = Installment(
+            fee_assignment_id=fee_asgn.id,
+            title="Tuition & Admission Fee",
+            installment_number=1,
+            due_amount=pay_amount,
+            due_date=payload.payment_date or date.today(),
+            paid_amount=Decimal("0.00"),
+            status="pending"
+        )
+        db.add(inst)
+        await db.flush()
+    else:
+        fee_asgn = student.fee_assignments[0]
 
     # Duplicate check within 5 minutes with same amount & ref
     dup_stmt = select(Payment).where(
@@ -203,9 +246,18 @@ async def record_payment(
     db.add(payment)
     await db.flush()
 
+    # Query installments explicitly to ensure async safety
+    inst_stmt = (
+        select(Installment)
+        .where(Installment.fee_assignment_id == fee_asgn.id)
+        .order_by(Installment.installment_number.asc())
+    )
+    inst_res = await db.execute(inst_stmt)
+    installments_list = inst_res.scalars().all()
+
     # Allocate across installments
     remaining_to_allocate = pay_amount
-    for inst in sorted(fee_asgn.installments, key=lambda x: x.installment_number):
+    for inst in installments_list:
         if remaining_to_allocate <= 0:
             break
         pending_on_inst = inst.due_amount - inst.paid_amount
@@ -335,8 +387,16 @@ async def verify_payment(
     student = payment.student
     fee_asgn = student.fee_assignments[0]
 
+    inst_stmt = (
+        select(Installment)
+        .where(Installment.fee_assignment_id == fee_asgn.id)
+        .order_by(Installment.installment_number.asc())
+    )
+    inst_res = await db.execute(inst_stmt)
+    v_installments = inst_res.scalars().all()
+
     remaining_to_allocate = payment.amount
-    for inst in sorted(fee_asgn.installments, key=lambda x: x.installment_number):
+    for inst in v_installments:
         if remaining_to_allocate <= 0:
             break
         pending_on_inst = inst.due_amount - inst.paid_amount

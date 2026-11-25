@@ -18,6 +18,11 @@ node_modules/
 out/
 build/
 dist/
+*.tsbuildinfo
+
+# Generated storage
+receipts_storage/*.pdf
+backend/receipts_storage/*.pdf
 
 # Logs & temp
 *.log

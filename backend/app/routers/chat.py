@@ -63,6 +63,34 @@ async def websocket_chat_endpoint(websocket: WebSocket, user_id: str):
     except Exception:
         manager.disconnect(user_id, websocket)
 
+@router.get("/contacts")
+async def list_chat_contacts(
+    current_user: User = Depends(get_current_user),
+    db: AsyncSession = Depends(get_db)
+):
+    stmt = (
+        select(User)
+        .where(
+            and_(
+                User.institute_id == current_user.institute_id,
+                User.id != current_user.id
+            )
+        )
+        .order_by(User.role.asc(), User.full_name.asc())
+    )
+    res = await db.execute(stmt)
+    users = res.scalars().all()
+    return [
+        {
+            "id": u.id,
+            "login_id": u.login_id,
+            "full_name": u.full_name,
+            "role": u.role,
+            "phone": u.phone or ""
+        }
+        for u in users
+    ]
+
 @router.get("/conversations", response_model=List[ConversationOut])
 async def list_user_conversations(
     current_user: User = Depends(get_current_user),
@@ -81,6 +109,35 @@ async def list_user_conversations(
     )
     res = await db.execute(stmt)
     conversations = res.scalars().all()
+
+    # If user has no conversations yet, auto-create the default Campus Channel
+    if not conversations:
+        default_channel = Conversation(
+            institute_id=current_user.institute_id,
+            title="Vaishnavi Classes — Campus Notice & Chat Channel",
+            is_direct=False,
+            last_message_at=datetime.utcnow()
+        )
+        db.add(default_channel)
+        await db.flush()
+
+        # Add current user
+        m1 = ConversationMember(conversation_id=default_channel.id, user_id=current_user.id)
+        db.add(m1)
+
+        # Welcome message
+        welcome_msg = Message(
+            conversation_id=default_channel.id,
+            sender_id=current_user.id,
+            content="Welcome to the Vaishnavi Classes Real-Time Discussion Portal! Send your queries or fee updates here.",
+            is_read=True
+        )
+        db.add(welcome_msg)
+        await db.commit()
+
+        # Re-fetch
+        res2 = await db.execute(stmt)
+        conversations = res2.scalars().all()
 
     out = []
     for conv in conversations:

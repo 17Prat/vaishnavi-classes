@@ -5,7 +5,7 @@ import { DashboardLayout } from "@/components/layout/DashboardLayout";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { apiFetch } from "@/lib/api";
+import { apiFetch, getReceiptPdfUrl } from "@/lib/api";
 import { formatCurrency, formatDate } from "@/lib/utils";
 import { Receipt } from "@/types";
 import { Receipt as ReceiptIcon, Search, Download, Printer, QrCode } from "lucide-react";
@@ -108,7 +108,7 @@ export default function AdminReceiptsPage() {
                         </td>
                         <td className="py-3 px-4 text-right space-x-2">
                           <a
-                            href={`http://127.0.0.1:8000/receipts-pdf/${r.receipt_number}.pdf`}
+                            href={getReceiptPdfUrl(r.receipt_number)}
                             target="_blank"
                             rel="noreferrer"
                             className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg text-xs font-semibold shadow-xs transition-colors"

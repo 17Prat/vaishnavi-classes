@@ -4,7 +4,7 @@ from typing import List
 import os
 
 class Settings(BaseSettings):
-    PROJECT_NAME: str = "FeeFlow Fee Management System"
+    PROJECT_NAME: str = "Vaishnavi Classes — Fee Management System"
     VERSION: str = "1.0.0"
     API_V1_STR: str = "/api/v1"
     
@@ -33,10 +33,11 @@ class Settings(BaseSettings):
     RECEIPTS_DIR: str = os.path.join(os.getcwd(), "receipts_storage")
     
     # Institute Defaults
-    DEFAULT_INSTITUTE_NAME: str = "Apex Institute of Science & Technology"
-    DEFAULT_INSTITUTE_CODE: str = "APEX01"
+    DEFAULT_INSTITUTE_NAME: str = "Vaishnavi Classes"
+    DEFAULT_INSTITUTE_CODE: str = "VAISHNAVI01"
     DEFAULT_CURRENCY: str = "INR"
     DEFAULT_CURRENCY_SYMBOL: str = "₹"
+    BUSINESS_WHATSAPP_NUMBER: str = Field(default="919664257346", env="BUSINESS_WHATSAPP_NUMBER")
 
     class Config:
         env_file = ".env"

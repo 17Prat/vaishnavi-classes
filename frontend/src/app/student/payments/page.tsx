@@ -82,7 +82,7 @@ export default function StudentPaymentsPage() {
               <div className="p-3 bg-white rounded-xl border border-indigo-200">
                 <span className="text-slate-500 block">Official Institute UPI ID:</span>
                 <span className="font-mono font-bold text-indigo-700 text-sm select-all">
-                  apexinstitute@upi
+                  vaishnaviclasses@upi
                 </span>
               </div>
 

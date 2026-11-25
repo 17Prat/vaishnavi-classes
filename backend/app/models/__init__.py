@@ -7,6 +7,7 @@ from app.models.fee import FeePlan, StudentFeeAssignment, Installment
 from app.models.payment import Payment, PaymentAllocation, Receipt, Reminder
 from app.models.chat import Conversation, ConversationMember, Message
 from app.models.notification import Notification, AuditLog
+from app.models.enquiry import Enquiry
 
 __all__ = [
     "Base",
@@ -37,5 +38,6 @@ __all__ = [
     "ConversationMember",
     "Message",
     "Notification",
-    "AuditLog"
+    "AuditLog",
+    "Enquiry"
 ]

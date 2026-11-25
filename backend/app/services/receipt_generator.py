@@ -104,18 +104,54 @@ def create_receipt_pdf(
 
     story = []
 
-    # Header section: Institute name and Receipt Badge
-    header_data = [
-        [
-            Paragraph(f"<b>{receipt_data.get('institute_name', 'FeeFlow Academy')}</b>", title_style),
-            Paragraph("<b>OFFICIAL FEE RECEIPT</b><br/><font size=8 color='#4b5563'>ORIGINAL COPY</font>", badge_style)
-        ],
-        [
-            Paragraph(f"{receipt_data.get('institute_address', 'Knowledge Park, Tech Campus')}<br/>Contact: {receipt_data.get('institute_phone', '+91 98765 43210')}", subtitle_style),
-            Paragraph(f"<b>Receipt No:</b> {receipt_data.get('receipt_number')}<br/><b>Date:</b> {receipt_data.get('payment_date')}", value_style)
+    # Logo & Header section
+    logo_path = os.path.join(os.path.dirname(__file__), "..", "static", "logo.jpg")
+    logo_flowable = None
+    if os.path.exists(logo_path):
+        try:
+            logo_flowable = RLImage(logo_path, width=0.85 * inch, height=0.85 * inch)
+        except Exception:
+            logo_flowable = None
+
+    if logo_flowable:
+        inst_info_table = Table([
+            [
+                logo_flowable,
+                [
+                    Paragraph(f"<b>{receipt_data.get('institute_name', 'Vaishnavi Classes')}</b>", title_style),
+                    Paragraph("Since 1996 • Excellence in Education", subtitle_style),
+                ]
+            ]
+        ], colWidths=[0.95 * inch, 3.25 * inch])
+        inst_info_table.setStyle(TableStyle([
+            ('VALIGN', (0,0), (-1,-1), 'MIDDLE'),
+            ('LEFTPADDING', (0,0), (-1,-1), 0),
+            ('RIGHTPADDING', (0,0), (-1,-1), 4),
+            ('BOTTOMPADDING', (0,0), (-1,-1), 0),
+            ('TOPPADDING', (0,0), (-1,-1), 0),
+        ]))
+        header_data = [
+            [
+                inst_info_table,
+                Paragraph("<b>OFFICIAL FEE RECEIPT</b><br/><font size=8 color='#4b5563'>ORIGINAL VERIFIED COPY</font>", badge_style)
+            ],
+            [
+                Paragraph(f"{receipt_data.get('institute_address', 'Vaishnavi Classes Campus')}<br/>Contact: {receipt_data.get('institute_phone', '+91 96642 57346')}", subtitle_style),
+                Paragraph(f"<b>Receipt No:</b> {receipt_data.get('receipt_number')}<br/><b>Date:</b> {receipt_data.get('payment_date')}", value_style)
+            ]
         ]
-    ]
-    t_header = Table(header_data, colWidths=[3.8 * inch, 3.4 * inch])
+    else:
+        header_data = [
+            [
+                Paragraph(f"<b>{receipt_data.get('institute_name', 'Vaishnavi Classes')}</b>", title_style),
+                Paragraph("<b>OFFICIAL FEE RECEIPT</b><br/><font size=8 color='#4b5563'>ORIGINAL COPY</font>", badge_style)
+            ],
+            [
+                Paragraph(f"{receipt_data.get('institute_address', 'Vaishnavi Classes Campus')}<br/>Contact: {receipt_data.get('institute_phone', '+91 96642 57346')}", subtitle_style),
+                Paragraph(f"<b>Receipt No:</b> {receipt_data.get('receipt_number')}<br/><b>Date:</b> {receipt_data.get('payment_date')}", value_style)
+            ]
+        ]
+    t_header = Table(header_data, colWidths=[4.2 * inch, 3.0 * inch])
     t_header.setStyle(TableStyle([
         ('VALIGN', (0,0), (-1,-1), 'TOP'),
         ('BOTTOMPADDING', (0,0), (-1,-1), 2),

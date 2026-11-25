@@ -6,7 +6,7 @@ import { DashboardLayout } from "@/components/layout/DashboardLayout";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { apiFetch } from "@/lib/api";
+import { apiFetch, getReceiptPdfUrl } from "@/lib/api";
 import { formatCurrency, formatDate } from "@/lib/utils";
 import { RecordPaymentModal } from "@/components/payments/RecordPaymentModal";
 import { CreditCard, Users, Clock, AlertTriangle, TrendingUp, BellRing, ArrowRight } from "lucide-react";
@@ -155,7 +155,7 @@ export default function StaffDashboardPage() {
                       <td className="py-3 px-4 text-right">
                         {p.receipt_number && (
                           <a
-                            href={`http://127.0.0.1:8000/receipts-pdf/${p.receipt_number}.pdf`}
+                            href={getReceiptPdfUrl(p.receipt_number)}
                             target="_blank"
                             rel="noreferrer"
                             className="text-indigo-600 hover:underline font-semibold"
