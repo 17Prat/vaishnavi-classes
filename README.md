@@ -1,6 +1,9 @@
-# FeeFlow — Production Fee Management System
+# Vaishnavi Classes — Fee Management System (Since 1996)
 
-FeeFlow is an enterprise-grade, multi-role SaaS Fee Management System built with **Next.js (App Router)**, **FastAPI**, **PostgreSQL / Neon**, **WebSockets**, and an installable **PWA**. Inspired by modern institutional platforms like FlowFee, FeeFlow provides an end-to-end platform for fee scheduling, installment tracking, cash and UPI collection, payment verification, digital PDF receipts with validation QR codes, free manual WhatsApp reminders, and real-time chat.
+[![Deploy to Netlify](https://www.netlify.com/img/deploy/button.svg)](https://app.netlify.com/start/deploy?repository=https://github.com/17Prat/vaishnavi-classes)
+[![Deploy to Render](https://render.com/images/deploy-to-render-button.svg)](https://render.com/deploy?repo=https://github.com/17Prat/vaishnavi-classes)
+
+Production-ready Fee Management System for **Vaishnavi Classes** built with **Next.js (App Router)**, **FastAPI**, **SQLite / PostgreSQL**, and installable **PWA**. Inspiring institutional excellence since 1996.
 
 ---
 
