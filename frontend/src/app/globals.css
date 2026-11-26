@@ -34,10 +34,54 @@
   --radius: 0.75rem;
 }
 
+html {
+  font-size: 16px;
+  -webkit-text-size-adjust: 100%;
+}
+
 body {
   color: hsl(var(--foreground));
   background: #f8fafc;
+  font-size: 0.9375rem; /* 15px default base */
+  line-height: 1.55;
   font-feature-settings: "rlig" 1, "calt" 1;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Global Typography & Legibility Enhancements */
+table {
+  font-size: 0.875rem !important; /* 14px instead of tiny 11px */
+  letter-spacing: 0.01em;
+}
+
+th {
+  font-size: 0.8125rem !important; /* 13px */
+  font-weight: 700 !important;
+  color: #334155 !important; /* Slate 700 for high readability */
+  letter-spacing: 0.03em !important;
+}
+
+td {
+  font-size: 0.875rem !important; /* 14px */
+  color: #0f172a !important; /* Slate 900 */
+}
+
+/* Minimum readable sizes for micro-utilities */
+.text-\[9px\],
+.text-\[10px\] {
+  font-size: 0.75rem !important; /* Minimum 12px for human eyes */
+  line-height: 1.25rem !important;
+}
+
+.text-\[11px\] {
+  font-size: 0.8125rem !important; /* Minimum 13px */
+  line-height: 1.25rem !important;
+}
+
+.text-xs {
+  font-size: 0.8125rem !important; /* 13px instead of 12px */
+  line-height: 1.25rem !important;
 }
 
 /* Custom modern scrollbars */

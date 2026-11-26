@@ -28,8 +28,8 @@ export default function AdminSettingsPage() {
     <DashboardLayout allowedRoles={["admin"]}>
       <div className="space-y-6 max-w-4xl">
         <div>
-          <h2 className="text-xl font-bold text-slate-900">Institute Profile & Receipt Configuration</h2>
-          <p className="text-xs text-slate-500 mt-0.5">
+          <h2 className="text-2xl font-extrabold text-slate-900 tracking-tight">Institute Profile & Receipt Configuration</h2>
+          <p className="text-sm font-medium text-slate-600 mt-1">
             Configure institute branding, receipt numbering prefixes, and UPI payment credentials.
           </p>
         </div>

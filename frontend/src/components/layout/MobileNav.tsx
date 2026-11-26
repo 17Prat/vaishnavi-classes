@@ -61,11 +61,11 @@ export function MobileNav() {
               key={item.href}
               href={item.href}
               className={cn(
-                "flex flex-col items-center py-1.5 px-3 rounded-lg text-[10px] font-medium transition-colors",
-                isActive ? "text-indigo-600 font-semibold" : "text-slate-500 hover:text-slate-800"
+                "flex flex-col items-center py-1.5 px-3 rounded-lg text-xs font-semibold transition-colors",
+                isActive ? "text-indigo-600 font-bold" : "text-slate-600 hover:text-slate-900"
               )}
             >
-              <Icon className={cn("h-5 w-5 mb-0.5", isActive ? "text-indigo-600 stroke-[2.5]" : "text-slate-400")} />
+              <Icon className={cn("h-5 w-5 mb-0.5", isActive ? "text-indigo-600 stroke-[2.5]" : "text-slate-500")} />
               <span>{item.label}</span>
             </Link>
           );

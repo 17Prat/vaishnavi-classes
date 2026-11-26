@@ -99,25 +99,25 @@ export default function AdminAcademicPage() {
     <DashboardLayout allowedRoles={["admin"]}>
       <div className="space-y-6">
         <div>
-          <h2 className="text-xl font-bold text-slate-900">Academic Hierarchy & Structure</h2>
-          <p className="text-xs text-slate-500 mt-0.5">
+          <h2 className="text-2xl font-extrabold text-slate-900 tracking-tight">Academic Hierarchy & Structure</h2>
+          <p className="text-sm font-medium text-slate-600 mt-1">
             Configure Courses, Classes, and Student Batches.
           </p>
         </div>
 
         <Tabs value={tab} onValueChange={setTab}>
           <div className="flex items-center justify-between border-b border-slate-200 pb-3">
-            <TabsList>
-              <TabsTrigger value="courses">Courses ({courses.length})</TabsTrigger>
-              <TabsTrigger value="batches">Batches ({batches.length})</TabsTrigger>
+            <TabsList className="h-11 p-1 bg-slate-100 rounded-xl">
+              <TabsTrigger value="courses" className="text-sm font-bold px-4 py-2">Courses ({courses.length})</TabsTrigger>
+              <TabsTrigger value="batches" className="text-sm font-bold px-4 py-2">Batches ({batches.length})</TabsTrigger>
             </TabsList>
             <div>
               {tab === "courses" ? (
-                <Button onClick={() => setShowCourseModal(true)} size="sm" className="gap-1.5 text-xs">
+                <Button onClick={() => setShowCourseModal(true)} size="sm" className="gap-2 text-sm font-bold h-10 px-4 shadow-sm">
                   <Plus className="h-4 w-4" /> Add Course
                 </Button>
               ) : (
-                <Button onClick={() => setShowBatchModal(true)} size="sm" className="gap-1.5 text-xs">
+                <Button onClick={() => setShowBatchModal(true)} size="sm" className="gap-2 text-sm font-bold h-10 px-4 shadow-sm">
                   <Plus className="h-4 w-4" /> Add Batch
                 </Button>
               )}
@@ -125,19 +125,19 @@ export default function AdminAcademicPage() {
           </div>
 
           <TabsContent value="courses">
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
               {courses.map((c) => (
-                <Card key={c.id} className="shadow-xs hover:shadow-sm transition-shadow">
-                  <CardHeader className="p-4 pb-2">
+                <Card key={c.id} className="shadow-xs hover:shadow-md transition-shadow border-slate-200">
+                  <CardHeader className="p-5 pb-2">
                     <div className="flex items-center justify-between">
-                      <span className="font-mono text-[10px] font-bold text-indigo-700 bg-indigo-50 px-2 py-0.5 rounded border border-indigo-200">
+                      <span className="font-mono text-xs font-bold text-indigo-700 bg-indigo-50 px-2.5 py-1 rounded-md border border-indigo-200">
                         {c.code}
                       </span>
-                      <span className="text-xs text-slate-500">{c.duration_months} Months</span>
+                      <span className="text-xs font-bold text-slate-500">{c.duration_months} Months</span>
                     </div>
-                    <CardTitle className="text-sm font-bold text-slate-900 mt-2">{c.name}</CardTitle>
+                    <CardTitle className="text-base font-bold text-slate-900 mt-2">{c.name}</CardTitle>
                   </CardHeader>
-                  <CardContent className="p-4 pt-1 text-xs text-slate-600">
+                  <CardContent className="p-5 pt-1 text-sm text-slate-600">
                     <p className="line-clamp-2">{c.description || "No description provided."}</p>
                   </CardContent>
                 </Card>
@@ -146,21 +146,21 @@ export default function AdminAcademicPage() {
           </TabsContent>
 
           <TabsContent value="batches">
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
               {batches.map((b) => (
-                <Card key={b.id} className="shadow-xs hover:shadow-sm transition-shadow">
-                  <CardHeader className="p-4 pb-2">
+                <Card key={b.id} className="shadow-xs hover:shadow-md transition-shadow border-slate-200">
+                  <CardHeader className="p-5 pb-2">
                     <div className="flex items-center justify-between">
-                      <span className="font-mono text-[10px] font-bold text-purple-700 bg-purple-50 px-2 py-0.5 rounded border border-purple-200">
+                      <span className="font-mono text-xs font-bold text-purple-700 bg-purple-50 px-2.5 py-1 rounded-md border border-purple-200">
                         {b.code}
                       </span>
-                      <span className="text-xs text-slate-500">Max: {b.max_capacity}</span>
+                      <span className="text-xs font-bold text-slate-500">Max: {b.max_capacity}</span>
                     </div>
-                    <CardTitle className="text-sm font-bold text-slate-900 mt-2">{b.name}</CardTitle>
+                    <CardTitle className="text-base font-bold text-slate-900 mt-2">{b.name}</CardTitle>
                   </CardHeader>
-                  <CardContent className="p-4 pt-1 text-xs text-slate-600">
-                    <p className="text-slate-800 font-medium">{b.class_name || "General"}</p>
-                    <p className="text-slate-500 text-[11px]">{b.course_name || ""}</p>
+                  <CardContent className="p-5 pt-1 text-sm text-slate-600">
+                    <p className="text-slate-900 font-bold">{b.class_name || "General"}</p>
+                    <p className="text-slate-500 text-xs font-medium">{b.course_name || ""}</p>
                   </CardContent>
                 </Card>
               ))}

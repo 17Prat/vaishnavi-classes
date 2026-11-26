@@ -96,13 +96,13 @@ export function StatCards({ summary }: StatCardsProps) {
           <Card key={idx} className={`border ${item.border} hover:shadow-md transition-shadow`}>
             <CardContent className="p-5 flex items-center justify-between">
               <div>
-                <p className="text-xs font-medium text-slate-500 uppercase tracking-wider">
+                <p className="text-xs font-bold text-slate-600 uppercase tracking-wider">
                   {item.title}
                 </p>
-                <h4 className="text-2xl font-bold text-slate-900 mt-1">
+                <h4 className="text-3xl font-extrabold text-slate-900 tracking-tight mt-1">
                   {item.value}
                 </h4>
-                <p className="text-xs text-slate-500 mt-1 font-medium">
+                <p className="text-xs font-semibold text-slate-500 mt-1">
                   {item.subtext}
                 </p>
               </div>

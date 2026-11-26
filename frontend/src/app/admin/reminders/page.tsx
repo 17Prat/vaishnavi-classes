@@ -34,30 +34,30 @@ export default function AdminRemindersPage() {
     <DashboardLayout allowedRoles={["admin"]}>
       <div className="space-y-6">
         <div>
-          <h2 className="text-xl font-bold text-slate-900">WhatsApp Fee Reminders Desk</h2>
-          <p className="text-xs text-slate-500 mt-0.5">
+          <h2 className="text-2xl font-extrabold text-slate-900 tracking-tight">WhatsApp Fee Reminders Desk</h2>
+          <p className="text-sm font-medium text-slate-600 mt-1">
             Click-to-chat automated reminders: opens WhatsApp directly with pre-composed professional templates.
           </p>
         </div>
 
         <Card className="shadow-sm">
           <CardHeader className="pb-3 border-b border-slate-100 flex flex-row items-center justify-between">
-            <CardTitle className="text-base font-semibold text-slate-800">
+            <CardTitle className="text-lg font-bold text-slate-900">
               Students with Due & Overdue Installments ({dueStudents.length})
             </CardTitle>
           </CardHeader>
           <CardContent className="p-0">
             <div className="overflow-x-auto">
-              <table className="w-full text-xs text-left">
-                <thead className="bg-slate-50 text-slate-500 uppercase font-semibold border-b border-slate-200">
+              <table className="w-full text-sm text-left">
+                <thead className="bg-slate-100/90 text-slate-700 uppercase font-bold text-xs tracking-wider border-b border-slate-200">
                   <tr>
-                    <th className="py-3 px-4">Student</th>
-                    <th className="py-3 px-4">Contact Phone</th>
-                    <th className="py-3 px-4">Installment</th>
-                    <th className="py-3 px-4">Due Date</th>
-                    <th className="py-3 px-4">Pending Due</th>
-                    <th className="py-3 px-4">Status</th>
-                    <th className="py-3 px-4 text-right">Send Reminder</th>
+                    <th className="py-3.5 px-4">Student</th>
+                    <th className="py-3.5 px-4">Contact Phone</th>
+                    <th className="py-3.5 px-4">Installment</th>
+                    <th className="py-3.5 px-4">Due Date</th>
+                    <th className="py-3.5 px-4">Pending Due</th>
+                    <th className="py-3.5 px-4">Status</th>
+                    <th className="py-3.5 px-4 text-right">Send Reminder</th>
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-slate-100">
@@ -69,38 +69,38 @@ export default function AdminRemindersPage() {
                     </tr>
                   ) : (
                     dueStudents.map((item, idx) => (
-                      <tr key={idx} className="hover:bg-slate-50/70 transition-colors">
-                        <td className="py-3 px-4">
-                          <p className="font-bold text-slate-900">{item.student_name}</p>
-                          <span className="text-[10px] text-slate-500 font-mono">{item.student_login_id}</span>
+                      <tr key={idx} className="hover:bg-slate-50/80 transition-colors">
+                        <td className="py-3.5 px-4">
+                          <p className="font-bold text-slate-900 text-base">{item.student_name}</p>
+                          <span className="text-xs text-slate-600 font-mono font-medium">{item.student_login_id}</span>
                         </td>
-                        <td className="py-3 px-4 font-mono font-medium text-slate-700">
+                        <td className="py-3.5 px-4 font-mono font-bold text-slate-800 text-sm">
                           {item.phone || "No phone"}
                         </td>
-                        <td className="py-3 px-4 text-slate-800 font-medium">
+                        <td className="py-3.5 px-4 text-slate-800 font-bold text-sm">
                           {item.installment_title}
                         </td>
-                        <td className="py-3 px-4 text-slate-600">
+                        <td className="py-3.5 px-4 text-slate-700 font-medium text-sm">
                           {formatDate(item.due_date)}
                         </td>
-                        <td className="py-3 px-4 font-bold text-indigo-700 text-sm">
+                        <td className="py-3.5 px-4 font-black text-indigo-700 text-base">
                           {formatCurrency(item.pending_amount)}
                         </td>
-                        <td className="py-3 px-4">
+                        <td className="py-3.5 px-4">
                           <Badge
                             variant={item.status === "overdue" ? "destructive" : "warning"}
-                            className="capitalize text-[10px]"
+                            className="capitalize text-xs font-bold px-2.5 py-1"
                           >
                             {item.status.replace("_", " ")}
                           </Badge>
                         </td>
-                        <td className="py-3 px-4 text-right">
+                        <td className="py-3.5 px-4 text-right">
                           <Button
                             size="sm"
                             onClick={() => setSelectedStudent(item)}
-                            className="bg-emerald-600 hover:bg-emerald-700 text-white text-xs h-7 px-3 gap-1.5 shadow-xs"
+                            className="bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold h-8 px-3.5 gap-1.5 shadow-xs rounded-lg"
                           >
-                            <Send className="h-3 w-3" /> WhatsApp
+                            <Send className="h-3.5 w-3.5" /> WhatsApp
                           </Button>
                         </td>
                       </tr>

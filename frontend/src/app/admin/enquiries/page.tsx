@@ -138,11 +138,11 @@ export default function AdminEnquiriesPage() {
           <div>
             <div className="flex items-center gap-2">
               <h1 className="text-2xl font-black text-slate-900 tracking-tight">Website Enquiries</h1>
-              <span className="text-xs bg-emerald-100 text-emerald-800 font-bold px-2.5 py-0.5 rounded-full border border-emerald-200">
+              <span className="text-xs bg-emerald-100 text-emerald-800 font-bold px-3 py-1 rounded-full border border-emerald-200">
                 Direct Messaging Active
               </span>
             </div>
-            <p className="text-xs text-slate-500 mt-1">
+            <p className="text-sm font-medium text-slate-600 mt-1">
               Visitor enquiries submitted directly from the website without opening third-party tabs.
             </p>
           </div>
@@ -150,30 +150,30 @@ export default function AdminEnquiriesPage() {
           <button
             onClick={fetchEnquiries}
             disabled={loading}
-            className="inline-flex items-center gap-1.5 bg-white border border-slate-300 text-slate-700 hover:bg-slate-50 text-xs font-semibold px-3 py-2 rounded-xl shadow-xs transition-all active:scale-95"
+            className="inline-flex items-center gap-2 bg-white border border-slate-300 text-slate-700 hover:bg-slate-50 text-sm font-bold px-4 py-2.5 rounded-xl shadow-xs transition-all active:scale-95"
           >
-            <RefreshCw className={`h-3.5 w-3.5 ${loading ? "animate-spin" : ""}`} />
+            <RefreshCw className={`h-4 w-4 ${loading ? "animate-spin" : ""}`} />
             Refresh
           </button>
         </div>
 
         {/* Metric Cards */}
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
-          <div className="bg-white p-4 rounded-2xl border border-slate-200 shadow-xs">
-            <p className="text-[11px] font-semibold text-slate-500 uppercase tracking-wider">Total Enquiries</p>
-            <p className="text-2xl font-black text-slate-900 mt-1">{totalCount}</p>
+          <div className="bg-white p-5 rounded-2xl border border-slate-200 shadow-xs">
+            <p className="text-xs font-bold text-slate-600 uppercase tracking-wider">Total Enquiries</p>
+            <p className="text-3xl font-black text-slate-900 mt-1">{totalCount}</p>
           </div>
-          <div className="bg-amber-50/70 p-4 rounded-2xl border border-amber-200 shadow-xs">
-            <p className="text-[11px] font-semibold text-amber-700 uppercase tracking-wider">Pending Action</p>
-            <p className="text-2xl font-black text-amber-900 mt-1">{pendingCount}</p>
+          <div className="bg-amber-50/70 p-5 rounded-2xl border border-amber-200 shadow-xs">
+            <p className="text-xs font-bold text-amber-800 uppercase tracking-wider">Pending Action</p>
+            <p className="text-3xl font-black text-amber-900 mt-1">{pendingCount}</p>
           </div>
-          <div className="bg-blue-50/70 p-4 rounded-2xl border border-blue-200 shadow-xs">
-            <p className="text-[11px] font-semibold text-blue-700 uppercase tracking-wider">Contacted</p>
-            <p className="text-2xl font-black text-blue-900 mt-1">{contactedCount}</p>
+          <div className="bg-blue-50/70 p-5 rounded-2xl border border-blue-200 shadow-xs">
+            <p className="text-xs font-bold text-blue-800 uppercase tracking-wider">Contacted</p>
+            <p className="text-3xl font-black text-blue-900 mt-1">{contactedCount}</p>
           </div>
-          <div className="bg-emerald-50/70 p-4 rounded-2xl border border-emerald-200 shadow-xs">
-            <p className="text-[11px] font-semibold text-emerald-700 uppercase tracking-wider">Converted</p>
-            <p className="text-2xl font-black text-emerald-900 mt-1">{convertedCount}</p>
+          <div className="bg-emerald-50/70 p-5 rounded-2xl border border-emerald-200 shadow-xs">
+            <p className="text-xs font-bold text-emerald-800 uppercase tracking-wider">Converted</p>
+            <p className="text-3xl font-black text-emerald-900 mt-1">{convertedCount}</p>
           </div>
         </div>
 
@@ -191,11 +191,11 @@ export default function AdminEnquiriesPage() {
           </div>
 
           <div className="flex items-center gap-2 w-full sm:w-auto">
-            <Filter className="h-3.5 w-3.5 text-slate-400" />
+            <Filter className="h-4 w-4 text-slate-500" />
             <select
               value={statusFilter}
               onChange={(e) => setStatusFilter(e.target.value)}
-              className="h-9 px-3 rounded-xl border border-slate-200 text-xs font-semibold bg-white text-slate-700 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+              className="h-11 px-3.5 rounded-xl border border-slate-300 text-sm font-bold bg-white text-slate-700 focus:outline-none focus:ring-2 focus:ring-indigo-500"
             >
               <option value="all">All Statuses</option>
               <option value="pending">Pending</option>
@@ -208,8 +208,8 @@ export default function AdminEnquiriesPage() {
         {/* Table */}
         <div className="bg-white rounded-2xl border border-slate-200 shadow-xs overflow-hidden">
           <div className="overflow-x-auto">
-            <table className="w-full text-left text-xs">
-              <thead className="bg-slate-50 border-b border-slate-200 text-[11px] font-bold text-slate-600 uppercase tracking-wider">
+            <table className="w-full text-left text-sm">
+              <thead className="bg-slate-100/90 border-b border-slate-200 text-xs font-bold text-slate-700 uppercase tracking-wider">
                 <tr>
                   <th className="px-4 py-3.5">Customer &amp; Date</th>
                   <th className="px-4 py-3.5">Mobile Number</th>
@@ -236,8 +236,8 @@ export default function AdminEnquiriesPage() {
                   filtered.map((enquiry) => (
                     <tr key={enquiry.id} className="hover:bg-slate-50/70 transition-colors">
                       <td className="px-4 py-3.5">
-                        <div className="font-bold text-slate-900">{enquiry.customer_name}</div>
-                        <div className="text-[10px] text-slate-400 font-mono mt-0.5">
+                        <div className="font-bold text-slate-900 text-base">{enquiry.customer_name}</div>
+                        <div className="text-xs text-slate-500 font-mono mt-0.5">
                           {new Date(enquiry.created_at).toLocaleString("en-IN", {
                             day: "numeric",
                             month: "short",
@@ -249,22 +249,22 @@ export default function AdminEnquiriesPage() {
                       </td>
 
                       <td className="px-4 py-3.5">
-                        <div className="font-mono text-slate-800 font-bold">{enquiry.mobile_number}</div>
+                        <div className="font-mono text-slate-900 font-bold text-sm">{enquiry.mobile_number}</div>
                         {enquiry.email && (
-                          <div className="text-[10px] text-slate-400 truncate max-w-[150px]">
+                          <div className="text-xs text-slate-500 truncate max-w-[160px]">
                             {enquiry.email}
                           </div>
                         )}
                       </td>
 
                       <td className="px-4 py-3.5">
-                        <span className="bg-indigo-50 text-indigo-700 font-bold px-2 py-0.5 rounded text-[11px] border border-indigo-100">
+                        <span className="bg-indigo-50 text-indigo-700 font-bold px-3 py-1 rounded-md text-xs border border-indigo-100">
                           {enquiry.service_type}
                         </span>
                       </td>
 
                       <td className="px-4 py-3.5 max-w-xs">
-                        <p className="text-slate-600 truncate" title={enquiry.message}>
+                        <p className="text-slate-700 text-sm truncate" title={enquiry.message}>
                           {enquiry.message}
                         </p>
                       </td>
@@ -274,12 +274,12 @@ export default function AdminEnquiriesPage() {
                           value={enquiry.status}
                           disabled={updatingId === enquiry.id}
                           onChange={(e) => handleStatusChange(enquiry.id, e.target.value)}
-                          className={`text-[11px] font-bold px-2 py-1 rounded-lg border focus:outline-none ${
+                          className={`text-xs font-bold px-3 py-1.5 rounded-lg border focus:outline-none ${
                             enquiry.status === "converted"
-                              ? "bg-emerald-50 text-emerald-700 border-emerald-200"
+                              ? "bg-emerald-50 text-emerald-800 border-emerald-300"
                               : enquiry.status === "contacted"
-                              ? "bg-blue-50 text-blue-700 border-blue-200"
-                              : "bg-amber-50 text-amber-800 border-amber-200"
+                              ? "bg-blue-50 text-blue-800 border-blue-300"
+                              : "bg-amber-50 text-amber-800 border-amber-300"
                           }`}
                         >
                           <option value="pending">Pending</option>
@@ -288,13 +288,13 @@ export default function AdminEnquiriesPage() {
                         </select>
                       </td>
 
-                      <td className="px-4 py-3.5 text-right space-x-2">
+                      <td className="px-4 py-3.5 text-right space-x-2 whitespace-nowrap">
                         <button
                           onClick={() => openDirectReply(enquiry)}
-                          className="inline-flex items-center gap-1 bg-emerald-600 hover:bg-emerald-700 text-white text-[11px] font-bold px-2.5 py-1.5 rounded-lg shadow-xs transition-all active:scale-95"
+                          className="inline-flex items-center gap-1.5 bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold px-3 py-1.5 rounded-lg shadow-xs transition-all active:scale-95"
                           title="Reply directly from the website without opening any extra tab"
                         >
-                          <Send className="h-3 w-3" />
+                          <Send className="h-3.5 w-3.5" />
                           Reply Directly
                         </button>
                       </td>

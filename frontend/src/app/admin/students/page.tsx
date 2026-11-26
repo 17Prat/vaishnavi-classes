@@ -127,22 +127,22 @@ export default function AdminStudentsPage() {
         {/* Header */}
         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
           <div>
-            <h2 className="text-xl font-bold text-slate-900">Student Directory & Fee Status</h2>
-            <p className="text-xs text-slate-500 mt-0.5">
+            <h2 className="text-2xl font-extrabold text-slate-900 tracking-tight">Student Directory & Fee Status</h2>
+            <p className="text-sm font-medium text-slate-600 mt-1">
               Manage student admissions, batch enrollments, and ledger balances.
             </p>
           </div>
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-2.5">
             <a
               href={`${API_BASE_URL}/students/export/csv`}
               target="_blank"
               rel="noreferrer"
-              className="inline-flex items-center gap-1.5 px-3 py-2 bg-white border border-slate-200 hover:bg-slate-50 text-slate-700 rounded-lg text-xs font-semibold shadow-xs"
+              className="inline-flex items-center gap-1.5 px-3.5 py-2.5 bg-white border border-slate-300 hover:bg-slate-50 text-slate-800 rounded-xl text-xs font-bold shadow-xs transition-colors"
             >
-              <Download className="h-3.5 w-3.5" /> Export CSV
+              <Download className="h-4 w-4" /> Export CSV
             </a>
-            <Button onClick={() => setShowAddModal(true)} className="gap-1.5 text-xs h-9">
-              <UserPlus className="h-4 w-4" /> Add Student
+            <Button onClick={() => setShowAddModal(true)} className="gap-2 text-sm font-bold h-11 px-5 shadow-sm">
+              <UserPlus className="h-5 w-5" /> Add Student
             </Button>
           </div>
         </div>
@@ -162,7 +162,7 @@ export default function AdminStudentsPage() {
             <select
               value={selectedBatch}
               onChange={(e) => setSelectedBatch(e.target.value)}
-              className="h-10 rounded-lg border border-slate-300 bg-white px-3 py-2 text-xs focus:outline-none focus:ring-2 focus:ring-indigo-500 sm:w-64"
+              className="h-11 rounded-xl border border-slate-300 bg-white px-3.5 py-2 text-sm font-medium focus:outline-none focus:ring-2 focus:ring-indigo-500 sm:w-64"
             >
               <option value="">All Batches</option>
               {batches.map((b) => (
@@ -176,17 +176,17 @@ export default function AdminStudentsPage() {
         <Card className="shadow-sm">
           <CardContent className="p-0">
             <div className="overflow-x-auto">
-              <table className="w-full text-xs text-left">
-                <thead className="bg-slate-50 text-slate-500 uppercase tracking-wider font-semibold border-b border-slate-200">
+              <table className="w-full text-sm text-left">
+                <thead className="bg-slate-100/90 text-slate-700 uppercase tracking-wider font-bold text-xs border-b border-slate-200">
                   <tr>
-                    <th className="py-3 px-4">Student ID</th>
-                    <th className="py-3 px-4">Full Name</th>
-                    <th className="py-3 px-4">Batch / Course</th>
-                    <th className="py-3 px-4">Guardian Contact</th>
-                    <th className="py-3 px-4">Total Fee</th>
-                    <th className="py-3 px-4">Total Paid</th>
-                    <th className="py-3 px-4">Remaining Balance</th>
-                    <th className="py-3 px-4 text-right">Actions</th>
+                    <th className="py-3.5 px-4">Student ID</th>
+                    <th className="py-3.5 px-4">Full Name</th>
+                    <th className="py-3.5 px-4">Batch / Course</th>
+                    <th className="py-3.5 px-4">Guardian Contact</th>
+                    <th className="py-3.5 px-4">Total Fee</th>
+                    <th className="py-3.5 px-4">Total Paid</th>
+                    <th className="py-3.5 px-4">Remaining Balance</th>
+                    <th className="py-3.5 px-4 text-right">Actions</th>
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-slate-100">
@@ -198,59 +198,59 @@ export default function AdminStudentsPage() {
                     </tr>
                   ) : (
                     filteredStudents.map((s) => (
-                      <tr key={s.id} className="hover:bg-slate-50/70 transition-colors">
-                        <td className="py-3 px-4 font-mono font-bold text-slate-800">
+                      <tr key={s.id} className="hover:bg-slate-50/80 transition-colors">
+                        <td className="py-3.5 px-4 font-mono font-bold text-slate-900 text-sm">
                           {s.student_id}
                         </td>
-                        <td className="py-3 px-4">
-                          <p className="font-semibold text-slate-900">{s.full_name}</p>
-                          <span className="text-[10px] text-slate-500">{s.phone || "No phone"}</span>
+                        <td className="py-3.5 px-4">
+                          <p className="font-bold text-slate-900 text-base">{s.full_name}</p>
+                          <span className="text-xs text-slate-600 font-medium">{s.phone || "No phone"}</span>
                         </td>
-                        <td className="py-3 px-4">
-                          <p className="font-medium text-slate-800">{s.batch_name || "Unassigned"}</p>
-                          <span className="text-[10px] text-slate-500">{s.course_name || ""}</span>
+                        <td className="py-3.5 px-4">
+                          <p className="font-bold text-slate-800 text-sm">{s.batch_name || "Unassigned"}</p>
+                          <span className="text-xs text-slate-500 font-medium">{s.course_name || ""}</span>
                         </td>
-                        <td className="py-3 px-4 text-slate-600">
-                          <p>{s.guardian_name || "—"}</p>
-                          <span className="text-[10px] font-mono">{s.guardian_phone || ""}</span>
+                        <td className="py-3.5 px-4 text-slate-700">
+                          <p className="font-semibold text-slate-900 text-sm">{s.guardian_name || "—"}</p>
+                          <span className="text-xs font-mono font-bold text-slate-600">{s.guardian_phone || ""}</span>
                         </td>
-                        <td className="py-3 px-4 font-medium text-slate-700">
+                        <td className="py-3.5 px-4 font-bold text-slate-800 text-sm">
                           {formatCurrency(s.total_fee)}
                         </td>
-                        <td className="py-3 px-4 font-semibold text-emerald-700">
+                        <td className="py-3.5 px-4 font-bold text-emerald-700 text-sm">
                           {formatCurrency(s.total_paid)}
                         </td>
-                        <td className="py-3 px-4">
-                          <span className={`font-bold ${s.remaining_balance > 0 ? "text-amber-700" : "text-emerald-600"}`}>
+                        <td className="py-3.5 px-4">
+                          <span className={`font-black text-sm ${s.remaining_balance > 0 ? "text-amber-700" : "text-emerald-600"}`}>
                             {formatCurrency(s.remaining_balance)}
                           </span>
                         </td>
-                        <td className="py-3 px-4 text-right space-x-1">
+                        <td className="py-3.5 px-4 text-right space-x-1.5 whitespace-nowrap">
                           <Button
                             size="sm"
                             variant="outline"
                             onClick={() => viewLedger(s.id)}
-                            className="h-7 text-[11px] px-2"
+                            className="h-8 text-xs font-bold px-3 rounded-lg"
                             title="View Fee Ledger"
                           >
-                            <FileText className="h-3 w-3 mr-1" /> Ledger
+                            <FileText className="h-3.5 w-3.5 mr-1" /> Ledger
                           </Button>
                           <Button
                             size="sm"
                             onClick={() => setPayModalStudent(s.id)}
-                            className="h-7 text-[11px] px-2 bg-indigo-600 hover:bg-indigo-700 text-white"
+                            className="h-8 text-xs font-bold px-3 bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg shadow-xs"
                             title="Collect Fee"
                           >
-                            <CreditCard className="h-3 w-3 mr-1" /> Pay
+                            <CreditCard className="h-3.5 w-3.5 mr-1" /> Pay
                           </Button>
                           <Button
                             size="sm"
                             variant="outline"
                             onClick={() => setWaModalStudent(s)}
-                            className="h-7 text-[11px] px-2 border-emerald-300 text-emerald-700 hover:bg-emerald-50"
+                            className="h-8 text-xs font-bold px-2.5 border-emerald-400 text-emerald-800 hover:bg-emerald-50 rounded-lg shadow-xs"
                             title="Send WhatsApp Reminder"
                           >
-                            <BellRing className="h-3 w-3" />
+                            <BellRing className="h-3.5 w-3.5" />
                           </Button>
                         </td>
                       </tr>

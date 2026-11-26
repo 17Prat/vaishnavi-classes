@@ -82,55 +82,55 @@ export default function AdminFeesPage() {
       <div className="space-y-6">
         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
           <div>
-            <h2 className="text-xl font-bold text-slate-900">Institutional Fee Structures</h2>
-            <p className="text-xs text-slate-500 mt-0.5">
+            <h2 className="text-2xl font-extrabold text-slate-900 tracking-tight">Institutional Fee Structures</h2>
+            <p className="text-sm font-medium text-slate-600 mt-1">
               Standardize tuition, admission, examination, and installment frequency plans.
             </p>
           </div>
-          <Button onClick={() => setShowModal(true)} className="gap-1.5 text-xs h-9">
-            <Plus className="h-4 w-4" /> Create Fee Plan
+          <Button onClick={() => setShowModal(true)} className="gap-2 text-sm font-bold h-11 px-5 shadow-sm">
+            <Plus className="h-5 w-5" /> Create Fee Plan
           </Button>
         </div>
 
         {/* Fee Plans Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
           {feePlans.map((fp) => (
             <Card key={fp.id} className="shadow-xs hover:shadow-md transition-shadow border-slate-200">
-              <CardHeader className="p-4 pb-2 border-b border-slate-100">
+              <CardHeader className="p-5 pb-3 border-b border-slate-100">
                 <div className="flex items-center justify-between">
-                  <span className="text-[10px] font-bold uppercase tracking-wider text-indigo-700 bg-indigo-50 px-2 py-0.5 rounded">
+                  <span className="text-xs font-bold uppercase tracking-wider text-indigo-700 bg-indigo-50 px-2.5 py-1 rounded-md">
                     {fp.installment_frequency} ({fp.number_of_installments} Installments)
                   </span>
-                  <Badge variant={fp.is_active ? "success" : "secondary"} className="text-[9px]">
+                  <Badge variant={fp.is_active ? "success" : "secondary"} className="text-xs font-bold px-2 py-0.5">
                     {fp.is_active ? "Active" : "Archived"}
                   </Badge>
                 </div>
-                <CardTitle className="text-base font-bold text-slate-900 mt-2">{fp.name}</CardTitle>
-                <p className="text-[11px] text-slate-500">{fp.course_name || "All Courses"}</p>
+                <CardTitle className="text-lg font-bold text-slate-900 mt-2">{fp.name}</CardTitle>
+                <p className="text-xs text-slate-500 font-medium">{fp.course_name || "All Courses"}</p>
               </CardHeader>
 
-              <CardContent className="p-4 text-xs space-y-2">
+              <CardContent className="p-5 text-sm space-y-2.5">
                 <div className="flex justify-between py-1 border-b border-slate-100">
-                  <span className="text-slate-500">Admission Fee:</span>
-                  <span className="font-semibold text-slate-800">{formatCurrency(fp.admission_fee)}</span>
+                  <span className="text-slate-600">Admission Fee:</span>
+                  <span className="font-bold text-slate-900">{formatCurrency(fp.admission_fee)}</span>
                 </div>
                 <div className="flex justify-between py-1 border-b border-slate-100">
-                  <span className="text-slate-500">Tuition Fee:</span>
-                  <span className="font-semibold text-slate-800">{formatCurrency(fp.tuition_fee)}</span>
+                  <span className="text-slate-600">Tuition Fee:</span>
+                  <span className="font-bold text-slate-900">{formatCurrency(fp.tuition_fee)}</span>
                 </div>
                 <div className="flex justify-between py-1 border-b border-slate-100">
-                  <span className="text-slate-500">Examination & Library:</span>
-                  <span className="font-semibold text-slate-800">
+                  <span className="text-slate-600">Examination & Library:</span>
+                  <span className="font-bold text-slate-900">
                     {formatCurrency((Number(fp.examination_fee) || 0) + (Number(fp.library_fee) || 0))}
                   </span>
                 </div>
                 <div className="flex justify-between py-1 border-b border-slate-100">
-                  <span className="text-slate-500">Transport Fee:</span>
-                  <span className="font-semibold text-slate-800">{formatCurrency(fp.transport_fee)}</span>
+                  <span className="text-slate-600">Transport Fee:</span>
+                  <span className="font-bold text-slate-900">{formatCurrency(fp.transport_fee)}</span>
                 </div>
                 <div className="flex justify-between pt-2">
-                  <span className="font-bold text-slate-800 text-sm">Total Fee Package:</span>
-                  <span className="font-bold text-indigo-700 text-base">{formatCurrency(fp.total_amount)}</span>
+                  <span className="font-extrabold text-slate-900 text-base">Total Fee Package:</span>
+                  <span className="font-black text-indigo-700 text-lg">{formatCurrency(fp.total_amount)}</span>
                 </div>
               </CardContent>
             </Card>
