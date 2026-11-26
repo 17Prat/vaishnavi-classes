@@ -3,6 +3,7 @@
 import React, { createContext, useContext, useState, useEffect } from "react";
 import { User, UserRole } from "@/types";
 import { apiFetch } from "@/lib/api";
+import { safeStorage } from "@/lib/storage";
 
 interface AuthContextType {
   user: User | null;
@@ -33,24 +34,37 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    // Validate / refresh from localStorage after client mounts
-    const savedToken = localStorage.getItem("vaishnavi_token") || localStorage.getItem("feeflow_token");
-    const savedUser = localStorage.getItem("vaishnavi_user") || localStorage.getItem("feeflow_user");
+    try {
+      if (typeof window !== "undefined") {
+        const savedToken =
+          safeStorage.getItem("vaishnavi_token") ||
+          safeStorage.getItem("feeflow_token");
+        const savedUser =
+          safeStorage.getItem("vaishnavi_user") ||
+          safeStorage.getItem("feeflow_user");
 
-    if (savedToken && savedUser) {
-      try {
-        setToken(savedToken);
-        setUser(JSON.parse(savedUser));
-      } catch {
-        localStorage.removeItem("feeflow_token");
-        localStorage.removeItem("feeflow_user");
-        localStorage.removeItem("vaishnavi_token");
-        localStorage.removeItem("vaishnavi_user");
-        setToken(null);
-        setUser(null);
+        if (savedToken && savedUser) {
+          try {
+            const parsed = JSON.parse(savedUser);
+            if (parsed && typeof parsed === "object") {
+              setToken(savedToken);
+              setUser(parsed);
+            }
+          } catch {
+            safeStorage.removeItem("feeflow_token");
+            safeStorage.removeItem("feeflow_user");
+            safeStorage.removeItem("vaishnavi_token");
+            safeStorage.removeItem("vaishnavi_user");
+            setToken(null);
+            setUser(null);
+          }
+        }
       }
+    } catch {
+      // Ignore storage access error in private browsing
+    } finally {
+      setIsLoading(false);
     }
-    setIsLoading(false);
   }, []);
 
   const login = async (loginId: string, password: string): Promise<User> => {
@@ -62,8 +76,8 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     const accessToken = res.access_token;
     const userData = res.user;
 
-    localStorage.setItem("feeflow_token", accessToken);
-    localStorage.setItem("feeflow_user", JSON.stringify(userData));
+    safeStorage.setItem("feeflow_token", accessToken);
+    safeStorage.setItem("feeflow_user", JSON.stringify(userData));
 
     setToken(accessToken);
     setUser(userData);
@@ -86,8 +100,8 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     const accessToken = res.access_token;
     const userData = res.user;
 
-    localStorage.setItem("feeflow_token", accessToken);
-    localStorage.setItem("feeflow_user", JSON.stringify(userData));
+    safeStorage.setItem("feeflow_token", accessToken);
+    safeStorage.setItem("feeflow_user", JSON.stringify(userData));
 
     setToken(accessToken);
     setUser(userData);
@@ -113,8 +127,8 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     } catch (e) {
       // Ignore
     }
-    localStorage.removeItem("feeflow_token");
-    localStorage.removeItem("feeflow_user");
+    safeStorage.removeItem("feeflow_token");
+    safeStorage.removeItem("feeflow_user");
     setToken(null);
     setUser(null);
     window.location.href = "/login";
@@ -124,7 +138,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     try {
       const u = await apiFetch("/auth/me");
       setUser(u);
-      localStorage.setItem("feeflow_user", JSON.stringify(u));
+      safeStorage.setItem("feeflow_user", JSON.stringify(u));
     } catch {
       // Ignore
     }

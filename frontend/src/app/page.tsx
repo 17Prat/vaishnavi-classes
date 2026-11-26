@@ -3,6 +3,7 @@
 import React, { useState } from "react";
 import Link from "next/link";
 import { useAuth } from "@/lib/auth";
+import { safeStorage } from "@/lib/storage";
 import {
   BUSINESS_WHATSAPP_NUMBER,
   getDirectChatWhatsAppUrl,
@@ -136,12 +137,16 @@ export default function LandingPage() {
       });
 
       // Save locally
-      const stored = JSON.parse(localStorage.getItem("vaishnavi_enquiries") || "[]");
-      stored.push({
-        ...formData,
-        timestamp: new Date().toISOString(),
-      });
-      localStorage.setItem("vaishnavi_enquiries", JSON.stringify(stored));
+      try {
+        const stored = JSON.parse(safeStorage.getItem("vaishnavi_enquiries") || "[]");
+        stored.push({
+          ...formData,
+          timestamp: new Date().toISOString(),
+        });
+        safeStorage.setItem("vaishnavi_enquiries", JSON.stringify(stored));
+      } catch {
+        // Safe fallback
+      }
 
       setSubmittedData({ ...formData });
       setSubmittedModalOpen(true);
@@ -224,7 +229,7 @@ export default function LandingPage() {
               WhatsApp Us
             </button>
 
-            {user ? (
+            {user && user.role ? (
               <Link
                 href={`/${user.role}`}
                 className="inline-flex items-center gap-2 bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-bold px-4 py-2.5 rounded-xl shadow-sm transition-all"

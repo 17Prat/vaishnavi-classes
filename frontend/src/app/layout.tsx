@@ -9,7 +9,7 @@ export const metadata: Metadata = {
   manifest: "/manifest.json",
   icons: {
     icon: "/logo.png",
-    apple: "/logo.png",
+    apple: "/icon-192.png",
   },
 };
 
@@ -28,9 +28,6 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <head>
-        <link rel="apple-touch-icon" href="/icon-192.png" />
-      </head>
       <body className="font-sans antialiased selection:bg-indigo-500 selection:text-white">
         <AuthProvider>
           {children}

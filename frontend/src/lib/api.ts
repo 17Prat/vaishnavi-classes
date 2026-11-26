@@ -1,3 +1,5 @@
+import { safeStorage } from "@/lib/storage";
+
 export const API_BASE_URL =
   process.env.NEXT_PUBLIC_API_URL ||
   (typeof window !== "undefined" && window.location.hostname !== "localhost" && window.location.hostname !== "127.0.0.1"
@@ -15,9 +17,10 @@ export async function apiFetch<T = any>(
   endpoint: string,
   options: RequestInit = {}
 ): Promise<T> {
-  const token = typeof window !== "undefined"
-    ? (localStorage.getItem("vaishnavi_token") || localStorage.getItem("feeflow_token"))
-    : null;
+  let token: string | null = null;
+  if (typeof window !== "undefined") {
+    token = safeStorage.getItem("vaishnavi_token") || safeStorage.getItem("feeflow_token");
+  }
 
   const headers: HeadersInit = {
     "Content-Type": "application/json",
@@ -36,10 +39,10 @@ export async function apiFetch<T = any>(
 
     if (res.status === 401 && typeof window !== "undefined") {
       // If unauthorized, redirect to login only when in private routes
-      localStorage.removeItem("feeflow_token");
-      localStorage.removeItem("feeflow_user");
-      localStorage.removeItem("vaishnavi_token");
-      localStorage.removeItem("vaishnavi_user");
+      safeStorage.removeItem("feeflow_token");
+      safeStorage.removeItem("feeflow_user");
+      safeStorage.removeItem("vaishnavi_token");
+      safeStorage.removeItem("vaishnavi_user");
       const p = window.location.pathname;
       if (p !== "/" && !p.startsWith("/login") && !p.startsWith("/verify-receipt")) {
         window.location.href = "/login";
@@ -137,7 +140,7 @@ function handleOfflineFallback<T = any>(endpoint: string, options: RequestInit =
     }
 
     // Check localStorage registered users
-    const registered = JSON.parse(localStorage.getItem("vaishnavi_registered_users") || "[]");
+    const registered = JSON.parse(safeStorage.getItem("vaishnavi_registered_users") || "[]");
     const found = registered.find(
       (u: any) =>
         (u.login_id?.toUpperCase() === loginId ||
@@ -171,7 +174,7 @@ function handleOfflineFallback<T = any>(endpoint: string, options: RequestInit =
 
   // 2. Auth Register Fallback
   if (cleanEp === "/auth/register" && method === "POST") {
-    const registered = JSON.parse(localStorage.getItem("vaishnavi_registered_users") || "[]");
+    const registered = JSON.parse(safeStorage.getItem("vaishnavi_registered_users") || "[]");
     const role = body.role === "staff" ? "staff" : "student";
     const count = registered.length + 2;
     const prefix = role === "staff" ? "STF" : "STU";
@@ -190,7 +193,7 @@ function handleOfflineFallback<T = any>(endpoint: string, options: RequestInit =
     };
 
     registered.push(newUser);
-    localStorage.setItem("vaishnavi_registered_users", JSON.stringify(registered));
+    safeStorage.setItem("vaishnavi_registered_users", JSON.stringify(registered));
 
     return {
       access_token: "registered-session-token",
@@ -232,7 +235,7 @@ function handleOfflineFallback<T = any>(endpoint: string, options: RequestInit =
       } as unknown as T;
     }
 
-    const registered = JSON.parse(localStorage.getItem("vaishnavi_registered_users") || "[]");
+    const registered = JSON.parse(safeStorage.getItem("vaishnavi_registered_users") || "[]");
     const idx = registered.findIndex(
       (u: any) =>
         u.login_id?.toUpperCase() === q ||
@@ -242,7 +245,7 @@ function handleOfflineFallback<T = any>(endpoint: string, options: RequestInit =
     if (idx !== -1) {
       if (newPwd) {
         registered[idx].password = newPwd;
-        localStorage.setItem("vaishnavi_registered_users", JSON.stringify(registered));
+        safeStorage.setItem("vaishnavi_registered_users", JSON.stringify(registered));
         return {
           message: `Password for ${registered[idx].login_id} has been reset successfully!`,
           login_id: registered[idx].login_id,
@@ -304,7 +307,7 @@ function handleOfflineFallback<T = any>(endpoint: string, options: RequestInit =
 
   // 5. Students List Fallback
   if (cleanEp.startsWith("/students")) {
-    const registered = JSON.parse(localStorage.getItem("vaishnavi_registered_users") || "[]");
+    const registered = JSON.parse(safeStorage.getItem("vaishnavi_registered_users") || "[]");
     const localStudents = registered.map((u: any, i: number) => ({
       id: u.id,
       login_id: u.login_id,

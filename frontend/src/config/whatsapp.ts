@@ -28,14 +28,19 @@ export interface EnquiryData {
  * Prepares the standard WhatsApp Enquiry Message per specification
  */
 export function formatEnquiryWhatsAppMessage(data: EnquiryData): string {
-  const emailText = data.email && data.email.trim() ? data.email.trim() : "Not provided";
+  const name = (data?.customerName || "").trim();
+  const phone = (data?.mobileNumber || "").trim();
+  const emailText = data?.email && data.email.trim() ? data.email.trim() : "Not provided";
+  const service = (data?.serviceType || "General Information").trim();
+  const msg = (data?.message || "").trim();
+
   return (
     `*New Website Enquiry*\n\n` +
-    `Customer Name: ${data.customerName.trim()}\n` +
-    `Mobile Number: ${data.mobileNumber.trim()}\n` +
+    `Customer Name: ${name || "Visitor"}\n` +
+    `Mobile Number: ${phone || "Not provided"}\n` +
     `Email: ${emailText}\n` +
-    `Service: ${data.serviceType.trim()}\n` +
-    `Message: ${data.message.trim()}\n\n` +
+    `Service: ${service}\n` +
+    `Message: ${msg || "Enquiry regarding admissions and fees"}\n\n` +
     `Source: Website Contact Form`
   );
 }
