@@ -94,20 +94,20 @@ export function StatCards({ summary }: StatCardsProps) {
         const Icon = item.icon;
         return (
           <Card key={idx} className={`border ${item.border} hover:shadow-md transition-shadow`}>
-            <CardContent className="p-5 flex items-center justify-between">
+            <CardContent className="p-6 flex items-center justify-between">
               <div>
-                <p className="text-xs font-bold text-slate-600 uppercase tracking-wider">
+                <p className="text-sm font-extrabold text-slate-700 uppercase tracking-wider">
                   {item.title}
                 </p>
-                <h4 className="text-3xl font-extrabold text-slate-900 tracking-tight mt-1">
+                <h4 className="text-3xl sm:text-4xl font-black text-slate-900 tracking-tight mt-1.5">
                   {item.value}
                 </h4>
-                <p className="text-xs font-semibold text-slate-500 mt-1">
+                <p className="text-sm font-bold text-slate-500 mt-1">
                   {item.subtext}
                 </p>
               </div>
-              <div className={`h-12 w-12 rounded-xl ${item.bg} ${item.color} flex items-center justify-center shrink-0 shadow-xs`}>
-                <Icon className="h-6 w-6" />
+              <div className={`h-14 w-14 rounded-2xl ${item.bg} ${item.color} flex items-center justify-center shrink-0 shadow-xs`}>
+                <Icon className="h-7 w-7" />
               </div>
             </CardContent>
           </Card>

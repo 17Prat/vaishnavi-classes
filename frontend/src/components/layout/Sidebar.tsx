@@ -67,26 +67,26 @@ export function Sidebar() {
   const navItems = role === "admin" ? adminNav : role === "staff" ? staffNav : studentNav;
 
   return (
-    <aside className="hidden lg:flex w-64 flex-col fixed inset-y-0 left-0 bg-white border-r border-slate-200 z-30 shadow-sm">
+    <aside className="hidden lg:flex w-72 flex-col fixed inset-y-0 left-0 bg-white border-r border-slate-200 z-30 shadow-sm">
       {/* Brand */}
-      <div className="h-20 flex items-center px-4 border-b border-slate-100 gap-3">
+      <div className="h-22 flex items-center px-5 border-b border-slate-100 gap-3.5 py-4">
         <img
           src="/logo.png"
           alt="Vaishnavi Classes"
-          className="h-11 w-11 rounded-xl object-cover shadow-sm border border-slate-200 flex-shrink-0"
+          className="h-12 w-12 rounded-xl object-cover shadow-sm border border-slate-200 flex-shrink-0"
         />
         <div className="min-w-0">
-          <span className="font-extrabold text-base tracking-tight text-slate-900 block leading-tight truncate">
+          <span className="font-black text-lg tracking-tight text-slate-900 block leading-tight truncate">
             Vaishnavi Classes
           </span>
-          <span className="text-xs block font-bold text-indigo-700 tracking-wider uppercase mt-0.5">
+          <span className="text-xs block font-bold text-indigo-700 tracking-wider uppercase mt-1">
             Since 1996 • {role}
           </span>
         </div>
       </div>
 
       {/* Nav List */}
-      <div className="flex-1 overflow-y-auto px-3.5 py-4 space-y-1.5">
+      <div className="flex-1 overflow-y-auto px-4 py-5 space-y-2">
         {navItems.map((item) => {
           const Icon = item.icon;
           const isActive = pathname
@@ -101,16 +101,16 @@ export function Sidebar() {
               key={item.href}
               href={item.href}
               className={cn(
-                "flex items-center gap-3.5 px-3.5 py-3 rounded-xl text-sm font-semibold transition-all group tracking-wide",
+                "flex items-center gap-4 px-4 py-3.5 rounded-xl text-base font-bold transition-all group tracking-wide",
                 isActive
-                  ? "bg-indigo-600 text-white font-bold shadow-md shadow-indigo-100"
-                  : "text-slate-700 hover:text-slate-900 hover:bg-slate-100/80"
+                  ? "bg-indigo-600 text-white shadow-md shadow-indigo-200"
+                  : "text-slate-700 hover:text-slate-900 hover:bg-slate-100"
               )}
             >
               <Icon
                 className={cn(
                   "h-5 w-5 shrink-0 transition-colors",
-                  isActive ? "text-white" : "text-slate-500 group-hover:text-slate-700"
+                  isActive ? "text-white" : "text-slate-500 group-hover:text-slate-800"
                 )}
               />
               <span className="truncate">{item.label}</span>
@@ -121,13 +121,13 @@ export function Sidebar() {
 
       {/* Footer institute info */}
       <div className="p-4 border-t border-slate-200 bg-slate-50/80">
-        <div className="flex items-center gap-2.5">
-          <ShieldCheck className="h-5 w-5 text-emerald-600 shrink-0" />
+        <div className="flex items-center gap-3">
+          <ShieldCheck className="h-6 w-6 text-emerald-600 shrink-0" />
           <div className="truncate">
-            <p className="text-xs font-bold text-slate-900 truncate">
+            <p className="text-sm font-bold text-slate-900 truncate">
               {user.institute_name || "Vaishnavi Classes"}
             </p>
-            <p className="text-xs text-slate-600 font-mono font-medium">
+            <p className="text-xs text-slate-600 font-mono font-bold">
               ID: {user.login_id}
             </p>
           </div>

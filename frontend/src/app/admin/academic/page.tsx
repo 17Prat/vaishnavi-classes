@@ -130,14 +130,14 @@ export default function AdminAcademicPage() {
                 <Card key={c.id} className="shadow-xs hover:shadow-md transition-shadow border-slate-200">
                   <CardHeader className="p-5 pb-2">
                     <div className="flex items-center justify-between">
-                      <span className="font-mono text-xs font-bold text-indigo-700 bg-indigo-50 px-2.5 py-1 rounded-md border border-indigo-200">
+                      <span className="font-mono text-xs font-black text-indigo-700 bg-indigo-50 px-3 py-1 rounded-lg border border-indigo-200">
                         {c.code}
                       </span>
-                      <span className="text-xs font-bold text-slate-500">{c.duration_months} Months</span>
+                      <span className="text-sm font-bold text-slate-600">{c.duration_months} Months</span>
                     </div>
-                    <CardTitle className="text-base font-bold text-slate-900 mt-2">{c.name}</CardTitle>
+                    <CardTitle className="text-lg font-black text-slate-900 mt-2">{c.name}</CardTitle>
                   </CardHeader>
-                  <CardContent className="p-5 pt-1 text-sm text-slate-600">
+                  <CardContent className="p-5 pt-1 text-base text-slate-700 font-medium">
                     <p className="line-clamp-2">{c.description || "No description provided."}</p>
                   </CardContent>
                 </Card>
@@ -151,16 +151,16 @@ export default function AdminAcademicPage() {
                 <Card key={b.id} className="shadow-xs hover:shadow-md transition-shadow border-slate-200">
                   <CardHeader className="p-5 pb-2">
                     <div className="flex items-center justify-between">
-                      <span className="font-mono text-xs font-bold text-purple-700 bg-purple-50 px-2.5 py-1 rounded-md border border-purple-200">
+                      <span className="font-mono text-xs font-black text-purple-700 bg-purple-50 px-3 py-1 rounded-lg border border-purple-200">
                         {b.code}
                       </span>
-                      <span className="text-xs font-bold text-slate-500">Max: {b.max_capacity}</span>
+                      <span className="text-sm font-bold text-slate-600">Max: {b.max_capacity}</span>
                     </div>
-                    <CardTitle className="text-base font-bold text-slate-900 mt-2">{b.name}</CardTitle>
+                    <CardTitle className="text-lg font-black text-slate-900 mt-2">{b.name}</CardTitle>
                   </CardHeader>
-                  <CardContent className="p-5 pt-1 text-sm text-slate-600">
+                  <CardContent className="p-5 pt-1 text-base text-slate-700 font-medium">
                     <p className="text-slate-900 font-bold">{b.class_name || "General"}</p>
-                    <p className="text-slate-500 text-xs font-medium">{b.course_name || ""}</p>
+                    <p className="text-slate-600 text-sm font-semibold">{b.course_name || ""}</p>
                   </CardContent>
                 </Card>
               ))}

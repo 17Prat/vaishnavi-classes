@@ -109,28 +109,28 @@ export default function AdminFeesPage() {
                 <p className="text-xs text-slate-500 font-medium">{fp.course_name || "All Courses"}</p>
               </CardHeader>
 
-              <CardContent className="p-5 text-sm space-y-2.5">
-                <div className="flex justify-between py-1 border-b border-slate-100">
-                  <span className="text-slate-600">Admission Fee:</span>
-                  <span className="font-bold text-slate-900">{formatCurrency(fp.admission_fee)}</span>
+              <CardContent className="p-6 text-base space-y-3">
+                <div className="flex justify-between py-1.5 border-b border-slate-100">
+                  <span className="text-slate-700 font-semibold">Admission Fee:</span>
+                  <span className="font-black text-slate-900 text-base">{formatCurrency(fp.admission_fee)}</span>
                 </div>
-                <div className="flex justify-between py-1 border-b border-slate-100">
-                  <span className="text-slate-600">Tuition Fee:</span>
-                  <span className="font-bold text-slate-900">{formatCurrency(fp.tuition_fee)}</span>
+                <div className="flex justify-between py-1.5 border-b border-slate-100">
+                  <span className="text-slate-700 font-semibold">Tuition Fee:</span>
+                  <span className="font-black text-slate-900 text-base">{formatCurrency(fp.tuition_fee)}</span>
                 </div>
-                <div className="flex justify-between py-1 border-b border-slate-100">
-                  <span className="text-slate-600">Examination & Library:</span>
-                  <span className="font-bold text-slate-900">
+                <div className="flex justify-between py-1.5 border-b border-slate-100">
+                  <span className="text-slate-700 font-semibold">Examination &amp; Library:</span>
+                  <span className="font-black text-slate-900 text-base">
                     {formatCurrency((Number(fp.examination_fee) || 0) + (Number(fp.library_fee) || 0))}
                   </span>
                 </div>
-                <div className="flex justify-between py-1 border-b border-slate-100">
-                  <span className="text-slate-600">Transport Fee:</span>
-                  <span className="font-bold text-slate-900">{formatCurrency(fp.transport_fee)}</span>
+                <div className="flex justify-between py-1.5 border-b border-slate-100">
+                  <span className="text-slate-700 font-semibold">Transport Fee:</span>
+                  <span className="font-black text-slate-900 text-base">{formatCurrency(fp.transport_fee)}</span>
                 </div>
                 <div className="flex justify-between pt-2">
-                  <span className="font-extrabold text-slate-900 text-base">Total Fee Package:</span>
-                  <span className="font-black text-indigo-700 text-lg">{formatCurrency(fp.total_amount)}</span>
+                  <span className="font-black text-slate-900 text-lg">Total Fee Package:</span>
+                  <span className="font-black text-indigo-700 text-xl">{formatCurrency(fp.total_amount)}</span>
                 </div>
               </CardContent>
             </Card>

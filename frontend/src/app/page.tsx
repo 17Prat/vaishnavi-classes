@@ -195,32 +195,32 @@ export default function LandingPage() {
 
       {/* Main Header / Navigation */}
       <header className="sticky top-0 z-40 bg-white/95 backdrop-blur-md border-b border-slate-200 shadow-xs">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-22 flex items-center justify-between">
           <Link href="/" className="flex items-center gap-3.5 group">
             <img
               src="/logo.png"
               alt="Vaishnavi Classes Logo"
-              className="h-12 w-12 rounded-xl object-cover shadow-sm border border-slate-200 transition-transform group-hover:scale-105"
+              className="h-14 w-14 rounded-xl object-cover shadow-sm border border-slate-200 transition-transform group-hover:scale-105"
             />
             <div>
               <div className="flex items-center gap-2">
-                <span className="text-xl font-extrabold tracking-tight text-slate-900">
+                <span className="text-xl sm:text-2xl font-black tracking-tight text-slate-900">
                   Vaishnavi Classes
                 </span>
-                <span className="bg-indigo-100 text-indigo-800 text-[10px] font-bold px-2 py-0.5 rounded-full border border-indigo-200">
+                <span className="bg-indigo-100 text-indigo-800 text-xs font-black px-2.5 py-0.5 rounded-full border border-indigo-200">
                   Since 1996
                 </span>
               </div>
-              <p className="text-xs text-slate-500 font-medium">
+              <p className="text-xs sm:text-sm text-slate-600 font-semibold">
                 Pioneers in Quality Education &amp; Board Exam Coaching
               </p>
             </div>
           </Link>
 
-          <div className="hidden md:flex items-center gap-6 text-sm font-semibold text-slate-600">
+          <div className="hidden md:flex items-center gap-8 text-base font-bold text-slate-700">
             <a href="#courses" className="hover:text-indigo-600 transition-colors">Courses</a>
             <a href="#why-us" className="hover:text-indigo-600 transition-colors">Why Vaishnavi</a>
-            <a href="#enquiry" className="hover:text-indigo-600 transition-colors text-indigo-600">
+            <a href="#enquiry" className="hover:text-indigo-600 transition-colors text-indigo-600 font-black">
               Admission Enquiry
             </a>
           </div>
@@ -228,26 +228,26 @@ export default function LandingPage() {
           <div className="flex items-center gap-3">
             <button
               onClick={() => handleDirectChat()}
-              className="hidden sm:inline-flex items-center gap-2 bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold px-4 py-2.5 rounded-xl shadow-xs transition-all active:scale-95 cursor-pointer"
+              className="hidden sm:inline-flex items-center gap-2 bg-emerald-600 hover:bg-emerald-700 text-white text-sm font-black px-5 py-3 rounded-xl shadow-xs transition-all active:scale-95 cursor-pointer"
             >
-              <Send className="h-3.5 w-3.5" />
+              <Send className="h-4 w-4" />
               WhatsApp Us
             </button>
 
             {mounted && user && user.role ? (
               <Link
                 href={`/${user.role}`}
-                className="inline-flex items-center gap-2 bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-bold px-4 py-2.5 rounded-xl shadow-sm transition-all"
+                className="inline-flex items-center gap-2 bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-black px-5 py-3 rounded-xl shadow-sm transition-all"
               >
-                <LogIn className="h-3.5 w-3.5" />
+                <LogIn className="h-4 w-4" />
                 Open Dashboard ({user.role})
               </Link>
             ) : (
               <Link
                 href="/login"
-                className="inline-flex items-center gap-2 bg-slate-900 hover:bg-slate-800 text-white text-xs font-bold px-4 py-2.5 rounded-xl shadow-sm transition-all"
+                className="inline-flex items-center gap-2 bg-slate-900 hover:bg-slate-800 text-white text-sm font-black px-5 py-3 rounded-xl shadow-sm transition-all"
               >
-                <LogIn className="h-3.5 w-3.5" />
+                <LogIn className="h-4 w-4" />
                 Portal Login
               </Link>
             )}
@@ -261,66 +261,66 @@ export default function LandingPage() {
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
             {/* Left Column: Headline and Call-to-Actions */}
             <div className="lg:col-span-7 space-y-6 text-center lg:text-left">
-              <div className="inline-flex items-center gap-2 bg-emerald-100/90 border border-emerald-300 text-emerald-900 text-xs font-bold px-3.5 py-1.5 rounded-full shadow-xs">
-                <Sparkles className="h-3.5 w-3.5 text-emerald-600" />
+              <div className="inline-flex items-center gap-2 bg-emerald-100/90 border border-emerald-300 text-emerald-900 text-sm font-black px-4 py-2 rounded-full shadow-xs">
+                <Sparkles className="h-4 w-4 text-emerald-600" />
                 <span>28+ Years of Academic Excellence (Est. 1996)</span>
               </div>
 
-              <h1 className="text-3xl sm:text-4xl lg:text-5xl font-black text-slate-900 tracking-tight leading-tight">
+              <h1 className="text-3xl sm:text-5xl lg:text-6xl font-black text-slate-900 tracking-tight leading-tight">
                 Empowering Students to Achieve <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-700 to-indigo-600">Top Academic Results</span>
               </h1>
 
-              <p className="text-base sm:text-lg text-slate-600 leading-relaxed font-normal">
+              <p className="text-base sm:text-xl text-slate-700 leading-relaxed font-medium">
                 Vaishnavi Classes provides expert-led, result-driven coaching for 8th, 9th, 10th School Boards (SSC/CBSE) and 11th &amp; 12th Science &amp; Commerce. Experience personalized guidance, small batch sizes, and transparent digital fee management.
               </p>
 
               {/* Action Buttons */}
-              <div className="flex flex-wrap items-center justify-center lg:justify-start gap-3.5 pt-2">
+              <div className="flex flex-wrap items-center justify-center lg:justify-start gap-4 pt-2">
                 <a
                   href="#enquiry"
-                  className="inline-flex items-center gap-2 bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-sm px-6 py-3.5 rounded-xl shadow-lg shadow-emerald-600/25 transition-all transform hover:-translate-y-0.5 active:translate-y-0 cursor-pointer"
+                  className="inline-flex items-center gap-2.5 bg-emerald-600 hover:bg-emerald-700 text-white font-black text-base px-7 py-4 rounded-xl shadow-lg shadow-emerald-600/25 transition-all transform hover:-translate-y-0.5 active:translate-y-0 cursor-pointer"
                 >
-                  <Send className="h-4 w-4" />
+                  <Send className="h-5 w-5" />
                   Send WhatsApp Enquiry
                 </a>
 
                 <button
                   onClick={() => handleDirectChat()}
-                  className="inline-flex items-center gap-2 bg-white hover:bg-slate-50 text-slate-800 border border-slate-300 font-bold text-sm px-5 py-3.5 rounded-xl shadow-xs transition-all hover:border-slate-400 cursor-pointer"
+                  className="inline-flex items-center gap-2.5 bg-white hover:bg-slate-50 text-slate-900 border-2 border-slate-300 font-black text-base px-6 py-4 rounded-xl shadow-xs transition-all hover:border-slate-400 cursor-pointer"
                 >
-                  <MessageSquare className="h-4 w-4 text-emerald-600" />
+                  <MessageSquare className="h-5 w-5 text-emerald-600" />
                   Chat on WhatsApp (+91 96642 57346)
                 </button>
 
                 <Link
                   href="/login"
-                  className="inline-flex items-center gap-1.5 text-indigo-600 hover:text-indigo-800 font-bold text-sm px-3 py-3.5"
+                  className="inline-flex items-center gap-1.5 text-indigo-700 hover:text-indigo-900 font-black text-base px-4 py-4"
                 >
                   <span>Student/Staff Portal</span>
-                  <ArrowRight className="h-4 w-4" />
+                  <ArrowRight className="h-5 w-5" />
                 </Link>
               </div>
 
               {/* Trust Badges */}
               <div className="pt-6 grid grid-cols-3 gap-4 border-t border-slate-200/80">
-                <div className="p-3 rounded-2xl bg-white border border-slate-200/80 shadow-xs">
-                  <p className="text-2xl sm:text-3xl font-black text-slate-900">28+</p>
-                  <p className="text-xs text-slate-500 font-semibold mt-0.5">Years of Trust (1996)</p>
+                <div className="p-4 rounded-2xl bg-white border border-slate-200/80 shadow-xs">
+                  <p className="text-3xl sm:text-4xl font-black text-slate-900">28+</p>
+                  <p className="text-xs sm:text-sm text-slate-600 font-bold mt-1">Years of Trust (1996)</p>
                 </div>
-                <div className="p-3 rounded-2xl bg-white border border-slate-200/80 shadow-xs">
-                  <p className="text-2xl sm:text-3xl font-black text-indigo-600">10,000+</p>
-                  <p className="text-xs text-slate-500 font-semibold mt-0.5">Successful Students</p>
+                <div className="p-4 rounded-2xl bg-white border border-slate-200/80 shadow-xs">
+                  <p className="text-3xl sm:text-4xl font-black text-indigo-600">10,000+</p>
+                  <p className="text-xs sm:text-sm text-slate-600 font-bold mt-1">Successful Students</p>
                 </div>
-                <div className="p-3 rounded-2xl bg-white border border-slate-200/80 shadow-xs">
-                  <p className="text-2xl sm:text-3xl font-black text-emerald-600">100%</p>
-                  <p className="text-xs text-slate-500 font-semibold mt-0.5">Digital Receipts &amp; Fees</p>
+                <div className="p-4 rounded-2xl bg-white border border-slate-200/80 shadow-xs">
+                  <p className="text-3xl sm:text-4xl font-black text-emerald-600">100%</p>
+                  <p className="text-xs sm:text-sm text-slate-600 font-bold mt-1">Digital Receipts &amp; Fees</p>
                 </div>
               </div>
             </div>
 
             {/* Right Column: Hero Visual Card */}
             <div className="lg:col-span-5 flex justify-center">
-              <div className="relative w-full max-w-md bg-white rounded-3xl p-6 sm:p-7 shadow-2xl border border-slate-200 ring-4 ring-indigo-50/50">
+              <div className="relative w-full max-w-md bg-white rounded-3xl p-6 sm:p-8 shadow-2xl border border-slate-200 ring-4 ring-indigo-50/50">
                 <div className="flex items-center gap-4 pb-4 border-b border-slate-100">
                   <img
                     src="/logo.png"
@@ -328,34 +328,34 @@ export default function LandingPage() {
                     className="h-16 w-16 rounded-2xl object-cover border-2 border-indigo-100 shadow-md"
                   />
                   <div>
-                    <h3 className="font-extrabold text-slate-900 text-lg">Vaishnavi Classes</h3>
-                    <p className="text-xs text-indigo-600 font-bold">Since 1996 • Excellence Always</p>
-                    <p className="text-[11px] text-slate-500 font-medium">Official Portal &amp; Fee Management</p>
+                    <h3 className="font-black text-slate-900 text-xl">Vaishnavi Classes</h3>
+                    <p className="text-xs sm:text-sm text-indigo-700 font-black">Since 1996 • Excellence Always</p>
+                    <p className="text-xs text-slate-600 font-semibold">Official Portal &amp; Fee Management</p>
                   </div>
                 </div>
 
-                <div className="py-4 space-y-3">
-                  <div className="flex items-start gap-3 p-3 rounded-xl bg-slate-50/90 border border-slate-100">
-                    <CheckCircle2 className="h-5 w-5 text-emerald-600 shrink-0 mt-0.5" />
+                <div className="py-4 space-y-3.5">
+                  <div className="flex items-start gap-3.5 p-3.5 rounded-xl bg-slate-50/90 border border-slate-100">
+                    <CheckCircle2 className="h-6 w-6 text-emerald-600 shrink-0 mt-0.5" />
                     <div>
-                      <p className="text-xs font-bold text-slate-900">Experienced Faculty</p>
-                      <p className="text-[11px] text-slate-500">Mentors with over two decades of board exam expertise.</p>
+                      <p className="text-sm font-black text-slate-900">Experienced Faculty</p>
+                      <p className="text-xs text-slate-600 font-medium">Mentors with over two decades of board exam expertise.</p>
                     </div>
                   </div>
 
-                  <div className="flex items-start gap-3 p-3 rounded-xl bg-slate-50/90 border border-slate-100">
-                    <CheckCircle2 className="h-5 w-5 text-emerald-600 shrink-0 mt-0.5" />
+                  <div className="flex items-start gap-3.5 p-3.5 rounded-xl bg-slate-50/90 border border-slate-100">
+                    <CheckCircle2 className="h-6 w-6 text-emerald-600 shrink-0 mt-0.5" />
                     <div>
-                      <p className="text-xs font-bold text-slate-900">Instant WhatsApp Fee Reminders</p>
-                      <p className="text-[11px] text-slate-500">Automated installment notices &amp; QR code payment receipts.</p>
+                      <p className="text-sm font-black text-slate-900">Instant WhatsApp Fee Reminders</p>
+                      <p className="text-xs text-slate-600 font-medium">Automated installment notices &amp; QR code payment receipts.</p>
                     </div>
                   </div>
 
-                  <div className="flex items-start gap-3 p-3 rounded-xl bg-slate-50/90 border border-slate-100">
-                    <CheckCircle2 className="h-5 w-5 text-emerald-600 shrink-0 mt-0.5" />
+                  <div className="flex items-start gap-3.5 p-3.5 rounded-xl bg-slate-50/90 border border-slate-100">
+                    <CheckCircle2 className="h-6 w-6 text-emerald-600 shrink-0 mt-0.5" />
                     <div>
-                      <p className="text-xs font-bold text-slate-900">Direct Owner WhatsApp Support</p>
-                      <p className="text-[11px] text-slate-500">Instant communication at +91 96642 57346 with notifications.</p>
+                      <p className="text-sm font-black text-slate-900">Direct Owner WhatsApp Support</p>
+                      <p className="text-xs text-slate-600 font-medium">Instant communication at +91 96642 57346 with notifications.</p>
                     </div>
                   </div>
                 </div>
@@ -363,7 +363,7 @@ export default function LandingPage() {
                 <div className="pt-2">
                   <a
                     href="#enquiry"
-                    className="w-full inline-flex items-center justify-center gap-2 bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-xs py-3.5 rounded-xl shadow-md shadow-indigo-200 transition-all cursor-pointer"
+                    className="w-full inline-flex items-center justify-center gap-2 bg-indigo-600 hover:bg-indigo-700 text-white font-black text-sm sm:text-base py-4 rounded-xl shadow-md shadow-indigo-200 transition-all cursor-pointer"
                   >
                     Apply for Admission 2026 →
                   </a>
@@ -377,14 +377,14 @@ export default function LandingPage() {
       {/* Courses Section */}
       <section id="courses" className="py-16 bg-white border-b border-slate-200">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center max-w-2xl mx-auto mb-12">
-            <span className="text-xs font-extrabold uppercase tracking-wider text-indigo-700 bg-indigo-50 px-3 py-1 rounded-full border border-indigo-200">
+          <div className="text-center max-w-3xl mx-auto mb-14">
+            <span className="text-sm font-black uppercase tracking-wider text-indigo-700 bg-indigo-50 px-4 py-1.5 rounded-full border border-indigo-200">
               Academic Programs
             </span>
-            <h2 className="text-2xl sm:text-3xl font-black text-slate-900 mt-3">
+            <h2 className="text-3xl sm:text-4xl font-black text-slate-900 mt-4 tracking-tight">
               Coaching Programs Tailored for High Performance
             </h2>
-            <p className="text-sm text-slate-600 mt-2">
+            <p className="text-base sm:text-lg text-slate-600 mt-2.5 font-medium">
               Comprehensive curriculum coverage, structured doubt clearing, and regular assessments.
             </p>
           </div>
@@ -393,27 +393,27 @@ export default function LandingPage() {
             {courses.map((course, idx) => (
               <div
                 key={idx}
-                className={`rounded-2xl p-6 border ${course.color} transition-all duration-200 hover:shadow-xl flex flex-col justify-between group`}
+                className={`rounded-3xl p-7 border-2 ${course.color} transition-all duration-200 hover:shadow-xl flex flex-col justify-between group bg-white`}
               >
                 <div>
-                  <span className="text-[10px] font-bold uppercase px-2.5 py-1 rounded-md bg-white border border-slate-200 text-slate-700 shadow-2xs">
+                  <span className="text-xs font-black uppercase px-3 py-1.5 rounded-lg bg-white border border-slate-200 text-slate-800 shadow-2xs">
                     {course.board}
                   </span>
-                  <h3 className="font-black text-slate-900 text-lg mt-3 group-hover:text-indigo-600 transition-colors">
+                  <h3 className="font-black text-slate-900 text-xl mt-4 group-hover:text-indigo-600 transition-colors">
                     {course.title}
                   </h3>
-                  <p className="text-xs text-slate-600 leading-relaxed mt-2.5 font-normal">
+                  <p className="text-sm sm:text-base text-slate-700 leading-relaxed mt-3 font-medium">
                     {course.desc}
                   </p>
                 </div>
-                <div className="mt-6 pt-4 border-t border-slate-200/80 flex items-center justify-between">
-                  <span className={`text-[11px] font-bold ${course.accent} bg-white px-2.5 py-1 rounded-md border border-slate-200/70 shadow-2xs`}>
+                <div className="mt-8 pt-5 border-t border-slate-200/80 flex items-center justify-between">
+                  <span className={`text-xs sm:text-sm font-black ${course.accent} bg-white px-3 py-1 rounded-lg border border-slate-200/70 shadow-2xs`}>
                     {course.badge}
                   </span>
                   <button
                     type="button"
                     onClick={() => handleSelectCourse(course.title)}
-                    className="text-xs font-bold text-indigo-600 hover:text-indigo-800 flex items-center gap-1 cursor-pointer"
+                    className="text-sm font-black text-indigo-700 hover:text-indigo-900 flex items-center gap-1.5 cursor-pointer"
                   >
                     Enquire →
                   </button>
@@ -425,47 +425,47 @@ export default function LandingPage() {
       </section>
 
       {/* Why Choose Vaishnavi Classes */}
-      <section id="why-us" className="py-16 bg-slate-50 border-b border-slate-200">
+      <section id="why-us" className="py-20 bg-slate-50 border-b border-slate-200">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center max-w-2xl mx-auto mb-12">
-            <span className="text-xs font-extrabold uppercase tracking-wider text-emerald-800 bg-emerald-50 px-3 py-1 rounded-full border border-emerald-200">
+          <div className="text-center max-w-3xl mx-auto mb-14">
+            <span className="text-sm font-black uppercase tracking-wider text-emerald-800 bg-emerald-50 px-4 py-1.5 rounded-full border border-emerald-200">
               Why Vaishnavi Classes?
             </span>
-            <h2 className="text-2xl sm:text-3xl font-black text-slate-900 mt-3">
+            <h2 className="text-3xl sm:text-4xl font-black text-slate-900 mt-4 tracking-tight">
               28 Years of Proven Trust and Success
             </h2>
-            <p className="text-sm text-slate-600 mt-2">
+            <p className="text-base sm:text-lg text-slate-600 mt-2.5 font-medium">
               Since 1996, generations of students have achieved their highest academic potential with us.
             </p>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            <div className="bg-white p-7 rounded-3xl border border-slate-200 shadow-xs hover:shadow-md transition-shadow">
-              <div className="h-12 w-12 rounded-2xl bg-indigo-50 text-indigo-600 flex items-center justify-center mb-4 shadow-2xs">
-                <Award className="h-6 w-6" />
+            <div className="bg-white p-8 rounded-3xl border border-slate-200 shadow-sm hover:shadow-md transition-shadow">
+              <div className="h-14 w-14 rounded-2xl bg-indigo-50 text-indigo-600 flex items-center justify-center mb-5 shadow-2xs">
+                <Award className="h-7 w-7" />
               </div>
-              <h3 className="text-base font-bold text-slate-900">Unmatched Teaching Heritage</h3>
-              <p className="text-xs text-slate-600 mt-2.5 leading-relaxed font-normal">
+              <h3 className="text-lg sm:text-xl font-black text-slate-900">Unmatched Teaching Heritage</h3>
+              <p className="text-sm sm:text-base text-slate-700 mt-3 leading-relaxed font-medium">
                 Founded in 1996, we bring over 28 years of consistent board toppers, deep subject knowledge, and proven pedagogical methods.
               </p>
             </div>
 
-            <div className="bg-white p-7 rounded-3xl border border-slate-200 shadow-xs hover:shadow-md transition-shadow">
-              <div className="h-12 w-12 rounded-2xl bg-emerald-50 text-emerald-600 flex items-center justify-center mb-4 shadow-2xs">
-                <Users className="h-6 w-6" />
+            <div className="bg-white p-8 rounded-3xl border border-slate-200 shadow-sm hover:shadow-md transition-shadow">
+              <div className="h-14 w-14 rounded-2xl bg-emerald-50 text-emerald-600 flex items-center justify-center mb-5 shadow-2xs">
+                <Users className="h-7 w-7" />
               </div>
-              <h3 className="text-base font-bold text-slate-900">Personalized Mentorship</h3>
-              <p className="text-xs text-slate-600 mt-2.5 leading-relaxed font-normal">
+              <h3 className="text-lg sm:text-xl font-black text-slate-900">Personalized Mentorship</h3>
+              <p className="text-sm sm:text-base text-slate-700 mt-3 leading-relaxed font-medium">
                 Every student receives individual attention, customized study strategies, periodic parent updates, and one-on-one doubt clearance.
               </p>
             </div>
 
-            <div className="bg-white p-7 rounded-3xl border border-slate-200 shadow-xs hover:shadow-md transition-shadow">
-              <div className="h-12 w-12 rounded-2xl bg-blue-50 text-blue-600 flex items-center justify-center mb-4 shadow-2xs">
-                <ShieldCheck className="h-6 w-6" />
+            <div className="bg-white p-8 rounded-3xl border border-slate-200 shadow-sm hover:shadow-md transition-shadow">
+              <div className="h-14 w-14 rounded-2xl bg-blue-50 text-blue-600 flex items-center justify-center mb-5 shadow-2xs">
+                <ShieldCheck className="h-7 w-7" />
               </div>
-              <h3 className="text-base font-bold text-slate-900">Transparent Digital Portal</h3>
-              <p className="text-xs text-slate-600 mt-2.5 leading-relaxed font-normal">
+              <h3 className="text-lg sm:text-xl font-black text-slate-900">Transparent Digital Portal</h3>
+              <p className="text-sm sm:text-base text-slate-700 mt-3 leading-relaxed font-medium">
                 Students and parents get a dedicated dashboard to track fee plans, download verified QR-code PDF receipts, and view payment ledgers.
               </p>
             </div>
@@ -474,55 +474,55 @@ export default function LandingPage() {
       </section>
 
       {/* WHATSAPP ENQUIRY & CONTACT SECTION */}
-      <section id="enquiry" className="py-16 bg-white">
+      <section id="enquiry" className="py-20 bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-12">
             {/* Left: Contact Info & WhatsApp Instruction */}
             <div className="lg:col-span-5 space-y-6">
               <div>
-                <span className="text-xs font-extrabold uppercase tracking-wider text-emerald-800 bg-emerald-50 px-3 py-1 rounded-full border border-emerald-200">
+                <span className="text-sm font-black uppercase tracking-wider text-emerald-800 bg-emerald-50 px-4 py-1.5 rounded-full border border-emerald-200">
                   Admission &amp; Fee Enquiry
                 </span>
-                <h2 className="text-2xl sm:text-3xl font-black text-slate-900 mt-3">
+                <h2 className="text-3xl sm:text-4xl font-black text-slate-900 mt-4 tracking-tight">
                   Connect Directly with Management
                 </h2>
-                <p className="text-sm text-slate-600 mt-2 leading-relaxed font-normal">
+                <p className="text-base sm:text-lg text-slate-700 mt-2.5 leading-relaxed font-medium">
                   Fill out the form to submit your admission inquiry. It records your request in our system and connects directly with the institute management at <strong>+91 96642 57346</strong>.
                 </p>
               </div>
 
               {/* Direct Info Card */}
-              <div className="bg-slate-50/90 rounded-3xl p-6 border border-slate-200 space-y-4 shadow-xs">
+              <div className="bg-slate-50/90 rounded-3xl p-7 border border-slate-200 space-y-5 shadow-xs">
                 <a
                   href="tel:+919664257346"
-                  className="flex items-center gap-3.5 p-2 rounded-xl hover:bg-white transition-colors"
+                  className="flex items-center gap-4 p-2.5 rounded-xl hover:bg-white transition-colors"
                 >
-                  <div className="h-10 w-10 rounded-xl bg-emerald-100 text-emerald-700 flex items-center justify-center shrink-0">
-                    <PhoneCall className="h-5 w-5" />
+                  <div className="h-12 w-12 rounded-xl bg-emerald-100 text-emerald-700 flex items-center justify-center shrink-0">
+                    <PhoneCall className="h-6 w-6" />
                   </div>
                   <div>
-                    <p className="text-xs text-slate-500 font-semibold">Registered WhatsApp &amp; Mobile</p>
-                    <p className="text-sm font-bold text-slate-900">+91 96642 57346</p>
+                    <p className="text-xs sm:text-sm text-slate-500 font-bold uppercase tracking-wider">Registered WhatsApp &amp; Mobile</p>
+                    <p className="text-lg sm:text-xl font-black text-slate-900">+91 96642 57346</p>
                   </div>
                 </a>
 
-                <div className="flex items-center gap-3.5 p-2 rounded-xl">
-                  <div className="h-10 w-10 rounded-xl bg-indigo-100 text-indigo-700 flex items-center justify-center shrink-0">
-                    <Clock className="h-5 w-5" />
+                <div className="flex items-center gap-4 p-2.5 rounded-xl">
+                  <div className="h-12 w-12 rounded-xl bg-indigo-100 text-indigo-700 flex items-center justify-center shrink-0">
+                    <Clock className="h-6 w-6" />
                   </div>
                   <div>
-                    <p className="text-xs text-slate-500 font-semibold">Inquiry Hours</p>
-                    <p className="text-sm font-bold text-slate-900">Mon – Sat (8:00 AM – 8:30 PM)</p>
+                    <p className="text-xs sm:text-sm text-slate-500 font-bold uppercase tracking-wider">Inquiry Hours</p>
+                    <p className="text-base sm:text-lg font-black text-slate-900">Mon – Sat (8:00 AM – 8:30 PM)</p>
                   </div>
                 </div>
 
-                <div className="flex items-center gap-3.5 p-2 rounded-xl">
-                  <div className="h-10 w-10 rounded-xl bg-blue-100 text-blue-700 flex items-center justify-center shrink-0">
-                    <MapPin className="h-5 w-5" />
+                <div className="flex items-center gap-4 p-2.5 rounded-xl">
+                  <div className="h-12 w-12 rounded-xl bg-blue-100 text-blue-700 flex items-center justify-center shrink-0">
+                    <MapPin className="h-6 w-6" />
                   </div>
                   <div>
-                    <p className="text-xs text-slate-500 font-semibold">Campus &amp; Desk</p>
-                    <p className="text-sm font-bold text-slate-900">Vaishnavi Classes Main Branch</p>
+                    <p className="text-xs sm:text-sm text-slate-500 font-bold uppercase tracking-wider">Campus &amp; Desk</p>
+                    <p className="text-base sm:text-lg font-black text-slate-900">Vaishnavi Classes Main Branch</p>
                   </div>
                 </div>
               </div>
@@ -542,9 +542,9 @@ export default function LandingPage() {
               <button
                 type="button"
                 onClick={() => handleDirectChat()}
-                className="w-full inline-flex items-center justify-center gap-2 bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs py-3.5 rounded-xl shadow-md shadow-emerald-200 transition-all cursor-pointer"
+                className="w-full inline-flex items-center justify-center gap-2.5 bg-emerald-600 hover:bg-emerald-700 text-white font-black text-base py-4 rounded-xl shadow-md shadow-emerald-200 transition-all cursor-pointer"
               >
-                <Send className="h-3.5 w-3.5" />
+                <Send className="h-5 w-5" />
                 Quick Direct Chat (+91 96642 57346)
               </button>
             </div>
@@ -552,40 +552,40 @@ export default function LandingPage() {
             {/* Right: The Interactive Enquiry Form */}
             <div className="lg:col-span-7">
               <div
-                className={`bg-white rounded-3xl p-6 sm:p-8 shadow-xl border transition-all duration-300 ${
+                className={`bg-white rounded-3xl p-7 sm:p-9 shadow-xl border-2 transition-all duration-300 ${
                   highlightForm
                     ? "border-indigo-500 ring-4 ring-indigo-100"
                     : "border-slate-200"
                 }`}
               >
                 <div className="flex items-center justify-between pb-6 mb-6 border-b border-slate-100">
-                  <div className="flex items-center gap-3">
+                  <div className="flex items-center gap-3.5">
                     <img
                       src="/logo.png"
                       alt="Vaishnavi Classes"
-                      className="h-10 w-10 rounded-xl object-cover border border-slate-200"
+                      className="h-12 w-12 rounded-xl object-cover border border-slate-200"
                     />
                     <div>
-                      <h3 className="text-lg font-bold text-slate-900">Website Enquiry Form</h3>
-                      <p className="text-xs text-slate-500">Official Vaishnavi Classes Contact</p>
+                      <h3 className="text-xl font-black text-slate-900">Website Enquiry Form</h3>
+                      <p className="text-xs sm:text-sm text-slate-600 font-semibold">Official Vaishnavi Classes Contact</p>
                     </div>
                   </div>
-                  <span className="text-[11px] font-bold bg-emerald-100 text-emerald-800 px-2.5 py-1 rounded-full">
+                  <span className="text-xs font-black bg-emerald-100 text-emerald-800 px-3 py-1 rounded-full uppercase tracking-wider">
                     Active
                   </span>
                 </div>
 
                 {errorMsg && (
-                  <div className="mb-6 p-3 rounded-xl bg-red-50 border border-red-200 text-red-700 text-xs font-medium">
+                  <div className="mb-6 p-4 rounded-xl bg-red-50 border border-red-200 text-red-700 text-sm font-bold">
                     ⚠️ {errorMsg}
                   </div>
                 )}
 
-                <form onSubmit={handleSubmitEnquiry} className="space-y-4">
+                <form onSubmit={handleSubmitEnquiry} className="space-y-5">
                   {/* Customer Name & Mobile */}
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
                     <div>
-                      <label className="block text-xs font-bold text-slate-700 mb-1">
+                      <label className="block text-sm sm:text-base font-black text-slate-800 mb-1.5">
                         Customer / Student Name <span className="text-red-500">*</span>
                       </label>
                       <input
@@ -594,12 +594,12 @@ export default function LandingPage() {
                         placeholder="e.g. Rahul Sharma"
                         value={formData.customerName}
                         onChange={(e) => setFormData({ ...formData, customerName: e.target.value })}
-                        className="w-full h-11 rounded-xl border border-slate-300 bg-white px-3 text-xs text-slate-800 focus:outline-none focus:ring-2 focus:ring-emerald-500"
+                        className="w-full h-13 rounded-xl border-2 border-slate-300 bg-white px-4 text-base font-semibold text-slate-900 focus:outline-none focus:ring-2 focus:ring-emerald-500"
                       />
                     </div>
 
                     <div>
-                      <label className="block text-xs font-bold text-slate-700 mb-1">
+                      <label className="block text-sm sm:text-base font-black text-slate-800 mb-1.5">
                         Mobile Number (WhatsApp) <span className="text-red-500">*</span>
                       </label>
                       <input
@@ -608,34 +608,34 @@ export default function LandingPage() {
                         placeholder="e.g. 9876543210"
                         value={formData.mobileNumber}
                         onChange={(e) => setFormData({ ...formData, mobileNumber: e.target.value })}
-                        className="w-full h-11 rounded-xl border border-slate-300 bg-white px-3 text-xs text-slate-800 font-mono focus:outline-none focus:ring-2 focus:ring-emerald-500"
+                        className="w-full h-13 rounded-xl border-2 border-slate-300 bg-white px-4 text-base text-slate-900 font-mono font-bold focus:outline-none focus:ring-2 focus:ring-emerald-500"
                       />
                     </div>
                   </div>
 
                   {/* Email & Service Type */}
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
                     <div>
-                      <label className="block text-xs font-bold text-slate-700 mb-1">
-                        Email Address <span className="text-slate-400 font-normal">(Optional)</span>
+                      <label className="block text-sm sm:text-base font-black text-slate-800 mb-1.5">
+                        Email Address <span className="text-slate-500 font-normal">(Optional)</span>
                       </label>
                       <input
                         type="email"
                         placeholder="e.g. rahul@example.com"
                         value={formData.email}
                         onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                        className="w-full h-11 rounded-xl border border-slate-300 bg-white px-3 text-xs text-slate-800 focus:outline-none focus:ring-2 focus:ring-emerald-500"
+                        className="w-full h-13 rounded-xl border-2 border-slate-300 bg-white px-4 text-base font-semibold text-slate-900 focus:outline-none focus:ring-2 focus:ring-emerald-500"
                       />
                     </div>
 
                     <div>
-                      <label className="block text-xs font-bold text-slate-700 mb-1">
+                      <label className="block text-sm sm:text-base font-black text-slate-800 mb-1.5">
                         Service / Enquiry Type <span className="text-red-500">*</span>
                       </label>
                       <select
                         value={formData.serviceType}
                         onChange={(e) => setFormData({ ...formData, serviceType: e.target.value })}
-                        className="w-full h-11 rounded-xl border border-slate-300 bg-white px-3 text-xs text-slate-800 font-medium focus:outline-none focus:ring-2 focus:ring-emerald-500"
+                        className="w-full h-13 rounded-xl border-2 border-slate-300 bg-white px-4 text-base text-slate-900 font-bold focus:outline-none focus:ring-2 focus:ring-emerald-500"
                       >
                         <option value="10th Board Coaching (SSC/CBSE)">10th Board Coaching (SSC/CBSE)</option>
                         <option value="Class 11th & 12th Science">Class 11th &amp; 12th Science</option>
@@ -650,7 +650,7 @@ export default function LandingPage() {
 
                   {/* Message */}
                   <div>
-                    <label className="block text-xs font-bold text-slate-700 mb-1">
+                    <label className="block text-sm sm:text-base font-black text-slate-800 mb-1.5">
                       Message / Special Queries <span className="text-red-500">*</span>
                     </label>
                     <textarea
@@ -659,14 +659,14 @@ export default function LandingPage() {
                       placeholder="Type details about your requirement..."
                       value={formData.message}
                       onChange={(e) => setFormData({ ...formData, message: e.target.value })}
-                      className="w-full rounded-xl border border-slate-300 bg-white p-3 text-xs text-slate-800 focus:outline-none focus:ring-2 focus:ring-emerald-500 resize-none leading-relaxed"
+                      className="w-full rounded-xl border-2 border-slate-300 bg-white p-4 text-base font-semibold text-slate-900 focus:outline-none focus:ring-2 focus:ring-emerald-500 resize-none leading-relaxed"
                     />
                   </div>
 
                   {/* Message Preview Box */}
-                  <div className="bg-slate-50/80 p-3.5 rounded-xl border border-slate-200 text-[11px] text-slate-600 font-mono">
-                    <p className="font-bold text-slate-800 mb-1">📋 Prefilled WhatsApp Message Preview:</p>
-                    <p className="whitespace-pre-line text-slate-700 font-medium">
+                  <div className="bg-slate-50/90 p-4 rounded-xl border-2 border-slate-200 text-xs sm:text-sm text-slate-700 font-mono">
+                    <p className="font-black text-slate-900 mb-1.5">📋 Prefilled WhatsApp Message Preview:</p>
+                    <p className="whitespace-pre-line text-slate-800 font-medium">
                       {formatEnquiryWhatsAppMessage(formData)}
                     </p>
                   </div>
@@ -675,13 +675,13 @@ export default function LandingPage() {
                   <button
                     type="submit"
                     disabled={submitting}
-                    className="w-full h-12 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-extrabold text-sm flex items-center justify-center gap-2 shadow-lg shadow-emerald-600/30 transition-all transform hover:-translate-y-0.5 active:translate-y-0 disabled:opacity-50 cursor-pointer"
+                    className="w-full h-14 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-black text-base sm:text-lg flex items-center justify-center gap-2.5 shadow-lg shadow-emerald-600/30 transition-all transform hover:-translate-y-0.5 active:translate-y-0 disabled:opacity-50 cursor-pointer"
                   >
-                    <Send className="h-4 w-4" />
+                    <Send className="h-5 w-5" />
                     {submitting ? "Sending Enquiry Directly..." : "🚀 Send Enquiry Directly to Vaishnavi Classes"}
                   </button>
 
-                  <p className="text-[11px] text-center text-slate-400">
+                  <p className="text-xs sm:text-sm text-center text-slate-500 font-medium">
                     Your enquiry is sent directly from the website without opening any external tabs or windows.
                   </p>
                 </form>
@@ -694,44 +694,44 @@ export default function LandingPage() {
       {/* SUCCESS CONFIRMATION MODAL */}
       {submittedModalOpen && submittedData && (
         <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm flex items-center justify-center p-4">
-          <div className="bg-white rounded-3xl shadow-2xl max-w-lg w-full p-6 sm:p-7 border border-slate-200 relative animate-in fade-in zoom-in-95 duration-150">
+          <div className="bg-white rounded-3xl shadow-2xl max-w-lg w-full p-7 sm:p-8 border border-slate-200 relative animate-in fade-in zoom-in-95 duration-150">
             <button
               onClick={() => setSubmittedModalOpen(false)}
-              className="absolute top-4 right-4 p-2 rounded-full hover:bg-slate-100 text-slate-400 hover:text-slate-600"
+              className="absolute top-5 right-5 p-2 rounded-full hover:bg-slate-100 text-slate-400 hover:text-slate-600"
             >
-              <X className="h-5 w-5" />
+              <X className="h-6 w-6" />
             </button>
 
-            <div className="flex items-center gap-3.5 mb-5">
-              <div className="h-12 w-12 rounded-2xl bg-emerald-100 text-emerald-700 flex items-center justify-center shrink-0">
-                <CheckCircle2 className="h-7 w-7" />
+            <div className="flex items-center gap-4 mb-6">
+              <div className="h-14 w-14 rounded-2xl bg-emerald-100 text-emerald-700 flex items-center justify-center shrink-0">
+                <CheckCircle2 className="h-8 w-8" />
               </div>
               <div>
-                <h3 className="text-lg font-black text-slate-900">Enquiry Recorded Successfully!</h3>
-                <p className="text-xs text-slate-500">Vaishnavi Classes Desk has received your request</p>
+                <h3 className="text-xl font-black text-slate-900">Enquiry Recorded Successfully!</h3>
+                <p className="text-sm text-slate-600 font-semibold">Vaishnavi Classes Desk has received your request</p>
               </div>
             </div>
 
-            <div className="bg-slate-50 p-4 rounded-2xl border border-slate-200 text-xs space-y-2 mb-6">
-              <div className="flex justify-between border-b border-slate-200/60 pb-1.5">
-                <span className="text-slate-500">Student Name:</span>
-                <span className="font-bold text-slate-900">{submittedData.customerName}</span>
+            <div className="bg-slate-50 p-5 rounded-2xl border border-slate-200 text-sm space-y-2.5 mb-6 font-medium">
+              <div className="flex justify-between border-b border-slate-200/60 pb-2">
+                <span className="text-slate-600">Student Name:</span>
+                <span className="font-black text-slate-900">{submittedData.customerName}</span>
               </div>
-              <div className="flex justify-between border-b border-slate-200/60 pb-1.5">
-                <span className="text-slate-500">WhatsApp Mobile:</span>
-                <span className="font-bold text-slate-900">{submittedData.mobileNumber}</span>
+              <div className="flex justify-between border-b border-slate-200/60 pb-2">
+                <span className="text-slate-600">WhatsApp Mobile:</span>
+                <span className="font-mono font-bold text-slate-900">{submittedData.mobileNumber}</span>
               </div>
-              <div className="flex justify-between border-b border-slate-200/60 pb-1.5">
-                <span className="text-slate-500">Selected Program:</span>
-                <span className="font-bold text-indigo-700">{submittedData.serviceType}</span>
+              <div className="flex justify-between border-b border-slate-200/60 pb-2">
+                <span className="text-slate-600">Selected Program:</span>
+                <span className="font-black text-indigo-700">{submittedData.serviceType}</span>
               </div>
               <div className="pt-1">
-                <span className="text-slate-500 block mb-1">Message:</span>
-                <p className="italic text-slate-700 font-medium">"{submittedData.message}"</p>
+                <span className="text-slate-600 block mb-1">Message:</span>
+                <p className="italic text-slate-800 font-medium">"{submittedData.message}"</p>
               </div>
             </div>
 
-            <div className="space-y-2.5">
+            <div className="space-y-3">
               <button
                 type="button"
                 onClick={() => {
@@ -741,14 +741,14 @@ export default function LandingPage() {
                   openWhatsAppChat(url);
                   setSubmittedModalOpen(false);
                 }}
-                className="w-full py-3.5 px-4 bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl font-bold text-xs flex items-center justify-center gap-2 shadow-md shadow-emerald-200 cursor-pointer"
+                className="w-full py-4 px-5 bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl font-black text-sm sm:text-base flex items-center justify-center gap-2 shadow-md shadow-emerald-200 cursor-pointer"
               >
-                <MessageSquare className="h-4 w-4" /> Also Open in WhatsApp to Message Management Now
+                <MessageSquare className="h-5 w-5" /> Also Open in WhatsApp to Message Management Now
               </button>
               <button
                 type="button"
                 onClick={() => setSubmittedModalOpen(false)}
-                className="w-full py-2.5 px-4 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-xl font-semibold text-xs transition-colors cursor-pointer"
+                className="w-full py-3.5 px-4 bg-slate-100 hover:bg-slate-200 text-slate-800 rounded-xl font-bold text-sm transition-colors cursor-pointer"
               >
                 Done / Management will call me
               </button>
@@ -758,39 +758,39 @@ export default function LandingPage() {
       )}
 
       {/* Footer */}
-      <footer className="mt-auto bg-slate-900 text-slate-300 py-12 border-t border-slate-800 text-xs">
+      <footer className="mt-auto bg-slate-900 text-slate-200 py-14 border-t border-slate-800">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
-            <div className="space-y-3">
-              <div className="flex items-center gap-3">
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-10">
+            <div className="space-y-3.5">
+              <div className="flex items-center gap-3.5">
                 <img
                   src="/logo.png"
                   alt="Vaishnavi Classes"
-                  className="h-10 w-10 rounded-xl object-cover border border-slate-700"
+                  className="h-12 w-12 rounded-xl object-cover border border-slate-700"
                 />
                 <div>
-                  <h4 className="font-bold text-white text-sm">Vaishnavi Classes</h4>
-                  <p className="text-[10px] text-emerald-400 font-semibold">Since 1996 • 28+ Years</p>
+                  <h4 className="font-black text-white text-base">Vaishnavi Classes</h4>
+                  <p className="text-xs text-emerald-400 font-black">Since 1996 • 28+ Years</p>
                 </div>
               </div>
-              <p className="text-slate-400 text-[11px] leading-relaxed">
+              <p className="text-slate-400 text-sm leading-relaxed font-medium">
                 Dedicated to academic perfection, conceptual clarity, and outstanding student achievement.
               </p>
             </div>
 
             <div>
-              <h5 className="font-bold text-white text-xs uppercase tracking-wider mb-3">Courses</h5>
-              <ul className="space-y-2 text-slate-400 text-[11px]">
-                <li><button onClick={() => handleSelectCourse("Class 8th to 10th (Secondary)")} className="hover:text-white transition-colors cursor-pointer">Class 8th, 9th &amp; 10th (SSC / CBSE)</button></li>
-                <li><button onClick={() => handleSelectCourse("Class 11th & 12th Science")} className="hover:text-white transition-colors cursor-pointer">Class 11th &amp; 12th Science</button></li>
-                <li><button onClick={() => handleSelectCourse("Class 11th & 12th Commerce")} className="hover:text-white transition-colors cursor-pointer">Class 11th &amp; 12th Commerce</button></li>
-                <li><button onClick={() => handleSelectCourse("Revision & Test Series Batch")} className="hover:text-white transition-colors cursor-pointer">Intensive Board Test Series</button></li>
+              <h5 className="font-black text-white text-sm uppercase tracking-wider mb-4">Courses</h5>
+              <ul className="space-y-2.5 text-slate-300 text-sm font-medium">
+                <li><button onClick={() => handleSelectCourse("Class 8th to 10th (Secondary)")} className="hover:text-white transition-colors cursor-pointer text-left">Class 8th, 9th &amp; 10th (SSC / CBSE)</button></li>
+                <li><button onClick={() => handleSelectCourse("Class 11th & 12th Science")} className="hover:text-white transition-colors cursor-pointer text-left">Class 11th &amp; 12th Science</button></li>
+                <li><button onClick={() => handleSelectCourse("Class 11th & 12th Commerce")} className="hover:text-white transition-colors cursor-pointer text-left">Class 11th &amp; 12th Commerce</button></li>
+                <li><button onClick={() => handleSelectCourse("Revision & Test Series Batch")} className="hover:text-white transition-colors cursor-pointer text-left">Intensive Board Test Series</button></li>
               </ul>
             </div>
 
             <div>
-              <h5 className="font-bold text-white text-xs uppercase tracking-wider mb-3">Portals</h5>
-              <ul className="space-y-2 text-slate-400 text-[11px]">
+              <h5 className="font-black text-white text-sm uppercase tracking-wider mb-4">Portals</h5>
+              <ul className="space-y-2.5 text-slate-300 text-sm font-medium">
                 <li><Link href="/login" className="hover:text-white transition-colors">Student Portal Login</Link></li>
                 <li><Link href="/login" className="hover:text-white transition-colors">Staff Portal Login</Link></li>
                 <li><Link href="/login" className="hover:text-white transition-colors">Admin Dashboard</Link></li>
@@ -799,22 +799,22 @@ export default function LandingPage() {
             </div>
 
             <div>
-              <h5 className="font-bold text-white text-xs uppercase tracking-wider mb-3">Direct Contact</h5>
-              <div className="space-y-2 text-slate-400 text-[11px]">
+              <h5 className="font-black text-white text-sm uppercase tracking-wider mb-4">Direct Contact</h5>
+              <div className="space-y-2.5 text-slate-300 text-sm font-medium">
                 <p>📞 Phone: +91 96642 57346</p>
                 <p>💬 WhatsApp: +91 96642 57346</p>
                 <p>📍 Location: Vaishnavi Classes</p>
                 <button
                   onClick={() => handleDirectChat()}
-                  className="mt-2 inline-flex items-center gap-1.5 bg-emerald-700 hover:bg-emerald-600 text-white font-bold px-3 py-1.5 rounded-lg text-[10px] cursor-pointer"
+                  className="mt-3 inline-flex items-center gap-2 bg-emerald-700 hover:bg-emerald-600 text-white font-black px-4 py-2.5 rounded-xl text-xs sm:text-sm cursor-pointer shadow-sm"
                 >
-                  <Send className="h-3 w-3" /> Chat on WhatsApp
+                  <Send className="h-4 w-4" /> Chat on WhatsApp
                 </button>
               </div>
             </div>
           </div>
 
-          <div className="mt-8 pt-6 border-t border-slate-800 flex flex-col sm:flex-row items-center justify-between text-slate-500 text-[11px] gap-2">
+          <div className="mt-10 pt-8 border-t border-slate-800 flex flex-col sm:flex-row items-center justify-between text-slate-400 text-sm font-medium gap-3">
             <p>© {new Date().getFullYear()} Vaishnavi Classes (Since 1996). All rights reserved.</p>
             <p>FeeFlow Management System — Designed for Vaishnavi Classes</p>
           </div>

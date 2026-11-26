@@ -61,64 +61,64 @@ export default function AdminPaymentsPage() {
       <div className="space-y-6">
         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
           <div>
-            <h2 className="text-2xl font-extrabold text-slate-900 tracking-tight">Payment Collection & Reconciliation</h2>
-            <p className="text-sm font-medium text-slate-600 mt-1">
+            <h2 className="text-3xl font-black text-slate-900 tracking-tight">Payment Collection & Reconciliation</h2>
+            <p className="text-base font-semibold text-slate-600 mt-1">
               Verify incoming student UPI transfers and record counter fee receipts.
             </p>
           </div>
-          <Button onClick={() => setShowRecordModal(true)} className="gap-2 text-sm font-bold h-11 px-5 shadow-sm">
+          <Button onClick={() => setShowRecordModal(true)} className="gap-2.5 text-base font-bold h-12 px-6 shadow-sm">
             <CreditCard className="h-5 w-5" /> Record New Payment
           </Button>
         </div>
 
         {/* Pending Verification Section */}
         {pendingPayments.length > 0 && (
-          <Card className="border-amber-300 bg-amber-50/20 shadow-sm">
+          <Card className="border-amber-300 bg-amber-50/30 shadow-sm">
             <CardHeader className="pb-3 border-b border-amber-200/60">
-              <div className="flex items-center gap-2">
-                <ShieldAlert className="h-5 w-5 text-amber-600" />
-                <CardTitle className="text-lg text-amber-900 font-bold">
+              <div className="flex items-center gap-2.5">
+                <ShieldAlert className="h-6 w-6 text-amber-600" />
+                <CardTitle className="text-xl text-amber-950 font-black">
                   Pending UPI Payments ({pendingPayments.length})
                 </CardTitle>
               </div>
             </CardHeader>
             <CardContent className="p-0">
               <div className="overflow-x-auto">
-                <table className="w-full text-sm text-left">
-                  <thead className="bg-amber-100/70 text-amber-950 font-bold text-xs uppercase tracking-wider border-b border-amber-200">
+                <table className="w-full text-base text-left">
+                  <thead className="bg-amber-100/80 text-amber-950 font-black text-sm uppercase tracking-wider border-b border-amber-200">
                     <tr>
-                      <th className="py-3 px-4">Student</th>
-                      <th className="py-3 px-4">Amount</th>
-                      <th className="py-3 px-4">UPI UTR Ref</th>
-                      <th className="py-3 px-4">Date</th>
-                      <th className="py-3 px-4">Student Notes</th>
-                      <th className="py-3 px-4 text-right">Verification</th>
+                      <th className="py-4 px-5">Student</th>
+                      <th className="py-4 px-5">Amount</th>
+                      <th className="py-4 px-5">UPI UTR Ref</th>
+                      <th className="py-4 px-5">Date</th>
+                      <th className="py-4 px-5">Student Notes</th>
+                      <th className="py-4 px-5 text-right">Verification</th>
                     </tr>
                   </thead>
                   <tbody className="divide-y divide-amber-200/50">
                     {pendingPayments.map((p) => (
-                      <tr key={p.id} className="hover:bg-amber-100/30">
-                        <td className="py-3 px-4">
-                          <p className="font-bold text-slate-900 text-sm">{p.student_name}</p>
-                          <span className="text-xs text-slate-600 font-mono font-medium">{p.student_login_id}</span>
+                      <tr key={p.id} className="hover:bg-amber-100/40">
+                        <td className="py-4 px-5">
+                          <p className="font-black text-slate-900 text-base">{p.student_name}</p>
+                          <span className="text-sm text-slate-600 font-mono font-bold">{p.student_login_id}</span>
                         </td>
-                        <td className="py-3 px-4 font-extrabold text-indigo-700 text-base">
+                        <td className="py-4 px-5 font-black text-indigo-700 text-lg">
                           {formatCurrency(p.amount)}
                         </td>
-                        <td className="py-3 px-4 font-mono font-bold text-slate-900 text-sm">
+                        <td className="py-4 px-5 font-mono font-bold text-slate-900 text-base">
                           {p.transaction_ref}
                         </td>
-                        <td className="py-3 px-4 text-slate-700 font-medium text-sm">
+                        <td className="py-4 px-5 text-slate-800 font-semibold text-base">
                           {formatDate(p.payment_date)}
                         </td>
-                        <td className="py-3 px-4 text-slate-600 italic text-sm">
+                        <td className="py-4 px-5 text-slate-600 italic text-base">
                           {p.notes || "—"}
                         </td>
-                        <td className="py-3 px-4 text-right">
+                        <td className="py-4 px-5 text-right">
                           <Button
                             size="sm"
                             onClick={() => setSelectedVerifyPayment(p)}
-                            className="bg-amber-600 hover:bg-amber-700 text-white text-xs font-bold h-8 px-3.5 shadow-xs"
+                            className="bg-amber-600 hover:bg-amber-700 text-white text-xs font-bold h-9 px-4 shadow-xs rounded-xl"
                           >
                             Review & Verify
                           </Button>
@@ -134,62 +134,62 @@ export default function AdminPaymentsPage() {
 
         {/* Processed Payments Ledger */}
         <Card className="shadow-sm">
-          <CardHeader className="pb-3 border-b border-slate-100">
-            <CardTitle className="text-lg font-bold text-slate-900">
+          <CardHeader className="pb-4 border-b border-slate-100">
+            <CardTitle className="text-xl font-black text-slate-900">
               Transaction History & Audit Ledger
             </CardTitle>
           </CardHeader>
           <CardContent className="p-0">
             <div className="overflow-x-auto">
-              <table className="w-full text-sm text-left">
-                <thead className="bg-slate-100/90 text-slate-700 uppercase font-bold text-xs tracking-wider border-b border-slate-200">
+              <table className="w-full text-base text-left">
+                <thead className="bg-slate-100 text-slate-800 uppercase font-black text-sm tracking-wider border-b-2 border-slate-200">
                   <tr>
-                    <th className="py-3.5 px-4">Receipt No</th>
-                    <th className="py-3.5 px-4">Student</th>
-                    <th className="py-3.5 px-4">Amount</th>
-                    <th className="py-3.5 px-4">Method</th>
-                    <th className="py-3.5 px-4">Status</th>
-                    <th className="py-3.5 px-4">Payment Date</th>
-                    <th className="py-3.5 px-4 text-right">Actions</th>
+                    <th className="py-4 px-5">Receipt No</th>
+                    <th className="py-4 px-5">Student</th>
+                    <th className="py-4 px-5">Amount</th>
+                    <th className="py-4 px-5">Method</th>
+                    <th className="py-4 px-5">Status</th>
+                    <th className="py-4 px-5">Payment Date</th>
+                    <th className="py-4 px-5 text-right">Actions</th>
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-slate-100">
                   {processedPayments.map((p) => (
                     <tr key={p.id} className="hover:bg-slate-50/80 transition-colors">
-                      <td className="py-3.5 px-4 font-mono font-bold text-slate-900 text-sm">
+                      <td className="py-4 px-5 font-mono font-bold text-indigo-700 text-base">
                         {p.receipt_number || "—"}
                       </td>
-                      <td className="py-3.5 px-4">
-                        <p className="font-bold text-slate-900 text-base">{p.student_name}</p>
-                        <span className="text-xs text-slate-600 font-mono font-semibold">{p.student_login_id}</span>
+                      <td className="py-4 px-5">
+                        <p className="font-black text-slate-900 text-lg leading-snug">{p.student_name}</p>
+                        <span className="text-sm text-slate-600 font-mono font-bold mt-0.5 block">{p.student_login_id}</span>
                       </td>
-                      <td className="py-3.5 px-4 font-black text-slate-900 text-base">
+                      <td className="py-4 px-5 font-black text-slate-900 text-xl">
                         {formatCurrency(p.amount)}
                       </td>
-                      <td className="py-3.5 px-4 uppercase text-slate-800 font-bold text-sm">
+                      <td className="py-4 px-5 uppercase text-slate-900 font-bold text-base">
                         {p.payment_method}
                       </td>
-                      <td className="py-3.5 px-4">
+                      <td className="py-4 px-5">
                         <Badge
                           variant={p.status === "verified" ? "success" : "destructive"}
-                          className="capitalize text-xs font-bold px-3 py-1"
+                          className="capitalize text-xs font-black px-3.5 py-1.5 uppercase tracking-wide"
                         >
                           {p.status}
                         </Badge>
                       </td>
-                      <td className="py-3.5 px-4 text-slate-700 font-medium text-sm">
+                      <td className="py-4 px-5 text-slate-800 font-semibold text-base">
                         {formatDate(p.payment_date)}
                       </td>
-                      <td className="py-3.5 px-4 text-right space-x-1.5 whitespace-nowrap">
+                      <td className="py-4 px-5 text-right space-x-2 whitespace-nowrap">
                         {p.receipt_number && (
                           <>
                             <a
                               href={getReceiptPdfUrl(p.receipt_number)}
                               target="_blank"
                               rel="noreferrer"
-                              className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-indigo-50 text-indigo-700 hover:bg-indigo-100 rounded-lg text-xs font-bold shadow-xs transition-colors"
+                              className="inline-flex items-center gap-1.5 px-3.5 py-2 bg-indigo-50 text-indigo-700 hover:bg-indigo-100 rounded-xl text-xs font-bold shadow-xs transition-colors"
                             >
-                              <Download className="h-3.5 w-3.5" /> PDF
+                              <Download className="h-4 w-4" /> PDF
                             </a>
                             <Button
                               size="sm"
@@ -202,10 +202,10 @@ export default function AdminPaymentsPage() {
                                   phone: st?.guardian_phone || st?.phone || "",
                                 });
                               }}
-                              className="h-8 text-xs font-bold px-3 border-emerald-400 text-emerald-800 hover:bg-emerald-50 rounded-lg shadow-xs"
+                              className="h-9 text-xs font-bold px-3.5 border-emerald-400 text-emerald-800 hover:bg-emerald-50 rounded-xl shadow-xs"
                               title="Send WhatsApp Receipt"
                             >
-                              <MessageSquareShare className="h-3.5 w-3.5 mr-1" /> WhatsApp
+                              <MessageSquareShare className="h-4 w-4 mr-1" /> WhatsApp
                             </Button>
                           </>
                         )}
@@ -214,10 +214,10 @@ export default function AdminPaymentsPage() {
                             size="sm"
                             variant="outline"
                             onClick={() => handleReversePayment(p.id)}
-                            className="h-8 text-xs font-bold px-2.5 text-red-600 hover:bg-red-50 border-red-200 rounded-lg"
+                            className="h-9 text-xs font-bold px-3 text-red-600 hover:bg-red-50 border-red-200 rounded-xl"
                             title="Reverse Payment"
                           >
-                            <RotateCcw className="h-3.5 w-3.5 mr-1" /> Reversal
+                            <RotateCcw className="h-4 w-4 mr-1" /> Reversal
                           </Button>
                         )}
                       </td>

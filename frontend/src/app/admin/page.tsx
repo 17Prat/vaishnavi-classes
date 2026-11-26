@@ -115,57 +115,57 @@ export default function AdminDashboardPage() {
 
         {/* Recent Transactions Table */}
         <Card className="shadow-sm">
-          <CardHeader className="flex flex-row items-center justify-between pb-3">
+          <CardHeader className="flex flex-row items-center justify-between pb-4">
             <div>
-              <CardTitle className="text-lg font-bold text-slate-900">
+              <CardTitle className="text-xl font-black text-slate-900">
                 Recent Fee Payments
               </CardTitle>
-              <p className="text-xs text-slate-500 font-medium mt-0.5">
+              <p className="text-sm text-slate-600 font-semibold mt-0.5">
                 Latest transactions recorded across cash, UPI, and bank transfers
               </p>
             </div>
-            <Link href="/admin/payments" className="text-xs font-bold text-indigo-700 hover:underline">
+            <Link href="/admin/payments" className="text-sm font-black text-indigo-700 hover:underline">
               View All Payments →
             </Link>
           </CardHeader>
           <CardContent>
             <div className="overflow-x-auto">
-              <table className="w-full text-sm text-left">
-                <thead className="bg-slate-100/90 text-slate-700 uppercase tracking-wider font-bold text-xs border-y border-slate-200">
+              <table className="w-full text-base text-left">
+                <thead className="bg-slate-100/90 text-slate-800 uppercase tracking-wider font-black text-sm border-y-2 border-slate-200">
                   <tr>
-                    <th className="py-3 px-3">Receipt / ID</th>
-                    <th className="py-3 px-3">Student</th>
-                    <th className="py-3 px-3">Amount</th>
-                    <th className="py-3 px-3">Method</th>
-                    <th className="py-3 px-3">Status</th>
-                    <th className="py-3 px-3">Date</th>
-                    <th className="py-3 px-3 text-right">Receipt</th>
+                    <th className="py-4 px-4">Receipt / ID</th>
+                    <th className="py-4 px-4">Student</th>
+                    <th className="py-4 px-4">Amount</th>
+                    <th className="py-4 px-4">Method</th>
+                    <th className="py-4 px-4">Status</th>
+                    <th className="py-4 px-4">Date</th>
+                    <th className="py-4 px-4 text-right">Receipt</th>
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-slate-100">
                   {recentPayments.length === 0 ? (
                     <tr>
-                      <td colSpan={7} className="py-6 text-center text-slate-400">
+                      <td colSpan={7} className="py-8 text-center text-slate-400 font-bold text-base">
                         No recent transactions found
                       </td>
                     </tr>
                   ) : (
                     recentPayments.map((p) => (
                       <tr key={p.id} className="hover:bg-slate-50/80 transition-colors">
-                        <td className="py-3.5 px-3 font-mono font-bold text-slate-900 text-sm">
+                        <td className="py-4 px-4 font-mono font-black text-indigo-700 text-base">
                           {p.receipt_number || "REC-2026-0001"}
                         </td>
-                        <td className="py-3.5 px-3">
-                          <p className="font-bold text-slate-900 text-base">{p.student_name || "Student"}</p>
-                          <span className="text-xs text-slate-600 font-mono font-medium">{p.student_login_id || "STU0001"}</span>
+                        <td className="py-4 px-4">
+                          <p className="font-black text-slate-900 text-lg leading-snug">{p.student_name || "Student"}</p>
+                          <span className="text-sm text-slate-600 font-mono font-bold mt-0.5 block">{p.student_login_id || "STU0001"}</span>
                         </td>
-                        <td className="py-3.5 px-3 font-black text-slate-900 text-base">
+                        <td className="py-4 px-4 font-black text-slate-900 text-xl">
                           {formatCurrency(p.amount ?? (p as any).amount_paid ?? 0)}
                         </td>
-                        <td className="py-3.5 px-3 uppercase text-slate-800 font-bold text-sm">
+                        <td className="py-4 px-4 uppercase text-slate-900 font-black text-base">
                           {p.payment_method ?? (p as any).payment_mode ?? "UPI"}
                         </td>
-                        <td className="py-3.5 px-3">
+                        <td className="py-4 px-4">
                           <Badge
                             variant={
                               p.status === "verified"
@@ -174,26 +174,26 @@ export default function AdminDashboardPage() {
                                 ? "warning"
                                 : "destructive"
                             }
-                            className="capitalize text-xs font-bold px-2.5 py-1"
+                            className="capitalize text-xs font-black px-3.5 py-1.5 uppercase tracking-wide"
                           >
                             {(p.status || "verified").replace("_", " ")}
                           </Badge>
                         </td>
-                        <td className="py-3.5 px-3 text-slate-700 font-medium text-sm">
+                        <td className="py-4 px-4 text-slate-800 font-semibold text-base">
                           {formatDate(p.payment_date || new Date().toISOString())}
                         </td>
-                        <td className="py-3.5 px-3 text-right">
+                        <td className="py-4 px-4 text-right">
                           {p.receipt_number ? (
                             <a
                               href={getReceiptPdfUrl(p.receipt_number)}
                               target="_blank"
                               rel="noreferrer"
-                              className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-indigo-50 text-indigo-700 hover:bg-indigo-100 font-bold text-xs rounded-lg shadow-xs"
+                              className="inline-flex items-center gap-1.5 px-3.5 py-2 bg-indigo-50 text-indigo-700 hover:bg-indigo-100 font-black text-xs rounded-xl shadow-xs"
                             >
-                              <Download className="h-3.5 w-3.5" /> PDF
+                              <Download className="h-4 w-4" /> PDF
                             </a>
                           ) : (
-                            <span className="text-slate-400 italic text-xs">—</span>
+                            <span className="text-slate-400 italic text-sm font-semibold">—</span>
                           )}
                         </td>
                       </tr>

@@ -76,30 +76,30 @@ export default function StudentDashboardPage() {
         {/* 3 Fee Metric Cards */}
         {ledger && (
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-            <Card className="border-indigo-100 shadow-xs">
-              <CardContent className="p-5">
-                <span className="text-xs font-bold text-slate-500 uppercase tracking-wider">Total Net Fee</span>
-                <h3 className="text-2xl font-bold text-slate-900 mt-1">{formatCurrency(ledger.net_payable)}</h3>
-                <p className="text-xs text-slate-400 mt-1 font-medium">{ledger.fee_plan_name}</p>
+            <Card className="border-indigo-200 shadow-xs">
+              <CardContent className="p-6">
+                <span className="text-sm font-extrabold text-slate-700 uppercase tracking-wider">Total Net Fee</span>
+                <h3 className="text-3xl font-black text-slate-900 mt-1.5">{formatCurrency(ledger.net_payable)}</h3>
+                <p className="text-sm text-slate-500 mt-1 font-bold">{ledger.fee_plan_name}</p>
               </CardContent>
             </Card>
 
-            <Card className="border-emerald-100 shadow-xs bg-emerald-50/20">
-              <CardContent className="p-5">
-                <span className="text-xs font-bold text-emerald-800 uppercase tracking-wider">Total Amount Paid</span>
-                <h3 className="text-2xl font-bold text-emerald-700 mt-1">{formatCurrency(ledger.total_paid)}</h3>
-                <p className="text-xs text-emerald-600 mt-1 font-medium flex items-center gap-1">
-                  <CheckCircle2 className="h-3.5 w-3.5" /> Reconciled & Verified
+            <Card className="border-emerald-200 shadow-xs bg-emerald-50/30">
+              <CardContent className="p-6">
+                <span className="text-sm font-extrabold text-emerald-900 uppercase tracking-wider">Total Amount Paid</span>
+                <h3 className="text-3xl font-black text-emerald-700 mt-1.5">{formatCurrency(ledger.total_paid)}</h3>
+                <p className="text-sm text-emerald-800 mt-1 font-bold flex items-center gap-1.5">
+                  <CheckCircle2 className="h-4 w-4" /> Reconciled &amp; Verified
                 </p>
               </CardContent>
             </Card>
 
-            <Card className="border-amber-100 shadow-xs bg-amber-50/20">
-              <CardContent className="p-5">
-                <span className="text-xs font-bold text-amber-800 uppercase tracking-wider">Remaining Balance</span>
-                <h3 className="text-2xl font-bold text-amber-700 mt-1">{formatCurrency(ledger.remaining_balance)}</h3>
-                <p className="text-xs text-amber-600 mt-1 font-medium flex items-center gap-1">
-                  <Clock className="h-3.5 w-3.5" /> Scheduled in installments
+            <Card className="border-amber-200 shadow-xs bg-amber-50/30">
+              <CardContent className="p-6">
+                <span className="text-sm font-extrabold text-amber-900 uppercase tracking-wider">Remaining Balance</span>
+                <h3 className="text-3xl font-black text-amber-700 mt-1.5">{formatCurrency(ledger.remaining_balance)}</h3>
+                <p className="text-sm text-amber-800 mt-1 font-bold flex items-center gap-1.5">
+                  <Clock className="h-4 w-4" /> Scheduled in installments
                 </p>
               </CardContent>
             </Card>

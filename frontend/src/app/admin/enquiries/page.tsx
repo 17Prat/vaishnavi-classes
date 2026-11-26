@@ -208,15 +208,15 @@ export default function AdminEnquiriesPage() {
         {/* Table */}
         <div className="bg-white rounded-2xl border border-slate-200 shadow-xs overflow-hidden">
           <div className="overflow-x-auto">
-            <table className="w-full text-left text-sm">
-              <thead className="bg-slate-100/90 border-b border-slate-200 text-xs font-bold text-slate-700 uppercase tracking-wider">
+            <table className="w-full text-left text-base">
+              <thead className="bg-slate-100 text-slate-800 uppercase font-black text-sm tracking-wider border-b-2 border-slate-200">
                 <tr>
-                  <th className="px-4 py-3.5">Customer &amp; Date</th>
-                  <th className="px-4 py-3.5">Mobile Number</th>
-                  <th className="px-4 py-3.5">Service / Course</th>
-                  <th className="px-4 py-3.5">Message</th>
-                  <th className="px-4 py-3.5">Status</th>
-                  <th className="px-4 py-3.5 text-right">Actions</th>
+                  <th className="px-5 py-4">Customer &amp; Date</th>
+                  <th className="px-5 py-4">Mobile Number</th>
+                  <th className="px-5 py-4">Service / Course</th>
+                  <th className="px-5 py-4">Message</th>
+                  <th className="px-5 py-4">Status</th>
+                  <th className="px-5 py-4 text-right">Actions</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-slate-100 font-medium">
@@ -234,10 +234,10 @@ export default function AdminEnquiriesPage() {
                   </tr>
                 ) : (
                   filtered.map((enquiry) => (
-                    <tr key={enquiry.id} className="hover:bg-slate-50/70 transition-colors">
-                      <td className="px-4 py-3.5">
-                        <div className="font-bold text-slate-900 text-base">{enquiry.customer_name}</div>
-                        <div className="text-xs text-slate-500 font-mono mt-0.5">
+                    <tr key={enquiry.id} className="hover:bg-slate-50/80 transition-colors">
+                      <td className="px-5 py-4">
+                        <div className="font-black text-slate-900 text-lg leading-snug">{enquiry.customer_name}</div>
+                        <div className="text-sm text-slate-600 font-mono font-bold mt-0.5">
                           {new Date(enquiry.created_at).toLocaleString("en-IN", {
                             day: "numeric",
                             month: "short",
@@ -248,38 +248,38 @@ export default function AdminEnquiriesPage() {
                         </div>
                       </td>
 
-                      <td className="px-4 py-3.5">
-                        <div className="font-mono text-slate-900 font-bold text-sm">{enquiry.mobile_number}</div>
+                      <td className="px-5 py-4">
+                        <div className="font-mono text-slate-900 font-black text-base">{enquiry.mobile_number}</div>
                         {enquiry.email && (
-                          <div className="text-xs text-slate-500 truncate max-w-[160px]">
+                          <div className="text-sm text-slate-600 truncate max-w-[180px]">
                             {enquiry.email}
                           </div>
                         )}
                       </td>
 
-                      <td className="px-4 py-3.5">
-                        <span className="bg-indigo-50 text-indigo-700 font-bold px-3 py-1 rounded-md text-xs border border-indigo-100">
+                      <td className="px-5 py-4">
+                        <span className="bg-indigo-50 text-indigo-700 font-black px-3.5 py-1.5 rounded-lg text-xs border border-indigo-200">
                           {enquiry.service_type}
                         </span>
                       </td>
 
-                      <td className="px-4 py-3.5 max-w-xs">
-                        <p className="text-slate-700 text-sm truncate" title={enquiry.message}>
+                      <td className="px-5 py-4 max-w-xs">
+                        <p className="text-slate-800 text-base font-medium truncate" title={enquiry.message}>
                           {enquiry.message}
                         </p>
                       </td>
 
-                      <td className="px-4 py-3.5">
+                      <td className="px-5 py-4">
                         <select
                           value={enquiry.status}
                           disabled={updatingId === enquiry.id}
                           onChange={(e) => handleStatusChange(enquiry.id, e.target.value)}
-                          className={`text-xs font-bold px-3 py-1.5 rounded-lg border focus:outline-none ${
+                          className={`text-xs font-black px-3.5 py-2 rounded-xl border focus:outline-none ${
                             enquiry.status === "converted"
-                              ? "bg-emerald-50 text-emerald-800 border-emerald-300"
+                              ? "bg-emerald-50 text-emerald-900 border-emerald-300"
                               : enquiry.status === "contacted"
-                              ? "bg-blue-50 text-blue-800 border-blue-300"
-                              : "bg-amber-50 text-amber-800 border-amber-300"
+                              ? "bg-blue-50 text-blue-900 border-blue-300"
+                              : "bg-amber-50 text-amber-900 border-amber-300"
                           }`}
                         >
                           <option value="pending">Pending</option>
@@ -288,13 +288,13 @@ export default function AdminEnquiriesPage() {
                         </select>
                       </td>
 
-                      <td className="px-4 py-3.5 text-right space-x-2 whitespace-nowrap">
+                      <td className="px-5 py-4 text-right space-x-2 whitespace-nowrap">
                         <button
                           onClick={() => openDirectReply(enquiry)}
-                          className="inline-flex items-center gap-1.5 bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold px-3 py-1.5 rounded-lg shadow-xs transition-all active:scale-95"
+                          className="inline-flex items-center gap-1.5 bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold px-4 py-2 rounded-xl shadow-xs transition-all active:scale-95"
                           title="Reply directly from the website without opening any extra tab"
                         >
-                          <Send className="h-3.5 w-3.5" />
+                          <Send className="h-4 w-4" />
                           Reply Directly
                         </button>
                       </td>

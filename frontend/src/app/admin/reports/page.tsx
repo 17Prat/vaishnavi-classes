@@ -111,15 +111,15 @@ export default function AdminReportsPage() {
           </CardHeader>
           <CardContent className="p-0">
             <div className="overflow-x-auto">
-              <table className="w-full text-sm text-left">
-                <thead className="bg-red-100/70 text-red-950 font-bold text-xs uppercase tracking-wider border-b border-red-200">
+              <table className="w-full text-base text-left">
+                <thead className="bg-red-100 text-red-950 font-black text-sm uppercase tracking-wider border-b-2 border-red-200">
                   <tr>
-                    <th className="py-3.5 px-4">Student</th>
-                    <th className="py-3.5 px-4">Course / Batch</th>
-                    <th className="py-3.5 px-4">Contact Phone</th>
-                    <th className="py-3.5 px-4">Due Date</th>
-                    <th className="py-3.5 px-4">Overdue Amount</th>
-                    <th className="py-3.5 px-4 text-right">Aging Days</th>
+                    <th className="py-4 px-5">Student</th>
+                    <th className="py-4 px-5">Course / Batch</th>
+                    <th className="py-4 px-5">Contact Phone</th>
+                    <th className="py-4 px-5">Due Date</th>
+                    <th className="py-4 px-5">Overdue Amount</th>
+                    <th className="py-4 px-5 text-right">Aging Days</th>
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-slate-100">
@@ -132,25 +132,25 @@ export default function AdminReportsPage() {
                   ) : (
                     defaulters.map((d) => (
                       <tr key={d.student_profile_id} className="hover:bg-red-50/40 transition-colors">
-                        <td className="py-3.5 px-4">
-                          <p className="font-bold text-slate-900 text-base">{d.student_name}</p>
-                          <span className="text-xs text-slate-600 font-mono font-semibold">{d.student_login_id}</span>
+                        <td className="py-4 px-5">
+                          <p className="font-black text-slate-900 text-lg leading-snug">{d.student_name}</p>
+                          <span className="text-sm text-slate-600 font-mono font-bold">{d.student_login_id}</span>
                         </td>
-                        <td className="py-3.5 px-4">
-                          <p className="font-bold text-slate-800 text-sm">{d.batch_name || "General"}</p>
-                          <span className="text-xs text-slate-500 font-medium">{d.course_name || ""}</span>
+                        <td className="py-4 px-5">
+                          <p className="font-bold text-slate-900 text-base">{d.batch_name || "General"}</p>
+                          <span className="text-sm text-slate-500 font-medium">{d.course_name || ""}</span>
                         </td>
-                        <td className="py-3.5 px-4 font-mono font-bold text-slate-800 text-sm">
+                        <td className="py-4 px-5 font-mono font-bold text-slate-900 text-base">
                           {d.guardian_phone || d.student_phone || "No phone"}
                         </td>
-                        <td className="py-3.5 px-4 text-slate-700 font-medium text-sm">
+                        <td className="py-4 px-5 text-slate-800 font-semibold text-base">
                           {formatDate(d.due_date)}
                         </td>
-                        <td className="py-3.5 px-4 font-black text-red-700 text-base">
+                        <td className="py-4 px-5 font-black text-red-700 text-xl">
                           {formatCurrency(d.overdue_amount)}
                         </td>
-                        <td className="py-3.5 px-4 text-right">
-                          <Badge variant="destructive" className="font-mono text-xs font-bold px-3 py-1">
+                        <td className="py-4 px-5 text-right">
+                          <Badge variant="destructive" className="font-mono text-xs font-black px-3.5 py-1.5 uppercase tracking-wide">
                             {d.days_overdue} Days Late
                           </Badge>
                         </td>

@@ -197,66 +197,66 @@ export function WhatsAppModal({
         /* Direct Send Success Card */
         <div className="my-4 p-5 rounded-2xl bg-emerald-50 border border-emerald-300 space-y-4 animate-in fade-in zoom-in-95">
           <div className="flex items-center gap-3">
-            <div className="h-12 w-12 rounded-2xl bg-emerald-600 text-white flex items-center justify-center shrink-0 shadow-md shadow-emerald-200">
-              <CheckCircle2 className="h-7 w-7" />
+            <div className="h-14 w-14 rounded-2xl bg-emerald-600 text-white flex items-center justify-center shrink-0 shadow-md shadow-emerald-200">
+              <CheckCircle2 className="h-8 w-8" />
             </div>
             <div>
-              <h4 className="text-sm font-black text-emerald-900 leading-tight">
+              <h4 className="text-base font-black text-emerald-900 leading-tight">
                 Message Dispatched &amp; Recorded in System!
               </h4>
-              <p className="text-xs text-emerald-700 font-medium">
+              <p className="text-sm text-emerald-700 font-semibold mt-0.5">
                 Recipient: +{deliveryResult.recipient_phone} ({deliveryResult.recipient_name})
               </p>
             </div>
           </div>
 
-          <div className="bg-white/80 rounded-xl p-3 border border-emerald-200 text-xs space-y-1.5 font-mono text-slate-700">
+          <div className="bg-white/90 rounded-2xl p-4 border border-emerald-200 text-sm space-y-2 font-mono text-slate-800">
             <div className="flex justify-between">
-              <span className="text-slate-500">Message ID:</span>
+              <span className="text-slate-600">Message ID:</span>
               <span className="font-bold text-slate-900">{deliveryResult.message_id}</span>
             </div>
             <div className="flex justify-between">
-              <span className="text-slate-500">Delivered At:</span>
+              <span className="text-slate-600">Delivered At:</span>
               <span className="font-bold text-slate-900">{deliveryResult.delivered_at}</span>
             </div>
             <div className="flex justify-between">
-              <span className="text-slate-500">Gateway:</span>
-              <span className="font-semibold text-emerald-700">{deliveryResult.delivered_via}</span>
+              <span className="text-slate-600">Gateway:</span>
+              <span className="font-black text-emerald-800">{deliveryResult.delivered_via}</span>
             </div>
-            <div className="flex justify-between">
-              <span className="text-slate-500">Delivery Status:</span>
-              <span className="bg-emerald-100 text-emerald-800 px-2 py-0.5 rounded font-bold uppercase text-[10px]">
+            <div className="flex justify-between items-center">
+              <span className="text-slate-600">Delivery Status:</span>
+              <span className="bg-emerald-100 text-emerald-900 px-3 py-1 rounded-full font-black uppercase text-xs">
                 {deliveryResult.status}
               </span>
             </div>
           </div>
 
-          <div className="text-[11px] text-emerald-900 leading-relaxed font-medium bg-emerald-100/60 p-2.5 rounded-lg border border-emerald-200 space-y-2">
+          <div className="text-xs sm:text-sm text-emerald-950 leading-relaxed font-medium bg-emerald-100/70 p-3 rounded-xl border border-emerald-200 space-y-2.5">
             <p>
               💡 <strong>Real WhatsApp Delivery Note:</strong> Agar aapke phone par bina WhatsApp Web open kiye background me message deliver hona chahiye, toh Meta Cloud API ya UltraMsg ka token lagta hai. Agar bina kisi API ke free me abhi phone par message deliver karna hai, toh neeche &quot;Open in WhatsApp to Deliver&quot; dabayein.
             </p>
             <Button
               size="sm"
               onClick={handleOpenWhatsAppAndSend}
-              className="w-full bg-emerald-700 hover:bg-emerald-800 text-white text-xs font-bold gap-1.5"
+              className="w-full bg-emerald-700 hover:bg-emerald-800 text-white text-xs sm:text-sm font-black gap-2 h-11"
             >
-              <Send className="h-3.5 w-3.5" /> 📱 Open in WhatsApp to Deliver Now (+91 {cleanPhoneNumber(recipientPhone).slice(-10)})
+              <Send className="h-4 w-4" /> 📱 Open in WhatsApp to Deliver Now (+91 {cleanPhoneNumber(recipientPhone).slice(-10)})
             </Button>
           </div>
 
-          <div className="flex items-center gap-2 pt-1">
+          <div className="flex items-center gap-3 pt-1">
             <Button
               variant="outline"
               size="sm"
               onClick={handleResetForAnother}
-              className="text-xs border-emerald-300 text-emerald-800 hover:bg-emerald-100 flex-1"
+              className="text-xs sm:text-sm font-bold border-emerald-300 text-emerald-800 hover:bg-emerald-100 flex-1 h-10"
             >
               Send Another
             </Button>
             <Button
               size="sm"
               onClick={() => onOpenChange(false)}
-              className="bg-slate-900 hover:bg-slate-800 text-white font-bold text-xs flex-1"
+              className="bg-slate-900 hover:bg-slate-800 text-white font-black text-xs sm:text-sm flex-1 h-10"
             >
               Done / Close
             </Button>

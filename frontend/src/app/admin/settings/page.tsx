@@ -44,36 +44,36 @@ export default function AdminSettingsPage() {
           {/* General info */}
           <Card className="shadow-sm">
             <CardHeader className="pb-3 border-b border-slate-100">
-              <CardTitle className="text-sm font-bold text-slate-800 flex items-center gap-2">
-                <Building2 className="h-4 w-4 text-indigo-600" /> General Institute Details
+              <CardTitle className="text-base font-black text-slate-900 flex items-center gap-2.5">
+                <Building2 className="h-5 w-5 text-indigo-600" /> General Institute Details
               </CardTitle>
             </CardHeader>
-            <CardContent className="p-5 space-y-4 text-xs">
+            <CardContent className="p-6 space-y-4 text-sm">
               <div className="grid grid-cols-2 gap-4">
                 <div>
-                  <label className="font-semibold text-slate-700 block mb-1">Institute Legal Name</label>
-                  <Input value={name} onChange={(e) => setName(e.target.value)} required />
+                  <label className="font-bold text-slate-800 block mb-1.5">Institute Legal Name</label>
+                  <Input value={name} onChange={(e) => setName(e.target.value)} required className="h-12 text-base" />
                 </div>
                 <div>
-                  <label className="font-semibold text-slate-700 block mb-1">Institution Code</label>
-                  <Input value={code} onChange={(e) => setCode(e.target.value)} required />
+                  <label className="font-bold text-slate-800 block mb-1.5">Institution Code</label>
+                  <Input value={code} onChange={(e) => setCode(e.target.value)} required className="h-12 text-base" />
                 </div>
               </div>
 
               <div className="grid grid-cols-2 gap-4">
                 <div>
-                  <label className="font-semibold text-slate-700 block mb-1">Official Email</label>
-                  <Input type="email" value={email} onChange={(e) => setEmail(e.target.value)} />
+                  <label className="font-bold text-slate-800 block mb-1.5">Official Email</label>
+                  <Input type="email" value={email} onChange={(e) => setEmail(e.target.value)} className="h-12 text-base" />
                 </div>
                 <div>
-                  <label className="font-semibold text-slate-700 block mb-1">Contact Phone</label>
-                  <Input value={phone} onChange={(e) => setPhone(e.target.value)} />
+                  <label className="font-bold text-slate-800 block mb-1.5">Contact Phone</label>
+                  <Input value={phone} onChange={(e) => setPhone(e.target.value)} className="h-12 text-base" />
                 </div>
               </div>
 
               <div>
-                <label className="font-semibold text-slate-700 block mb-1">Campus Address</label>
-                <Input value={address} onChange={(e) => setAddress(e.target.value)} />
+                <label className="font-bold text-slate-800 block mb-1.5">Campus Address</label>
+                <Input value={address} onChange={(e) => setAddress(e.target.value)} className="h-12 text-base" />
               </div>
             </CardContent>
           </Card>
@@ -81,11 +81,11 @@ export default function AdminSettingsPage() {
           {/* Payment & Receipts */}
           <Card className="shadow-sm">
             <CardHeader className="pb-3 border-b border-slate-100">
-              <CardTitle className="text-sm font-bold text-slate-800 flex items-center gap-2">
-                <QrCode className="h-4 w-4 text-purple-600" /> UPI & PDF Receipt Numbering
+              <CardTitle className="text-base font-black text-slate-900 flex items-center gap-2.5">
+                <QrCode className="h-5 w-5 text-purple-600" /> UPI &amp; PDF Receipt Numbering
               </CardTitle>
             </CardHeader>
-            <CardContent className="p-5 space-y-4 text-xs">
+            <CardContent className="p-6 space-y-4 text-sm">
               <div className="grid grid-cols-3 gap-4">
                 <div>
                   <label className="font-semibold text-slate-700 block mb-1">Institute UPI ID (VPA)</label>

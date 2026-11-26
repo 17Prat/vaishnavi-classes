@@ -126,85 +126,85 @@ export default function AdminStaffPage() {
         <Card className="shadow-sm">
           <CardContent className="p-0">
             <div className="overflow-x-auto">
-              <table className="w-full text-sm text-left">
-                <thead className="bg-slate-100/90 text-slate-700 uppercase tracking-wider font-bold text-xs border-b border-slate-200">
+              <table className="w-full text-base text-left">
+                <thead className="bg-slate-100 text-slate-800 uppercase tracking-wider font-black text-sm border-b-2 border-slate-200">
                   <tr>
-                    <th className="py-3.5 px-4">Staff ID</th>
-                    <th className="py-3.5 px-4">Full Name</th>
-                    <th className="py-3.5 px-4">Designation</th>
-                    <th className="py-3.5 px-4">Collect Fees</th>
-                    <th className="py-3.5 px-4">Verify UPI</th>
-                    <th className="py-3.5 px-4">Reminders</th>
-                    <th className="py-3.5 px-4">Reports</th>
-                    <th className="py-3.5 px-4 text-right">Actions</th>
+                    <th className="py-4 px-5">Staff ID</th>
+                    <th className="py-4 px-5">Full Name</th>
+                    <th className="py-4 px-5">Designation</th>
+                    <th className="py-4 px-5">Collect Fees</th>
+                    <th className="py-4 px-5">Verify UPI</th>
+                    <th className="py-4 px-5">Reminders</th>
+                    <th className="py-4 px-5">Reports</th>
+                    <th className="py-4 px-5 text-right">Actions</th>
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-slate-100">
                   {staffList.map((st) => (
                     <tr key={st.id} className="hover:bg-slate-50/80 transition-colors">
-                      <td className="py-3.5 px-4 font-mono font-bold text-slate-900 text-sm">
+                      <td className="py-4 px-5 font-mono font-bold text-indigo-700 text-base">
                         {st.staff_id}
                       </td>
-                      <td className="py-3.5 px-4">
-                        <p className="font-bold text-slate-900 text-base">{st.full_name}</p>
-                        <span className="text-xs text-slate-600 font-medium">{st.phone || st.email || ""}</span>
+                      <td className="py-4 px-5">
+                        <p className="font-black text-slate-900 text-lg leading-snug">{st.full_name}</p>
+                        <span className="text-sm text-slate-600 font-bold">{st.phone || st.email || ""}</span>
                       </td>
-                      <td className="py-3.5 px-4 text-slate-800 font-bold text-sm">
+                      <td className="py-4 px-5 text-slate-900 font-bold text-base">
                         {st.designation}
                       </td>
-                      <td className="py-3.5 px-4">
+                      <td className="py-4 px-5">
                         <button
                           onClick={() => togglePermission(st.id, "can_collect_fees", st.permissions.can_collect_fees)}
-                          className={`h-7 px-3 rounded-full font-bold text-xs flex items-center gap-1.5 transition-colors ${
-                            st.permissions.can_collect_fees ? "bg-emerald-100 text-emerald-900" : "bg-slate-100 text-slate-600"
+                          className={`h-8 px-3.5 rounded-full font-bold text-xs flex items-center gap-1.5 transition-colors ${
+                            st.permissions.can_collect_fees ? "bg-emerald-100 text-emerald-950 font-black" : "bg-slate-100 text-slate-600"
                           }`}
                         >
-                          {st.permissions.can_collect_fees ? <Check className="h-3.5 w-3.5 text-emerald-700" /> : <X className="h-3.5 w-3.5 text-slate-500" />}
+                          {st.permissions.can_collect_fees ? <Check className="h-4 w-4 text-emerald-700" /> : <X className="h-4 w-4 text-slate-500" />}
                           {st.permissions.can_collect_fees ? "Allowed" : "Denied"}
                         </button>
                       </td>
-                      <td className="py-3.5 px-4">
+                      <td className="py-4 px-5">
                         <button
                           onClick={() => togglePermission(st.id, "can_verify_upi", st.permissions.can_verify_upi)}
-                          className={`h-7 px-3 rounded-full font-bold text-xs flex items-center gap-1.5 transition-colors ${
-                            st.permissions.can_verify_upi ? "bg-emerald-100 text-emerald-900" : "bg-slate-100 text-slate-600"
+                          className={`h-8 px-3.5 rounded-full font-bold text-xs flex items-center gap-1.5 transition-colors ${
+                            st.permissions.can_verify_upi ? "bg-emerald-100 text-emerald-950 font-black" : "bg-slate-100 text-slate-600"
                           }`}
                         >
-                          {st.permissions.can_verify_upi ? <Check className="h-3.5 w-3.5 text-emerald-700" /> : <X className="h-3.5 w-3.5 text-slate-500" />}
+                          {st.permissions.can_verify_upi ? <Check className="h-4 w-4 text-emerald-700" /> : <X className="h-4 w-4 text-slate-500" />}
                           {st.permissions.can_verify_upi ? "Allowed" : "Denied"}
                         </button>
                       </td>
-                      <td className="py-3.5 px-4">
+                      <td className="py-4 px-5">
                         <button
                           onClick={() => togglePermission(st.id, "can_send_reminders", st.permissions.can_send_reminders)}
-                          className={`h-7 px-3 rounded-full font-bold text-xs flex items-center gap-1.5 transition-colors ${
-                            st.permissions.can_send_reminders ? "bg-emerald-100 text-emerald-900" : "bg-slate-100 text-slate-600"
+                          className={`h-8 px-3.5 rounded-full font-bold text-xs flex items-center gap-1.5 transition-colors ${
+                            st.permissions.can_send_reminders ? "bg-emerald-100 text-emerald-950 font-black" : "bg-slate-100 text-slate-600"
                           }`}
                         >
-                          {st.permissions.can_send_reminders ? <Check className="h-3.5 w-3.5 text-emerald-700" /> : <X className="h-3.5 w-3.5 text-slate-500" />}
+                          {st.permissions.can_send_reminders ? <Check className="h-4 w-4 text-emerald-700" /> : <X className="h-4 w-4 text-slate-500" />}
                           {st.permissions.can_send_reminders ? "Allowed" : "Denied"}
                         </button>
                       </td>
-                      <td className="py-3.5 px-4">
+                      <td className="py-4 px-5">
                         <button
                           onClick={() => togglePermission(st.id, "can_view_reports", st.permissions.can_view_reports)}
-                          className={`h-7 px-3 rounded-full font-bold text-xs flex items-center gap-1.5 transition-colors ${
-                            st.permissions.can_view_reports ? "bg-emerald-100 text-emerald-900" : "bg-slate-100 text-slate-600"
+                          className={`h-8 px-3.5 rounded-full font-bold text-xs flex items-center gap-1.5 transition-colors ${
+                            st.permissions.can_view_reports ? "bg-emerald-100 text-emerald-950 font-black" : "bg-slate-100 text-slate-600"
                           }`}
                         >
-                          {st.permissions.can_view_reports ? <Check className="h-3.5 w-3.5 text-emerald-700" /> : <X className="h-3.5 w-3.5 text-slate-500" />}
+                          {st.permissions.can_view_reports ? <Check className="h-4 w-4 text-emerald-700" /> : <X className="h-4 w-4 text-slate-500" />}
                           {st.permissions.can_view_reports ? "Allowed" : "Denied"}
                         </button>
                       </td>
-                      <td className="py-3.5 px-4 text-right">
+                      <td className="py-4 px-5 text-right">
                         <Button
                           size="sm"
                           variant="outline"
                           onClick={() => setResetModalStaff(st)}
-                          className="h-8 text-xs font-bold px-3 text-slate-700 hover:bg-slate-100 rounded-lg shadow-xs"
+                          className="h-9 text-xs font-bold px-3.5 text-slate-800 hover:bg-slate-100 rounded-xl shadow-xs"
                           title="Reset Password"
                         >
-                          <KeyRound className="h-3.5 w-3.5 mr-1 text-slate-500" /> Reset Pwd
+                          <KeyRound className="h-4 w-4 mr-1 text-slate-600" /> Reset Pwd
                         </Button>
                       </td>
                     </tr>

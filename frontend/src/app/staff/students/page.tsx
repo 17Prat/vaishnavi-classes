@@ -67,42 +67,42 @@ export default function StaffStudentsPage() {
         <Card className="shadow-sm">
           <CardContent className="p-0">
             <div className="overflow-x-auto">
-              <table className="w-full text-xs text-left">
-                <thead className="bg-slate-50 text-slate-500 uppercase font-semibold border-b border-slate-200">
+              <table className="w-full text-base text-left">
+                <thead className="bg-slate-100 text-slate-800 uppercase tracking-wider font-black text-sm border-b-2 border-slate-200">
                   <tr>
-                    <th className="py-3 px-4">Student ID</th>
-                    <th className="py-3 px-4">Full Name</th>
-                    <th className="py-3 px-4">Batch</th>
-                    <th className="py-3 px-4">Total Fee</th>
-                    <th className="py-3 px-4">Total Paid</th>
-                    <th className="py-3 px-4">Remaining Balance</th>
-                    <th className="py-3 px-4 text-right">Actions</th>
+                    <th className="py-4 px-5">Student ID</th>
+                    <th className="py-4 px-5">Full Name</th>
+                    <th className="py-4 px-5">Batch</th>
+                    <th className="py-4 px-5">Total Fee</th>
+                    <th className="py-4 px-5">Total Paid</th>
+                    <th className="py-4 px-5">Remaining Balance</th>
+                    <th className="py-4 px-5 text-right">Actions</th>
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-slate-100">
                   {filtered.map((s) => (
-                    <tr key={s.id} className="hover:bg-slate-50/70 transition-colors">
-                      <td className="py-3 px-4 font-mono font-bold text-slate-800">{s.student_id}</td>
-                      <td className="py-3 px-4 font-semibold text-slate-900">{s.full_name}</td>
-                      <td className="py-3 px-4 text-slate-600">{s.batch_name || "General"}</td>
-                      <td className="py-3 px-4 font-medium text-slate-800">{formatCurrency(s.total_fee)}</td>
-                      <td className="py-3 px-4 font-semibold text-emerald-700">{formatCurrency(s.total_paid)}</td>
-                      <td className="py-3 px-4 font-bold text-amber-700">{formatCurrency(s.remaining_balance)}</td>
-                      <td className="py-3 px-4 text-right space-x-2">
+                    <tr key={s.id} className="hover:bg-slate-50/80 transition-colors">
+                      <td className="py-4 px-5 font-mono font-bold text-indigo-700 text-base">{s.student_id}</td>
+                      <td className="py-4 px-5 font-black text-slate-900 text-lg leading-snug">{s.full_name}</td>
+                      <td className="py-4 px-5 text-slate-800 font-bold text-base">{s.batch_name || "General"}</td>
+                      <td className="py-4 px-5 font-bold text-slate-900 text-base">{formatCurrency(s.total_fee)}</td>
+                      <td className="py-4 px-5 font-black text-emerald-700 text-base">{formatCurrency(s.total_paid)}</td>
+                      <td className="py-4 px-5 font-black text-amber-700 text-base">{formatCurrency(s.remaining_balance)}</td>
+                      <td className="py-4 px-5 text-right space-x-2 whitespace-nowrap">
                         <Button
                           size="sm"
                           onClick={() => setPayModalStudent(s.id)}
-                          className="h-7 text-xs px-2.5 bg-indigo-600 hover:bg-indigo-700 text-white"
+                          className="h-9 text-xs font-bold px-3.5 bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl shadow-xs"
                         >
-                          <CreditCard className="h-3 w-3 mr-1" /> Pay
+                          <CreditCard className="h-4 w-4 mr-1" /> Pay
                         </Button>
                         <Button
                           size="sm"
                           variant="outline"
                           onClick={() => setWaModalStudent(s)}
-                          className="h-7 text-xs px-2.5 text-emerald-700 border-emerald-300 hover:bg-emerald-50"
+                          className="h-9 text-xs font-bold px-3.5 text-emerald-800 border-emerald-400 hover:bg-emerald-50 rounded-xl shadow-xs"
                         >
-                          <BellRing className="h-3 w-3 mr-1" /> Reminder
+                          <BellRing className="h-4 w-4 mr-1" /> Reminder
                         </Button>
                       </td>
                     </tr>

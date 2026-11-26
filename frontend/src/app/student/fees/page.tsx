@@ -127,36 +127,36 @@ export default function StudentFeeLedgerPage() {
 
         {/* Installment Details Table */}
         <Card className="shadow-sm">
-          <CardHeader className="pb-3 border-b border-slate-100">
-            <CardTitle className="text-sm font-bold text-slate-800">
+          <CardHeader className="pb-4 border-b border-slate-100">
+            <CardTitle className="text-xl font-black text-slate-900">
               Installment Schedule
             </CardTitle>
           </CardHeader>
           <CardContent className="p-0">
             <div className="overflow-x-auto">
-              <table className="w-full text-xs text-left">
-                <thead className="bg-slate-50 text-slate-500 uppercase font-semibold border-b border-slate-200">
+              <table className="w-full text-base text-left">
+                <thead className="bg-slate-100 text-slate-800 uppercase font-black text-sm tracking-wider border-b-2 border-slate-200">
                   <tr>
-                    <th className="py-2.5 px-4">#</th>
-                    <th className="py-2.5 px-4">Installment Title</th>
-                    <th className="py-2.5 px-4">Due Date</th>
-                    <th className="py-2.5 px-4">Due Amount</th>
-                    <th className="py-2.5 px-4">Paid Amount</th>
-                    <th className="py-2.5 px-4 text-right">Status</th>
+                    <th className="py-4 px-5">#</th>
+                    <th className="py-4 px-5">Installment Title</th>
+                    <th className="py-4 px-5">Due Date</th>
+                    <th className="py-4 px-5">Due Amount</th>
+                    <th className="py-4 px-5">Paid Amount</th>
+                    <th className="py-4 px-5 text-right">Status</th>
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-slate-100">
                   {ledger.installments.map((inst) => (
-                    <tr key={inst.id} className="hover:bg-slate-50/70">
-                      <td className="py-3 px-4 font-bold text-slate-700">{inst.installment_number}</td>
-                      <td className="py-3 px-4 font-semibold text-slate-900">{inst.title}</td>
-                      <td className="py-3 px-4 text-slate-600">{formatDate(inst.due_date)}</td>
-                      <td className="py-3 px-4 font-bold text-slate-900">{formatCurrency(inst.due_amount)}</td>
-                      <td className="py-3 px-4 font-semibold text-emerald-700">{formatCurrency(inst.paid_amount)}</td>
-                      <td className="py-3 px-4 text-right">
+                    <tr key={inst.id} className="hover:bg-slate-50/80 transition-colors">
+                      <td className="py-4 px-5 font-black text-slate-800 text-base">{inst.installment_number}</td>
+                      <td className="py-4 px-5 font-black text-slate-900 text-lg">{inst.title}</td>
+                      <td className="py-4 px-5 text-slate-800 font-semibold text-base">{formatDate(inst.due_date)}</td>
+                      <td className="py-4 px-5 font-black text-slate-900 text-xl">{formatCurrency(inst.due_amount)}</td>
+                      <td className="py-4 px-5 font-black text-emerald-700 text-xl">{formatCurrency(inst.paid_amount)}</td>
+                      <td className="py-4 px-5 text-right">
                         <Badge
                           variant={inst.status === "paid" ? "success" : inst.status === "overdue" ? "destructive" : "warning"}
-                          className="capitalize text-[10px]"
+                          className="capitalize text-xs font-black px-3.5 py-1.5 uppercase tracking-wide"
                         >
                           {inst.status}
                         </Badge>
