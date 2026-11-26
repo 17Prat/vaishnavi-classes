@@ -262,30 +262,43 @@ function handleOfflineFallback<T = any>(endpoint: string, options: RequestInit =
   // 4. Dashboard Stats & Charts Fallbacks
   if (cleanEp.startsWith("/dashboard/summary")) {
     return {
-      total_revenue_collected: 485000,
-      total_fee_due: 65000,
-      total_active_students: 124,
-      total_courses: 8,
-      monthly_collection: 112000,
-      overdue_count: 5,
+      total_students: 124,
+      total_staff: 8,
+      total_fees: 550000,
+      total_collected: 485000,
+      total_pending: 65000,
+      total_overdue: 15000,
+      today_collected: 18000,
+      monthly_collected: 112000,
+      collection_rate_percentage: 88.2,
+      pending_verifications_count: 0,
     } as unknown as T;
   }
 
   if (cleanEp.startsWith("/dashboard/charts")) {
     return {
-      monthly_collection: [
-        { month: "Jun", amount: 65000 },
-        { month: "Jul", amount: 82000 },
-        { month: "Aug", amount: 78000 },
-        { month: "Sep", amount: 95000 },
-        { month: "Oct", amount: 104000 },
-        { month: "Nov", amount: 112000 },
+      daily: [
+        { period: "Mon (20 Nov)", collected: 15000, target: 20000 },
+        { period: "Tue (21 Nov)", collected: 22000, target: 20000 },
+        { period: "Wed (22 Nov)", collected: 18000, target: 20000 },
+        { period: "Thu (23 Nov)", collected: 25000, target: 20000 },
+        { period: "Fri (24 Nov)", collected: 28000, target: 20000 },
+        { period: "Sat (25 Nov)", collected: 32000, target: 20000 },
+        { period: "Sun (26 Nov)", collected: 12000, target: 20000 },
       ],
-      course_wise_revenue: [
-        { course: "Class 11 Science", amount: 185000 },
-        { course: "Class 12 Science", amount: 210000 },
-        { course: "Class 10 Board", amount: 90000 },
+      monthly: [
+        { period: "Jun", collected: 65000, target: 80000 },
+        { period: "Jul", collected: 82000, target: 80000 },
+        { period: "Aug", collected: 78000, target: 80000 },
+        { period: "Sep", collected: 95000, target: 90000 },
+        { period: "Oct", collected: 104000, target: 100000 },
+        { period: "Nov", collected: 112000, target: 100000 },
       ],
+      payment_methods_breakdown: {
+        UPI: 320000,
+        CASH: 125000,
+        BANK_TRANSFER: 40000,
+      },
     } as unknown as T;
   }
 
@@ -345,27 +358,54 @@ function handleOfflineFallback<T = any>(endpoint: string, options: RequestInit =
     return [
       {
         id: "pay-01",
-        receipt_number: "REC-2026-0001",
+        student_id: "stu-001",
         student_name: "Pratham Patel",
+        student_login_id: "STU0001",
+        course_name: "Class 11 Science (PCM)",
+        amount: 12000,
         amount_paid: 12000,
-        payment_date: "2026-11-20",
+        payment_method: "UPI",
         payment_mode: "UPI",
-        reference_number: "UPI-48192847",
+        transaction_ref: "UPI-48192847",
+        payment_date: "2026-11-20",
         status: "verified",
+        receipt_number: "REC-2026-0001",
+        created_at: "2026-11-20T10:30:00Z",
       },
     ] as unknown as T;
   }
 
-  // 8. Fee Plans Fallback
+  // 8. Fee Plans & Academic Fallback
   if (cleanEp.startsWith("/fees/plans")) {
     return [
       {
         id: "fp-01",
         name: "Standard Academic Annual Fee",
         total_amount: 35000,
-        installments_count: 3,
+        admission_fee: 5000,
+        tuition_fee: 25000,
+        examination_fee: 5000,
+        number_of_installments: 3,
+        installment_frequency: "quarterly",
         description: "Covers complete academic tuition, study material, and test series.",
+        is_active: true,
       },
+    ] as unknown as T;
+  }
+
+  if (cleanEp.startsWith("/academic/batches")) {
+    return [
+      { id: "batch-01", name: "11th Science Morning Batch", code: "11SC-M", max_capacity: 45, class_name: "Class 11", course_name: "Class 11 Science" },
+      { id: "batch-02", name: "12th Science Evening Batch", code: "12SC-E", max_capacity: 45, class_name: "Class 12", course_name: "Class 12 Science" },
+      { id: "batch-03", name: "10th Board Toppers Batch", code: "10TH-TOP", max_capacity: 40, class_name: "Class 10", course_name: "Class 10 Board" },
+    ] as unknown as T;
+  }
+
+  if (cleanEp.startsWith("/academic/courses")) {
+    return [
+      { id: "course-01", name: "Class 11th & 12th Science", code: "11SCI", duration_months: 12 },
+      { id: "course-02", name: "Class 11th & 12th Commerce", code: "COMM", duration_months: 12 },
+      { id: "course-03", name: "Class 8th to 10th (Secondary)", code: "SEC10", duration_months: 10 },
     ] as unknown as T;
   }
 

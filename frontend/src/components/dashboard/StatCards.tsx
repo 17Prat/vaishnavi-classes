@@ -21,11 +21,21 @@ interface StatCardsProps {
 export function StatCards({ summary }: StatCardsProps) {
   if (!summary) return null;
 
+  const totalStudents = summary.total_students ?? 0;
+  const totalStaff = summary.total_staff ?? 0;
+  const totalFees = summary.total_fees ?? 0;
+  const totalCollected = summary.total_collected ?? 0;
+  const collectionRate = summary.collection_rate_percentage ?? 0;
+  const totalPending = summary.total_pending ?? 0;
+  const totalOverdue = summary.total_overdue ?? 0;
+  const todayCollected = summary.today_collected ?? 0;
+  const monthlyCollected = summary.monthly_collected ?? 0;
+
   const stats = [
     {
       title: "Total Students",
-      value: summary.total_students.toString(),
-      subtext: `${summary.total_staff} Staff Members`,
+      value: totalStudents.toString(),
+      subtext: `${totalStaff} Staff Members`,
       icon: Users,
       color: "text-indigo-600",
       bg: "bg-indigo-50",
@@ -33,7 +43,7 @@ export function StatCards({ summary }: StatCardsProps) {
     },
     {
       title: "Total Billed Fees",
-      value: formatCurrency(summary.total_fees),
+      value: formatCurrency(totalFees),
       subtext: "All active enrollments",
       icon: CreditCard,
       color: "text-slate-700",
@@ -42,8 +52,8 @@ export function StatCards({ summary }: StatCardsProps) {
     },
     {
       title: "Total Collected",
-      value: formatCurrency(summary.total_collected),
-      subtext: `${summary.collection_rate_percentage}% Collection Rate`,
+      value: formatCurrency(totalCollected),
+      subtext: `${collectionRate}% Collection Rate`,
       icon: CheckCircle2,
       color: "text-emerald-600",
       bg: "bg-emerald-50",
@@ -51,7 +61,7 @@ export function StatCards({ summary }: StatCardsProps) {
     },
     {
       title: "Pending Balance",
-      value: formatCurrency(summary.total_pending),
+      value: formatCurrency(totalPending),
       subtext: "Unpaid scheduled installments",
       icon: Clock,
       color: "text-amber-600",
@@ -60,7 +70,7 @@ export function StatCards({ summary }: StatCardsProps) {
     },
     {
       title: "Overdue Amount",
-      value: formatCurrency(summary.total_overdue),
+      value: formatCurrency(totalOverdue),
       subtext: "Past due date",
       icon: AlertTriangle,
       color: "text-red-600",
@@ -69,8 +79,8 @@ export function StatCards({ summary }: StatCardsProps) {
     },
     {
       title: "Today's Collection",
-      value: formatCurrency(summary.today_collected),
-      subtext: `Month: ${formatCurrency(summary.monthly_collected)}`,
+      value: formatCurrency(todayCollected),
+      subtext: `Month: ${formatCurrency(monthlyCollected)}`,
       icon: TrendingUp,
       color: "text-purple-600",
       bg: "bg-purple-50",
