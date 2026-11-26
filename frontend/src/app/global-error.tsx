@@ -27,8 +27,19 @@ export default function GlobalError({
             A temporary connection issue occurred. Please tap below to reload.
           </p>
           <button
-            onClick={() => reset()}
-            className="w-full py-3 bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-xs rounded-xl shadow-md"
+            onClick={() => {
+              try {
+                if (typeof window !== "undefined") {
+                  window.localStorage?.clear();
+                  window.sessionStorage?.clear();
+                }
+              } catch {}
+              reset();
+              if (typeof window !== "undefined") {
+                window.location.href = "/";
+              }
+            }}
+            className="w-full py-3 bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-xs rounded-xl shadow-md cursor-pointer"
           >
             Reload Portal
           </button>

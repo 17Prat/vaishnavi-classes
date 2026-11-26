@@ -20,7 +20,7 @@ export function MobileNav() {
   const pathname = usePathname();
   const { user } = useAuth();
 
-  if (!user) return null;
+  if (!user || typeof user !== "object" || Array.isArray(user) || !user.role) return null;
 
   const role = user.role;
 

@@ -31,11 +31,11 @@ export default function StaffStudentsPage() {
     loadStudents();
   }, []);
 
-  const filtered = students.filter((s) => {
-    const q = search.toLowerCase();
+  const filtered = (students || []).filter((s) => {
+    const q = (search || "").toLowerCase();
     return (
-      s.full_name.toLowerCase().includes(q) ||
-      s.student_id.toLowerCase().includes(q) ||
+      (s.full_name || "").toLowerCase().includes(q) ||
+      (s.student_id || s.login_id || "").toLowerCase().includes(q) ||
       (s.phone && s.phone.includes(q))
     );
   });

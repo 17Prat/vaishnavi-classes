@@ -39,8 +39,8 @@ export default function StudentDashboardPage() {
           apiFetch("/receipts"),
         ]);
         setLedger(led);
-        setPayments(pays.slice(0, 4));
-        setReceipts(recs.slice(0, 3));
+        setPayments(Array.isArray(pays) ? pays.slice(0, 4) : []);
+        setReceipts(Array.isArray(recs) ? recs.slice(0, 3) : []);
       } catch {
         // Ignore
       } finally {
@@ -124,7 +124,7 @@ export default function StudentDashboardPage() {
             </CardHeader>
             <CardContent className="p-5">
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-                {ledger.installments.map((inst) => (
+                {(ledger.installments || []).map((inst) => (
                   <div
                     key={inst.id}
                     className={`p-4 rounded-xl border transition-all ${

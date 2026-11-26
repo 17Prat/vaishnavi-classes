@@ -53,8 +53,8 @@ export default function AdminPaymentsPage() {
     }
   };
 
-  const pendingPayments = payments.filter((p) => p.status === "pending_verification");
-  const processedPayments = payments.filter((p) => p.status !== "pending_verification");
+  const pendingPayments = (payments || []).filter((p) => p.status === "pending_verification");
+  const processedPayments = (payments || []).filter((p) => p.status !== "pending_verification");
 
   return (
     <DashboardLayout allowedRoles={["admin"]}>

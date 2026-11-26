@@ -121,7 +121,7 @@ export default function AdminFeesPage() {
                 <div className="flex justify-between py-1 border-b border-slate-100">
                   <span className="text-slate-500">Examination & Library:</span>
                   <span className="font-semibold text-slate-800">
-                    {formatCurrency(fp.examination_fee + fp.library_fee)}
+                    {formatCurrency((Number(fp.examination_fee) || 0) + (Number(fp.library_fee) || 0))}
                   </span>
                 </div>
                 <div className="flex justify-between py-1 border-b border-slate-100">

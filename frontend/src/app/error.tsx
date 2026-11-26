@@ -1,7 +1,8 @@
 "use client";
 
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import Link from "next/link";
+import { safeStorage } from "@/lib/storage";
 import { RefreshCw, Home, MessageSquare, ShieldAlert } from "lucide-react";
 
 export default function ErrorBoundary({
@@ -12,9 +13,23 @@ export default function ErrorBoundary({
   reset: () => void;
 }) {
   useEffect(() => {
-    // Log error cleanly
     console.error("Vaishnavi Classes client-side error captured:", error);
   }, [error]);
+
+  const handleCleanReload = () => {
+    try {
+      if (typeof window !== "undefined") {
+        safeStorage.removeItem("feeflow_token");
+        safeStorage.removeItem("feeflow_user");
+        safeStorage.removeItem("vaishnavi_token");
+        safeStorage.removeItem("vaishnavi_user");
+      }
+    } catch {}
+    reset();
+    if (typeof window !== "undefined") {
+      window.location.href = "/";
+    }
+  };
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 via-indigo-50/30 to-purple-50/20 flex items-center justify-center p-4">
@@ -39,20 +54,31 @@ export default function ErrorBoundary({
           </p>
         </div>
 
+        {error?.message && (
+          <details className="text-left text-[11px] text-slate-500 bg-slate-50 p-2.5 rounded-xl border border-slate-200">
+            <summary className="cursor-pointer font-bold text-slate-700">Diagnostic Details</summary>
+            <p className="mt-1 font-mono text-red-600 break-all">{error.message}</p>
+          </details>
+        )}
+
         <div className="space-y-2.5 pt-2">
           <button
-            onClick={() => reset()}
-            className="w-full h-11 bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl font-bold text-xs flex items-center justify-center gap-2 shadow-md shadow-indigo-200 transition-all cursor-pointer"
+            onClick={handleCleanReload}
+            className="w-full h-11 bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl font-bold text-xs flex items-center justify-center gap-2 shadow-md shadow-indigo-200 transition-all cursor-pointer active:scale-98"
           >
             <RefreshCw className="h-4 w-4" /> Reload &amp; Try Again
           </button>
 
-          <Link
-            href="/"
-            className="w-full h-11 bg-slate-100 hover:bg-slate-200 text-slate-800 rounded-xl font-bold text-xs flex items-center justify-center gap-2 transition-colors"
+          <button
+            onClick={() => {
+              if (typeof window !== "undefined") {
+                window.location.href = "/";
+              }
+            }}
+            className="w-full h-11 bg-slate-100 hover:bg-slate-200 text-slate-800 rounded-xl font-bold text-xs flex items-center justify-center gap-2 transition-colors cursor-pointer"
           >
             <Home className="h-4 w-4" /> Return to Homepage
-          </Link>
+          </button>
 
           <a
             href="https://wa.me/919664257346?text=Hello%20Vaishnavi%20Classes,%20I%20need%20help%20with%20the%20website%20portal."

@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import { useAuth } from "@/lib/auth";
 import { safeStorage } from "@/lib/storage";
@@ -37,6 +37,11 @@ import {
 
 export default function LandingPage() {
   const { user } = useAuth();
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   // Enquiry Form State
   const [formData, setFormData] = useState({
@@ -229,7 +234,7 @@ export default function LandingPage() {
               WhatsApp Us
             </button>
 
-            {user && user.role ? (
+            {mounted && user && user.role ? (
               <Link
                 href={`/${user.role}`}
                 className="inline-flex items-center gap-2 bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-bold px-4 py-2.5 rounded-xl shadow-sm transition-all"

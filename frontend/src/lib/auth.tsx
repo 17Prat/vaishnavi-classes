@@ -46,9 +46,17 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         if (savedToken && savedUser) {
           try {
             const parsed = JSON.parse(savedUser);
-            if (parsed && typeof parsed === "object") {
+            if (
+              parsed &&
+              typeof parsed === "object" &&
+              !Array.isArray(parsed) &&
+              parsed.role &&
+              parsed.full_name
+            ) {
               setToken(savedToken);
               setUser(parsed);
+            } else {
+              throw new Error("Corrupted or invalid user session");
             }
           } catch {
             safeStorage.removeItem("feeflow_token");
@@ -137,8 +145,10 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const refreshUser = async () => {
     try {
       const u = await apiFetch("/auth/me");
-      setUser(u);
-      safeStorage.setItem("feeflow_user", JSON.stringify(u));
+      if (u && typeof u === "object" && !Array.isArray(u) && u.role && u.full_name) {
+        setUser(u);
+        safeStorage.setItem("feeflow_user", JSON.stringify(u));
+      }
     } catch {
       // Ignore
     }

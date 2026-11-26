@@ -122,11 +122,15 @@ export function Header() {
         {/* User Badge */}
         <div className="flex items-center gap-3 pl-3 border-l border-slate-200">
           <div className="text-right hidden sm:block">
-            <p className="text-xs font-semibold text-slate-900 leading-tight">{user.full_name}</p>
-            <p className="text-[10px] text-slate-500 font-mono uppercase">{user.role} • {user.login_id}</p>
+            <p className="text-xs font-semibold text-slate-900 leading-tight">
+              {user?.full_name || "Vaishnavi User"}
+            </p>
+            <p className="text-[10px] text-slate-500 font-mono uppercase">
+              {user?.role || "user"} • {user?.login_id || ""}
+            </p>
           </div>
           <div className="h-8 w-8 rounded-full bg-indigo-100 text-indigo-700 flex items-center justify-center font-bold text-xs uppercase shadow-xs">
-            {user.full_name.charAt(0)}
+            {(user?.full_name || "V").charAt(0).toUpperCase()}
           </div>
           <button
             onClick={logout}

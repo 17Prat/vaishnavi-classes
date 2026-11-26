@@ -85,7 +85,7 @@ export default function AdminReportsPage() {
                   Channel Breakdown
                 </span>
                 <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
-                  {collectionData.payment_methods.map((m: any, idx: number) => (
+                  {Array.isArray(collectionData.payment_methods) && collectionData.payment_methods.map((m: any, idx: number) => (
                     <div key={idx} className="p-3 bg-slate-50 rounded-xl border border-slate-100">
                       <span className="text-[11px] font-semibold text-slate-500 block">{m.method}</span>
                       <span className="text-sm font-bold text-slate-900">{formatCurrency(m.amount)}</span>

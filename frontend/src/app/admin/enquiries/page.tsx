@@ -113,21 +113,22 @@ export default function AdminEnquiriesPage() {
     }
   };
 
-  const filtered = enquiries.filter((e) => {
+  const filtered = (enquiries || []).filter((e) => {
+    const q = (search || "").toLowerCase();
     const matchesSearch =
-      e.customer_name.toLowerCase().includes(search.toLowerCase()) ||
-      e.mobile_number.includes(search) ||
-      e.service_type.toLowerCase().includes(search.toLowerCase()) ||
-      (e.email && e.email.toLowerCase().includes(search.toLowerCase()));
+      (e.customer_name || "").toLowerCase().includes(q) ||
+      (e.mobile_number || "").includes(q) ||
+      (e.service_type || "").toLowerCase().includes(q) ||
+      (e.email && e.email.toLowerCase().includes(q));
 
     const matchesStatus = statusFilter === "all" || e.status === statusFilter;
     return matchesSearch && matchesStatus;
   });
 
-  const totalCount = enquiries.length;
-  const pendingCount = enquiries.filter((e) => e.status === "pending").length;
-  const contactedCount = enquiries.filter((e) => e.status === "contacted").length;
-  const convertedCount = enquiries.filter((e) => e.status === "converted").length;
+  const totalCount = (enquiries || []).length;
+  const pendingCount = (enquiries || []).filter((e) => e.status === "pending").length;
+  const contactedCount = (enquiries || []).filter((e) => e.status === "contacted").length;
+  const convertedCount = (enquiries || []).filter((e) => e.status === "converted").length;
 
   return (
     <DashboardLayout>

@@ -24,7 +24,7 @@ export function DashboardLayout({ children, allowedRoles }: DashboardLayoutProps
 
   useEffect(() => {
     if (mounted && !isLoading) {
-      if (!user) {
+      if (!user || typeof user !== "object" || Array.isArray(user) || !user.role) {
         router.push("/login");
       } else if (allowedRoles && !allowedRoles.includes(user.role)) {
         // Redirect to their default dashboard
@@ -34,7 +34,7 @@ export function DashboardLayout({ children, allowedRoles }: DashboardLayoutProps
   }, [user, isLoading, allowedRoles, router, mounted]);
 
   // Prevent SSR hydration mismatch by showing consistent server loader until client mounted
-  if (!mounted || isLoading || !user) {
+  if (!mounted || isLoading || !user || typeof user !== "object" || Array.isArray(user) || !user.role) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-slate-50">
         <div className="flex flex-col items-center gap-3">
