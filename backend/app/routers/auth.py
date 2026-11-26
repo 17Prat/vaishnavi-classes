@@ -1,10 +1,14 @@
 from fastapi import APIRouter, Depends, HTTPException, status, Response, Request
 from sqlalchemy.ext.asyncio import AsyncSession
-from sqlalchemy import select
+from sqlalchemy import select, func, or_
 from sqlalchemy.orm import selectinload
 from app.database import get_db
 from app.models.user import User, StaffProfile, StaffPermission, StudentProfile
-from app.schemas.auth import LoginRequest, LoginResponse, UserOut, ChangePasswordRequest, AdminResetPasswordRequest
+from app.models.institute import Institute
+from app.schemas.auth import (
+    LoginRequest, LoginResponse, UserOut, ChangePasswordRequest,
+    AdminResetPasswordRequest, RegisterRequest, ForgotPasswordRequest
+)
 from app.utils.security import verify_password, hash_password, create_access_token
 from app.utils.dependencies import get_current_user, require_roles
 from app.models.audit import AuditLog
@@ -165,6 +169,145 @@ async def admin_reset_password(
     await db.commit()
 
     return {"message": f"Password reset for {target_user.login_id} successfully"}
+
+@router.post("/register", response_model=LoginResponse)
+async def register(
+    payload: RegisterRequest,
+    response: Response,
+    db: AsyncSession = Depends(get_db)
+):
+    # Get master institute
+    inst_stmt = select(Institute).limit(1)
+    inst_res = await db.execute(inst_stmt)
+    institute = inst_res.scalar_one_or_none()
+    if not institute:
+        raise HTTPException(status_code=500, detail="Institute not initialized")
+
+    # Check if phone already registered
+    existing_stmt = select(User).where(User.phone == payload.phone)
+    existing_res = await db.execute(existing_stmt)
+    if existing_res.scalar_one_or_none():
+        raise HTTPException(status_code=400, detail="An account with this phone number already exists.")
+
+    # Generate next ID based on role
+    role = payload.role if payload.role in ["student", "staff"] else "student"
+    if role == "student":
+        cnt_res = await db.execute(select(func.count(User.id)).where(User.role == "student"))
+        count = cnt_res.scalar() or 0
+        new_login_id = f"STU{str(count + 1).zfill(4)}"
+    else:
+        cnt_res = await db.execute(select(func.count(User.id)).where(User.role == "staff"))
+        count = cnt_res.scalar() or 0
+        new_login_id = f"STF{str(count + 1).zfill(4)}"
+
+    user = User(
+        institute_id=institute.id,
+        login_id=new_login_id,
+        hashed_password=hash_password(payload.password),
+        role=role,
+        full_name=payload.full_name,
+        email=payload.email,
+        phone=payload.phone,
+        is_active=True,
+        must_change_password=False
+    )
+    db.add(user)
+    await db.flush()
+
+    if role == "student":
+        profile = StudentProfile(
+            institute_id=institute.id,
+            user_id=user.id,
+            admission_number=f"ADM-{new_login_id}",
+            roll_number=str(count + 1),
+            emergency_contact=payload.phone
+        )
+        db.add(profile)
+    else:
+        profile = StaffProfile(
+            institute_id=institute.id,
+            user_id=user.id,
+            designation="Teacher",
+            qualification="Degree"
+        )
+        db.add(profile)
+        perm = StaffPermission(
+            staff_profile_id=profile.id,
+            can_collect_fees=True,
+            can_verify_upi=True,
+            can_send_reminders=True,
+            can_view_reports=True,
+            can_manage_students=True
+        )
+        db.add(perm)
+
+    await db.commit()
+
+    token_data = {
+        "sub": user.id,
+        "login_id": user.login_id,
+        "role": user.role,
+        "institute_id": user.institute_id
+    }
+    access_token = create_access_token(token_data)
+
+    user_out = UserOut(
+        id=user.id,
+        institute_id=user.institute_id,
+        login_id=user.login_id,
+        role=user.role,
+        full_name=user.full_name,
+        email=user.email,
+        phone=user.phone,
+        avatar_url=None,
+        is_active=user.is_active,
+        must_change_password=user.must_change_password,
+        permissions={},
+        student_profile_id=profile.id if role == "student" else None,
+        staff_profile_id=profile.id if role == "staff" else None,
+        institute_name=institute.name
+    )
+
+    return LoginResponse(access_token=access_token, user=user_out)
+
+@router.post("/forgot-password")
+async def forgot_password(
+    payload: ForgotPasswordRequest,
+    db: AsyncSession = Depends(get_db)
+):
+    query = payload.login_id_or_phone.strip()
+    stmt = (
+        select(User)
+        .where(
+            or_(
+                User.login_id == query.upper(),
+                User.phone == query,
+                User.email == query.lower()
+            )
+        )
+    )
+    res = await db.execute(stmt)
+    user = res.scalar_one_or_none()
+    if not user:
+        raise HTTPException(status_code=404, detail="No account found matching that Login ID or Mobile Number.")
+
+    if payload.new_password:
+        if len(payload.new_password) < 6:
+            raise HTTPException(status_code=400, detail="Password must be at least 6 characters.")
+        user.hashed_password = hash_password(payload.new_password)
+        user.must_change_password = False
+        await db.commit()
+        return {
+            "message": f"Password for {user.login_id} ({user.full_name}) has been reset successfully. You can now log in.",
+            "login_id": user.login_id,
+            "reset": True
+        }
+
+    return {
+        "message": f"Account verified for {user.full_name} ({user.login_id}). Please enter your new password.",
+        "login_id": user.login_id,
+        "reset": False
+    }
 
 @router.post("/logout")
 async def logout(response: Response):

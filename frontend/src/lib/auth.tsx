@@ -9,6 +9,18 @@ interface AuthContextType {
   token: string | null;
   isLoading: boolean;
   login: (loginId: string, password: string) => Promise<User>;
+  registerUser: (data: {
+    full_name: string;
+    phone: string;
+    email?: string;
+    role?: string;
+    password: string;
+    course_interest?: string;
+  }) => Promise<User>;
+  forgotPassword: (
+    loginIdOrPhone: string,
+    newPassword?: string
+  ) => Promise<{ message: string; login_id?: string; reset: boolean }>;
   logout: () => void;
   refreshUser: () => Promise<void>;
 }
@@ -58,6 +70,43 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     return userData;
   };
 
+  const registerUser = async (data: {
+    full_name: string;
+    phone: string;
+    email?: string;
+    role?: string;
+    password: string;
+    course_interest?: string;
+  }): Promise<User> => {
+    const res = await apiFetch("/auth/register", {
+      method: "POST",
+      body: JSON.stringify(data),
+    });
+
+    const accessToken = res.access_token;
+    const userData = res.user;
+
+    localStorage.setItem("feeflow_token", accessToken);
+    localStorage.setItem("feeflow_user", JSON.stringify(userData));
+
+    setToken(accessToken);
+    setUser(userData);
+    return userData;
+  };
+
+  const forgotPassword = async (
+    loginIdOrPhone: string,
+    newPassword?: string
+  ): Promise<{ message: string; login_id?: string; reset: boolean }> => {
+    return await apiFetch("/auth/forgot-password", {
+      method: "POST",
+      body: JSON.stringify({
+        login_id_or_phone: loginIdOrPhone,
+        new_password: newPassword,
+      }),
+    });
+  };
+
   const logout = async () => {
     try {
       await apiFetch("/auth/logout", { method: "POST" });
@@ -82,7 +131,18 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   };
 
   return (
-    <AuthContext.Provider value={{ user, token, isLoading, login, logout, refreshUser }}>
+    <AuthContext.Provider
+      value={{
+        user,
+        token,
+        isLoading,
+        login,
+        registerUser,
+        forgotPassword,
+        logout,
+        refreshUser,
+      }}
+    >
       {children}
     </AuthContext.Provider>
   );

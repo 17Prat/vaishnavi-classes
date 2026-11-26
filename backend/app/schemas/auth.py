@@ -37,3 +37,15 @@ class ChangePasswordRequest(BaseModel):
 class AdminResetPasswordRequest(BaseModel):
     user_id: str
     new_password: str = Field(..., min_length=6)
+
+class RegisterRequest(BaseModel):
+    full_name: str = Field(..., min_length=2)
+    phone: str = Field(..., min_length=10)
+    email: Optional[str] = None
+    role: str = Field(default="student")
+    password: str = Field(..., min_length=6)
+    course_interest: Optional[str] = None
+
+class ForgotPasswordRequest(BaseModel):
+    login_id_or_phone: str
+    new_password: Optional[str] = None
