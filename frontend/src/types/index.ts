@@ -84,6 +84,15 @@ export interface Batch {
   name: string;
   code: string;
   max_capacity: number;
+  subject?: string;
+  start_date?: string;
+  end_date?: string;
+  start_time?: string;
+  end_time?: string;
+  batch_days?: string;
+  assigned_staff_name?: string;
+  description?: string;
+  status?: string;
   class_name?: string;
   course_name?: string;
 }
@@ -104,6 +113,10 @@ export interface FeePlan {
   installment_frequency: string;
   number_of_installments: number;
   is_active: boolean;
+  discount_type?: string;
+  discount_value?: number;
+  discount_amount?: number;
+  discount_reason?: string;
 }
 
 export interface Installment {
@@ -124,19 +137,43 @@ export interface FeeLedger {
   login_id: string;
   fee_plan_name: string;
   base_amount: number;
+  original_fee_amount?: number;
   admission_fee: number;
   tuition_fee: number;
   examination_fee: number;
   library_fee: number;
   transport_fee: number;
   custom_fee: number;
+  discount_type?: string;
+  discount_value?: number;
   discount_amount: number;
+  discount_reason?: string;
   scholarship_amount: number;
   net_payable: number;
   total_paid: number;
   remaining_balance: number;
   status: string;
   installments: Installment[];
+}
+
+export interface UpiAccount {
+  id: string;
+  institute_id: string;
+  account_holder_name: string;
+  upi_id: string;
+  display_name?: string;
+  is_default: boolean;
+  is_active: boolean;
+  created_at: string;
+}
+
+export interface SignatureSettings {
+  signatory_name: string;
+  signatory_designation: string;
+  signature_image_path?: string;
+  signature_data_url?: string;
+  signature_enabled: boolean;
+  signature_version: number;
 }
 
 export interface Payment {

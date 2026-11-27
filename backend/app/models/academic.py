@@ -15,6 +15,7 @@ class AcademicYear(Base, UUIDPrimaryKeyMixin, TimestampMixin):
 
     institute = relationship("Institute", back_populates="academic_years")
     enrollments = relationship("Enrollment", back_populates="academic_year", cascade="all, delete-orphan")
+    batches = relationship("Batch", back_populates="academic_year")
 
 class Course(Base, UUIDPrimaryKeyMixin, TimestampMixin):
     __tablename__ = "courses"
@@ -43,11 +44,23 @@ class Batch(Base, UUIDPrimaryKeyMixin, TimestampMixin):
     __tablename__ = "batches"
 
     class_id = Column(String(36), ForeignKey("classes.id", ondelete="CASCADE"), nullable=False, index=True)
-    name = Column(String(100), nullable=False) # e.g. "Alpha Batch 2026"
+    academic_year_id = Column(String(36), ForeignKey("academic_years.id", ondelete="SET NULL"), nullable=True, index=True)
+    name = Column(String(100), nullable=False) # e.g. "10th Standard Morning Batch"
     code = Column(String(50), nullable=False)
+    subject = Column(String(150), nullable=True)
+    start_date = Column(Date, nullable=True)
+    end_date = Column(Date, nullable=True)
+    start_time = Column(String(20), nullable=True) # e.g. "07:00 AM"
+    end_time = Column(String(20), nullable=True) # e.g. "09:00 AM"
+    batch_days = Column(String(100), nullable=True) # e.g. "Monday to Saturday"
     max_capacity = Column(Integer, default=60, nullable=False)
+    assigned_staff_name = Column(String(150), nullable=True)
+    description = Column(Text, nullable=True)
+    status = Column(String(20), default="active", nullable=False) # active, inactive, archived
+    created_by = Column(String(36), nullable=True)
 
     school_class = relationship("SchoolClass", back_populates="batches")
+    academic_year = relationship("AcademicYear", back_populates="batches")
     enrollments = relationship("Enrollment", back_populates="batch", cascade="all, delete-orphan")
     staff_assignments = relationship("StaffBatchAssignment", back_populates="batch", cascade="all, delete-orphan")
 

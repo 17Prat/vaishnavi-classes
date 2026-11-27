@@ -57,9 +57,31 @@ class BatchBase(BaseModel):
     name: str = Field(..., example="Morning Batch Alpha")
     code: str = Field(..., example="M-ALPHA")
     max_capacity: int = 60
+    academic_year_id: Optional[str] = None
+    subject: Optional[str] = None
+    start_date: Optional[date] = None
+    end_date: Optional[date] = None
+    start_time: Optional[str] = None
+    end_time: Optional[str] = None
+    batch_days: Optional[str] = None
+    assigned_staff_name: Optional[str] = None
+    description: Optional[str] = None
+    status: Optional[str] = "active"
 
 class BatchCreate(BatchBase):
     pass
+
+class BatchUpdate(BaseModel):
+    name: Optional[str] = None
+    code: Optional[str] = None
+    max_capacity: Optional[int] = None
+    subject: Optional[str] = None
+    start_time: Optional[str] = None
+    end_time: Optional[str] = None
+    batch_days: Optional[str] = None
+    assigned_staff_name: Optional[str] = None
+    description: Optional[str] = None
+    status: Optional[str] = None
 
 class BatchOut(BatchBase):
     id: str

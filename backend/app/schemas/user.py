@@ -17,7 +17,10 @@ class StudentCreate(BaseModel):
     batch_id: Optional[str] = None
     academic_year_id: Optional[str] = None
     fee_plan_id: Optional[str] = None
+    discount_type: Optional[str] = "none" # none, percentage, fixed
+    discount_value: Optional[float] = 0.0
     discount_amount: Optional[float] = 0.0
+    original_fee_amount: Optional[float] = None
     scholarship_amount: Optional[float] = 0.0
     discount_reason: Optional[str] = None
     scholarship_reason: Optional[str] = None

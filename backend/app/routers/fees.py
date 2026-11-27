@@ -2,14 +2,14 @@ from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select
 from sqlalchemy.orm import selectinload
-from typing import List
+from typing import List, Optional
 from decimal import Decimal
-from datetime import date, timedelta
+from datetime import date, datetime, timedelta
 from app.database import get_db
 from app.models.fee import FeePlan, StudentFeeAssignment, Installment
 from app.models.user import User, StudentProfile
 from app.models.academic import Course
-from app.schemas.fee import FeePlanCreate, FeePlanOut, AssignFeePlanRequest, FeeLedgerOut
+from app.schemas.fee import FeePlanCreate, FeePlanOut, AssignFeePlanRequest, UpdateDiscountRequest, FeeLedgerOut
 from app.utils.dependencies import get_current_user, require_roles
 
 router = APIRouter(prefix="/fees", tags=["Fee Management"])
@@ -123,19 +123,36 @@ async def assign_fee_plan(
     if not fee_plan:
         raise HTTPException(status_code=404, detail="Fee Plan not found")
 
-    base_amt = fee_plan.total_amount
-    disc = Decimal(str(payload.discount_amount or 0.0))
+    base_amt = Decimal(str(payload.original_fee_amount)) if payload.original_fee_amount else fee_plan.total_amount
+    disc_type = (payload.discount_type or "none").lower()
+    disc_val = Decimal(str(payload.discount_value or 0.0))
+
+    if disc_type == "percentage":
+        disc = (base_amt * disc_val / Decimal("100")).quantize(Decimal("0.01"))
+    elif disc_type == "fixed":
+        disc = min(disc_val, base_amt).quantize(Decimal("0.01"))
+    else:
+        disc = Decimal(str(payload.discount_amount or 0.0)).quantize(Decimal("0.01"))
+        if disc > Decimal("0.00"):
+            disc_type = "fixed"
+            disc_val = disc
+
     schol = Decimal(str(payload.scholarship_amount or 0.0))
-    net = base_amt - disc - schol
+    net = max(base_amt - disc - schol, Decimal("0.00"))
 
     asgn = StudentFeeAssignment(
         student_id=student.id,
         fee_plan_id=fee_plan.id,
         base_amount=base_amt,
+        original_fee_amount=base_amt,
+        discount_type=disc_type,
+        discount_value=disc_val,
         discount_amount=disc,
         scholarship_amount=schol,
         discount_reason=payload.discount_reason,
         scholarship_reason=payload.scholarship_reason,
+        discount_applied_by=current_user.id,
+        discount_applied_at=datetime.utcnow(),
         net_payable=net,
         total_paid=Decimal("0.00"),
         remaining_balance=net,
@@ -144,17 +161,22 @@ async def assign_fee_plan(
     db.add(asgn)
     await db.flush()
 
-    count = fee_plan.number_of_installments
+    count = fee_plan.number_of_installments or 1
     inst_due = (net / Decimal(count)).quantize(Decimal("0.01"))
     start_d = payload.custom_first_due_date or (date.today().replace(day=10))
 
     for i in range(1, count + 1):
         due_d = start_d + timedelta(days=30 * (i - 1))
+        if i == count:
+            this_due = net - (inst_due * (count - 1))
+        else:
+            this_due = inst_due
+
         inst = Installment(
             fee_assignment_id=asgn.id,
             installment_number=i,
             title=f"Installment {i} ({due_d.strftime('%b %Y')})",
-            due_amount=inst_due,
+            due_amount=this_due,
             paid_amount=Decimal("0.00"),
             due_date=due_d,
             status="pending"
@@ -162,4 +184,100 @@ async def assign_fee_plan(
         db.add(inst)
 
     await db.commit()
-    return {"message": "Fee plan assigned and installments scheduled successfully", "assignment_id": asgn.id}
+    return {
+        "message": "Fee plan assigned and installments scheduled successfully",
+        "assignment_id": asgn.id,
+        "original_fees": float(base_amt),
+        "discount_amount": float(disc),
+        "net_payable": float(net)
+    }
+
+@router.put("/assignments/{assignment_id}/discount")
+async def update_assignment_discount(
+    assignment_id: str,
+    payload: UpdateDiscountRequest,
+    current_user: User = Depends(require_roles(["admin"])),
+    db: AsyncSession = Depends(get_db)
+):
+    stmt = (
+        select(StudentFeeAssignment)
+        .where(StudentFeeAssignment.id == assignment_id)
+        .options(selectinload(StudentFeeAssignment.installments))
+    )
+    res = await db.execute(stmt)
+    asgn = res.scalar_one_or_none()
+    if not asgn:
+        raise HTTPException(status_code=404, detail="Fee assignment not found")
+
+    base_amt = asgn.original_fee_amount or asgn.base_amount
+    disc_type = (payload.discount_type or "none").lower()
+    disc_val = Decimal(str(payload.discount_value or 0.0))
+
+    if disc_type == "percentage":
+        disc = (base_amt * disc_val / Decimal("100")).quantize(Decimal("0.01"))
+    elif disc_type == "fixed":
+        disc = min(disc_val, base_amt).quantize(Decimal("0.01"))
+    else:
+        disc = Decimal("0.00")
+        disc_val = Decimal("0.00")
+
+    schol = asgn.scholarship_amount or Decimal("0.00")
+    new_net = max(base_amt - disc - schol, Decimal("0.00"))
+
+    # Update ledger
+    asgn.discount_type = disc_type
+    asgn.discount_value = disc_val
+    asgn.discount_amount = disc
+    if payload.discount_reason is not None:
+        asgn.discount_reason = payload.discount_reason
+    asgn.discount_applied_by = current_user.id
+    asgn.discount_applied_at = datetime.utcnow()
+    asgn.net_payable = new_net
+    asgn.remaining_balance = max(new_net - asgn.total_paid, Decimal("0.00"))
+    if asgn.remaining_balance <= Decimal("0.00") and asgn.total_paid > Decimal("0.00"):
+        asgn.status = "paid"
+    elif asgn.total_paid > Decimal("0.00"):
+        asgn.status = "partial"
+    else:
+        asgn.status = "pending"
+
+    # Re-allocate unpaid balance across pending installments
+    unpaid_installments = [i for i in asgn.installments if i.status != "paid"]
+    if unpaid_installments:
+        total_remaining = asgn.remaining_balance
+        count = len(unpaid_installments)
+        share = (total_remaining / Decimal(count)).quantize(Decimal("0.01"))
+        for idx, inst in enumerate(unpaid_installments):
+            if idx == count - 1:
+                inst.due_amount = inst.paid_amount + (total_remaining - (share * (count - 1)))
+            else:
+                inst.due_amount = inst.paid_amount + share
+            if inst.paid_amount >= inst.due_amount:
+                inst.status = "paid"
+            elif inst.paid_amount > Decimal("0.00"):
+                inst.status = "partial"
+            else:
+                inst.status = "pending"
+
+    await db.commit()
+    return {
+        "message": "Discount updated successfully",
+        "original_fees": float(base_amt),
+        "discount_type": disc_type,
+        "discount_amount": float(disc),
+        "net_payable": float(new_net),
+        "remaining_balance": float(asgn.remaining_balance)
+    }
+
+@router.delete("/assignments/{assignment_id}/discount")
+async def remove_assignment_discount(
+    assignment_id: str,
+    current_user: User = Depends(require_roles(["admin"])),
+    db: AsyncSession = Depends(get_db)
+):
+    return await update_assignment_discount(
+        assignment_id,
+        UpdateDiscountRequest(discount_type="none", discount_value=0.0, discount_reason="Discount removed"),
+        current_user,
+        db
+    )

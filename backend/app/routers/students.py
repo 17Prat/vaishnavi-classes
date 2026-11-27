@@ -6,7 +6,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select, func, or_
 from sqlalchemy.orm import selectinload
 from typing import List, Optional
-from datetime import date, timedelta
+from datetime import date, datetime, timedelta
 from decimal import Decimal
 from app.database import get_db
 from app.models.user import User, StudentProfile
@@ -195,20 +195,37 @@ async def create_student(
         fp_res = await db.execute(fp_stmt)
         fee_plan = fp_res.scalar_one_or_none()
         if fee_plan:
-            base_amt = fee_plan.total_amount
-            disc = Decimal(str(payload.discount_amount or 0.0))
+            base_amt = Decimal(str(payload.original_fee_amount)) if payload.original_fee_amount else fee_plan.total_amount
+            disc_type = (payload.discount_type or "none").lower()
+            disc_val = Decimal(str(payload.discount_value or 0.0))
+
+            if disc_type == "percentage":
+                disc = (base_amt * disc_val / Decimal("100")).quantize(Decimal("0.01"))
+            elif disc_type == "fixed":
+                disc = min(disc_val, base_amt).quantize(Decimal("0.01"))
+            else:
+                disc = Decimal(str(payload.discount_amount or 0.0)).quantize(Decimal("0.01"))
+                if disc > Decimal("0.00"):
+                    disc_type = "fixed"
+                    disc_val = disc
+
             schol = Decimal(str(payload.scholarship_amount or 0.0))
-            net = base_amt - disc - schol
+            net = max(base_amt - disc - schol, Decimal("0.00"))
             total_fee = float(net)
 
             asgn = StudentFeeAssignment(
                 student_id=profile.id,
                 fee_plan_id=fee_plan.id,
                 base_amount=base_amt,
+                original_fee_amount=base_amt,
+                discount_type=disc_type,
+                discount_value=disc_val,
                 discount_amount=disc,
                 scholarship_amount=schol,
                 discount_reason=payload.discount_reason,
                 scholarship_reason=payload.scholarship_reason,
+                discount_applied_by=current_user.id,
+                discount_applied_at=datetime.utcnow(),
                 net_payable=net,
                 total_paid=Decimal("0.00"),
                 remaining_balance=net,
@@ -218,16 +235,23 @@ async def create_student(
             await db.flush()
 
             # Generate installments
-            count = fee_plan.number_of_installments
+            count = fee_plan.number_of_installments or 1
             inst_due = (net / Decimal(count)).quantize(Decimal("0.01"))
             start_m = date.today().replace(day=10)
             for i in range(1, count + 1):
                 due_d = start_m + timedelta(days=30 * (i - 1))
+                # Adjust last installment for rounding
+                if i == count:
+                    allocated_so_far = inst_due * (count - 1)
+                    this_due = net - allocated_so_far
+                else:
+                    this_due = inst_due
+
                 inst = Installment(
                     fee_assignment_id=asgn.id,
                     installment_number=i,
                     title=f"Installment {i} ({due_d.strftime('%b %Y')})",
-                    due_amount=inst_due,
+                    due_amount=this_due,
                     paid_amount=Decimal("0.00"),
                     due_date=due_d,
                     status="pending"
@@ -312,13 +336,17 @@ async def get_student_ledger(
         login_id=student.student_id,
         fee_plan_name=plan.name if plan else "Standard Fee Plan",
         base_amount=float(asgn.base_amount),
+        original_fee_amount=float(asgn.original_fee_amount or asgn.base_amount),
         admission_fee=float(plan.admission_fee) if plan else 0.0,
         tuition_fee=float(plan.tuition_fee) if plan else 0.0,
         examination_fee=float(plan.examination_fee) if plan else 0.0,
         library_fee=float(plan.library_fee) if plan else 0.0,
         transport_fee=float(plan.transport_fee) if plan else 0.0,
         custom_fee=float(plan.custom_fee) if plan else 0.0,
+        discount_type=asgn.discount_type or "none",
+        discount_value=float(asgn.discount_value or 0.0),
         discount_amount=float(asgn.discount_amount),
+        discount_reason=asgn.discount_reason,
         scholarship_amount=float(asgn.scholarship_amount),
         net_payable=float(asgn.net_payable),
         total_paid=float(asgn.total_paid),

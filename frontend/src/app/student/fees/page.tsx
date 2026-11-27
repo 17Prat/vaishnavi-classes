@@ -90,18 +90,21 @@ export default function StudentFeeLedgerPage() {
 
             {/* Concessions */}
             {(ledger.discount_amount > 0 || ledger.scholarship_amount > 0) && (
-              <div className="space-y-2 pb-3 border-b border-slate-100 bg-emerald-50/40 p-3 rounded-lg">
-                <p className="font-bold text-emerald-800">Waivers & Scholarships Applied:</p>
+              <div className="space-y-2 pb-3 border-b border-slate-100 bg-emerald-50/50 p-3 rounded-lg border border-emerald-200">
+                <p className="font-bold text-emerald-900 text-xs">Concession &amp; Waivers Applied:</p>
                 {ledger.discount_amount > 0 && (
-                  <div className="flex justify-between text-emerald-700">
-                    <span>Discount / Waiver:</span>
-                    <span>- {formatCurrency(ledger.discount_amount)}</span>
+                  <div className="flex justify-between text-emerald-700 font-semibold">
+                    <span>
+                      Fee Concession {ledger.discount_type === "percentage" && ledger.discount_value ? `(${ledger.discount_value}%)` : ""}
+                      {ledger.discount_reason ? ` • ${ledger.discount_reason}` : ""}:
+                    </span>
+                    <span className="font-extrabold">- {formatCurrency(ledger.discount_amount)}</span>
                   </div>
                 )}
                 {ledger.scholarship_amount > 0 && (
-                  <div className="flex justify-between text-emerald-700">
+                  <div className="flex justify-between text-emerald-700 font-semibold">
                     <span>Academic Scholarship:</span>
-                    <span>- {formatCurrency(ledger.scholarship_amount)}</span>
+                    <span className="font-extrabold">- {formatCurrency(ledger.scholarship_amount)}</span>
                   </div>
                 )}
               </div>

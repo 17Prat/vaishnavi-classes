@@ -1,13 +1,41 @@
 import os
 import qrcode
+import base64
 from io import BytesIO
 from decimal import Decimal
-from reportlab.lib.pagesizes import letter, A4
+from reportlab.lib.pagesizes import A4
 from reportlab.lib import colors
 from reportlab.platypus import SimpleDocTemplate, Paragraph, Spacer, Table, TableStyle, Image as RLImage
 from reportlab.lib.styles import getSampleStyleSheet, ParagraphStyle
 from reportlab.lib.units import inch
+from reportlab.pdfbase import pdfmetrics
+from reportlab.pdfbase.ttfonts import TTFont
 from app.config import settings
+
+# Register TrueType Font for Indian Rupee Symbol (₹) and crisp Unicode support
+PRIMARY_FONT = "Helvetica"
+BOLD_FONT = "Helvetica-Bold"
+
+FONT_CANDIDATES = [
+    ("CustomUnicode", "C:/Windows/Fonts/arial.ttf", "CustomUnicodeBold", "C:/Windows/Fonts/arialbd.ttf"),
+    ("CustomUnicode", "C:/Windows/Fonts/segoeui.ttf", "CustomUnicodeBold", "C:/Windows/Fonts/segoeuib.ttf"),
+    ("CustomUnicode", "/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf", "CustomUnicodeBold", "/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf"),
+    ("CustomUnicode", "/usr/share/fonts/dejavu/DejaVuSans.ttf", "CustomUnicodeBold", "/usr/share/fonts/dejavu/DejaVuSans-Bold.ttf"),
+]
+
+for name, regular_path, bold_name, bold_path in FONT_CANDIDATES:
+    if os.path.exists(regular_path):
+        try:
+            pdfmetrics.registerFont(TTFont(name, regular_path))
+            PRIMARY_FONT = name
+            if os.path.exists(bold_path):
+                pdfmetrics.registerFont(TTFont(bold_name, bold_path))
+                BOLD_FONT = bold_name
+            else:
+                BOLD_FONT = name
+            break
+        except Exception:
+            pass
 
 def generate_qr_code_image(data: str) -> BytesIO:
     qr = qrcode.QRCode(
@@ -24,29 +52,29 @@ def generate_qr_code_image(data: str) -> BytesIO:
     buffer.seek(0)
     return buffer
 
+def get_signature_flowable(signature_source: str):
+    """
+    Returns an RLImage flowable from base64 data URL or local file path
+    """
+    if not signature_source:
+        return None
+    try:
+        if signature_source.startswith("data:"):
+            # Base64 data URL
+            header, encoded = signature_source.split(",", 1)
+            raw = base64.b64decode(encoded)
+            buf = BytesIO(raw)
+            return RLImage(buf, width=1.4 * inch, height=0.55 * inch)
+        elif os.path.exists(signature_source):
+            return RLImage(signature_source, width=1.4 * inch, height=0.55 * inch)
+    except Exception:
+        return None
+    return None
+
 def create_receipt_pdf(
     receipt_data: dict,
     output_filename: str
 ) -> str:
-    """
-    receipt_data contains:
-      - receipt_number
-      - payment_date
-      - institute_name
-      - institute_code
-      - institute_address
-      - institute_phone
-      - student_name
-      - student_id (STU0001)
-      - course_name
-      - batch_name
-      - amount_paid (float)
-      - balance_after (float)
-      - payment_method (cash/upi/bank/cheque)
-      - transaction_ref
-      - verification_url
-      - collected_by
-    """
     file_path = os.path.join(settings.RECEIPTS_DIR, output_filename)
     doc = SimpleDocTemplate(
         file_path,
@@ -62,11 +90,12 @@ def create_receipt_pdf(
     dark_color = colors.HexColor("#1e1b4b")
     gray_color = colors.HexColor("#64748b")
     light_bg = colors.HexColor("#f8fafc")
+    green_color = colors.HexColor("#16a34a")
 
     title_style = ParagraphStyle(
         "InstTitle",
         parent=styles["Heading1"],
-        fontName="Helvetica-Bold",
+        fontName=BOLD_FONT,
         fontSize=20,
         textColor=primary_color,
         spaceAfter=4,
@@ -74,7 +103,7 @@ def create_receipt_pdf(
     subtitle_style = ParagraphStyle(
         "InstSubtitle",
         parent=styles["Normal"],
-        fontName="Helvetica",
+        fontName=PRIMARY_FONT,
         fontSize=9,
         textColor=gray_color,
         spaceAfter=12,
@@ -82,22 +111,22 @@ def create_receipt_pdf(
     badge_style = ParagraphStyle(
         "ReceiptBadge",
         parent=styles["Heading2"],
-        fontName="Helvetica-Bold",
-        fontSize=14,
+        fontName=BOLD_FONT,
+        fontSize=13,
         textColor=colors.HexColor("#166534"),
         alignment=2, # right
     )
     bold_label = ParagraphStyle(
         "BoldLabel",
         parent=styles["Normal"],
-        fontName="Helvetica-Bold",
+        fontName=BOLD_FONT,
         fontSize=9,
         textColor=dark_color,
     )
     value_style = ParagraphStyle(
         "ValueText",
         parent=styles["Normal"],
-        fontName="Helvetica",
+        fontName=PRIMARY_FONT,
         fontSize=9,
         textColor=colors.HexColor("#334155"),
     )
@@ -119,7 +148,7 @@ def create_receipt_pdf(
                 logo_flowable,
                 [
                     Paragraph(f"<b>{receipt_data.get('institute_name', 'Vaishnavi Classes')}</b>", title_style),
-                    Paragraph("Since 1996 • Excellence in Education", subtitle_style),
+                    Paragraph("Since 1996 • 28+ Years of Academic Excellence", subtitle_style),
                 ]
             ]
         ], colWidths=[0.95 * inch, 3.25 * inch])
@@ -133,10 +162,10 @@ def create_receipt_pdf(
         header_data = [
             [
                 inst_info_table,
-                Paragraph("<b>OFFICIAL FEE RECEIPT</b><br/><font size=8 color='#4b5563'>ORIGINAL VERIFIED COPY</font>", badge_style)
+                Paragraph("<b>OFFICIAL FEE RECEIPT</b><br/><font size=8 color='#4b5563'>DIGITALLY VERIFIED COPY</font>", badge_style)
             ],
             [
-                Paragraph(f"{receipt_data.get('institute_address', 'Vaishnavi Classes Campus')}<br/>Contact: {receipt_data.get('institute_phone', '+91 96642 57346')}", subtitle_style),
+                Paragraph(f"{receipt_data.get('institute_address', 'Vaishnavi Classes Main Campus')}<br/>Contact: {receipt_data.get('institute_phone', '+91 96642 57346')}", subtitle_style),
                 Paragraph(f"<b>Receipt No:</b> {receipt_data.get('receipt_number')}<br/><b>Date:</b> {receipt_data.get('payment_date')}", value_style)
             ]
         ]
@@ -144,10 +173,10 @@ def create_receipt_pdf(
         header_data = [
             [
                 Paragraph(f"<b>{receipt_data.get('institute_name', 'Vaishnavi Classes')}</b>", title_style),
-                Paragraph("<b>OFFICIAL FEE RECEIPT</b><br/><font size=8 color='#4b5563'>ORIGINAL COPY</font>", badge_style)
+                Paragraph("<b>OFFICIAL FEE RECEIPT</b><br/><font size=8 color='#4b5563'>DIGITALLY VERIFIED COPY</font>", badge_style)
             ],
             [
-                Paragraph(f"{receipt_data.get('institute_address', 'Vaishnavi Classes Campus')}<br/>Contact: {receipt_data.get('institute_phone', '+91 96642 57346')}", subtitle_style),
+                Paragraph(f"{receipt_data.get('institute_address', 'Vaishnavi Classes Main Campus')}<br/>Contact: {receipt_data.get('institute_phone', '+91 96642 57346')}", subtitle_style),
                 Paragraph(f"<b>Receipt No:</b> {receipt_data.get('receipt_number')}<br/><b>Date:</b> {receipt_data.get('payment_date')}", value_style)
             ]
         ]
@@ -157,7 +186,7 @@ def create_receipt_pdf(
         ('BOTTOMPADDING', (0,0), (-1,-1), 2),
     ]))
     story.append(t_header)
-    story.append(Spacer(1, 10))
+    story.append(Spacer(1, 8))
 
     # Divider
     divider = Table([[""]], colWidths=[7.2 * inch], rowHeights=[2])
@@ -165,7 +194,7 @@ def create_receipt_pdf(
         ('BACKGROUND', (0,0), (-1,-1), primary_color),
     ]))
     story.append(divider)
-    story.append(Spacer(1, 12))
+    story.append(Spacer(1, 10))
 
     # Student & Payment details table
     info_data = [
@@ -177,7 +206,7 @@ def create_receipt_pdf(
         ],
         [
             Paragraph("Course / Program:", bold_label),
-            Paragraph(str(receipt_data.get("course_name", "General")), value_style),
+            Paragraph(str(receipt_data.get("course_name", "General Coaching")), value_style),
             Paragraph("Batch:", bold_label),
             Paragraph(str(receipt_data.get("batch_name", "Regular")), value_style),
         ],
@@ -192,57 +221,108 @@ def create_receipt_pdf(
     t_info.setStyle(TableStyle([
         ('BACKGROUND', (0,0), (-1,-1), light_bg),
         ('GRID', (0,0), (-1,-1), 0.5, colors.HexColor("#e2e8f0")),
-        ('TOPPADDING', (0,0), (-1,-1), 6),
-        ('BOTTOMPADDING', (0,0), (-1,-1), 6),
+        ('TOPPADDING', (0,0), (-1,-1), 5),
+        ('BOTTOMPADDING', (0,0), (-1,-1), 5),
         ('LEFTPADDING', (0,0), (-1,-1), 8),
         ('RIGHTPADDING', (0,0), (-1,-1), 8),
     ]))
     story.append(t_info)
-    story.append(Spacer(1, 15))
+    story.append(Spacer(1, 12))
 
-    # Fee Items Table
+    # Fee Items & Discount Breakdown Table
     currency = receipt_data.get("currency_symbol", "₹")
     amount_paid = float(receipt_data.get("amount_paid", 0.0))
     balance_after = float(receipt_data.get("balance_after", 0.0))
+    original_fees = float(receipt_data.get("original_fees", 0.0))
+    discount_amount = float(receipt_data.get("discount_amount", 0.0))
+    discount_reason = receipt_data.get("discount_reason")
+    discount_type = receipt_data.get("discount_type", "none")
+    discount_value = float(receipt_data.get("discount_value", 0.0))
 
     items_data = [
         [
             Paragraph("<b>#</b>", bold_label),
             Paragraph("<b>Fee Particulars / Description</b>", bold_label),
-            Paragraph("<b>Paid Amount</b>", ParagraphStyle("RightH", parent=bold_label, alignment=2)),
-        ],
-        [
-            Paragraph("1", value_style),
-            Paragraph(f"Installment / Academic Fee Payment — {receipt_data.get('installment_title', 'Tuition & Academic')}", value_style),
-            Paragraph(f"<b>{currency} {amount_paid:,.2f}</b>", ParagraphStyle("RightV", parent=value_style, alignment=2)),
-        ],
-        [
-            Paragraph("", value_style),
-            Paragraph("<b>Total Received Amount:</b>", ParagraphStyle("TotalL", parent=bold_label, alignment=2)),
-            Paragraph(f"<b>{currency} {amount_paid:,.2f}</b>", ParagraphStyle("TotalV", parent=bold_label, alignment=2, textColor=primary_color)),
-        ],
-        [
-            Paragraph("", value_style),
-            Paragraph("<b>Remaining Outstanding Balance:</b>", ParagraphStyle("BalL", parent=bold_label, alignment=2)),
-            Paragraph(f"<b>{currency} {balance_after:,.2f}</b>", ParagraphStyle("BalV", parent=bold_label, alignment=2, textColor=colors.HexColor("#dc2626") if balance_after > 0 else colors.HexColor("#16a34a"))),
+            Paragraph("<b>Amount</b>", ParagraphStyle("RightH", parent=bold_label, alignment=2)),
         ],
     ]
-    t_items = Table(items_data, colWidths=[0.5 * inch, 4.7 * inch, 2.0 * inch])
+
+    item_num = 1
+    if original_fees > 0:
+        items_data.append([
+            Paragraph(str(item_num), value_style),
+            Paragraph(f"Academic Course Fee — {receipt_data.get('course_name', 'Annual Program')}", value_style),
+            Paragraph(f"{currency} {original_fees:,.2f}", ParagraphStyle("RightV", parent=value_style, alignment=2)),
+        ])
+        item_num += 1
+
+    if discount_amount > 0:
+        disc_label = "Special Concession"
+        if discount_type == "percentage":
+            disc_label = f"Concession / Scholarship ({discount_value:g}%)"
+        elif discount_reason:
+            disc_label = f"Concession ({discount_reason})"
+        items_data.append([
+            Paragraph(str(item_num), value_style),
+            Paragraph(f"<b>Fee Concession:</b> {disc_label}", ParagraphStyle("DiscP", parent=value_style, textColor=green_color)),
+            Paragraph(f"<b>- {currency} {discount_amount:,.2f}</b>", ParagraphStyle("RightD", parent=value_style, alignment=2, textColor=green_color)),
+        ])
+        item_num += 1
+
+    items_data.append([
+        Paragraph(str(item_num), value_style),
+        Paragraph(f"<b>Payment Verified:</b> {receipt_data.get('installment_title', 'Tuition & Academic Installment')}", value_style),
+        Paragraph(f"<b>{currency} {amount_paid:,.2f}</b>", ParagraphStyle("RightV2", parent=value_style, alignment=2, fontName=BOLD_FONT)),
+    ])
+
+    items_data.append([
+        Paragraph("", value_style),
+        Paragraph("<b>Total Received Amount in this Receipt:</b>", ParagraphStyle("TotalL", parent=bold_label, alignment=2)),
+        Paragraph(f"<b>{currency} {amount_paid:,.2f}</b>", ParagraphStyle("TotalV", parent=bold_label, alignment=2, textColor=primary_color)),
+    ])
+
+    items_data.append([
+        Paragraph("", value_style),
+        Paragraph("<b>Remaining Outstanding Balance:</b>", ParagraphStyle("BalL", parent=bold_label, alignment=2)),
+        Paragraph(f"<b>{currency} {balance_after:,.2f}</b>", ParagraphStyle("BalV", parent=bold_label, alignment=2, textColor=colors.HexColor("#dc2626") if balance_after > 0 else colors.HexColor("#16a34a"))),
+    ])
+
+    t_items = Table(items_data, colWidths=[0.4 * inch, 4.8 * inch, 2.0 * inch])
     t_items.setStyle(TableStyle([
         ('BACKGROUND', (0,0), (-1,0), colors.HexColor("#e0e7ff")),
         ('GRID', (0,0), (-1,-1), 0.5, colors.HexColor("#cbd5e1")),
-        ('TOPPADDING', (0,0), (-1,-1), 7),
-        ('BOTTOMPADDING', (0,0), (-1,-1), 7),
+        ('TOPPADDING', (0,0), (-1,-1), 6),
+        ('BOTTOMPADDING', (0,0), (-1,-1), 6),
         ('LEFTPADDING', (0,0), (-1,-1), 8),
         ('RIGHTPADDING', (0,0), (-1,-1), 8),
     ]))
     story.append(t_items)
-    story.append(Spacer(1, 20))
+    story.append(Spacer(1, 15))
 
-    # QR Code & Verification footer
-    verification_url = receipt_data.get("verification_url", f"https://feeflow.internal/verify-receipt/{receipt_data.get('receipt_number')}")
+    # QR Code & Verification footer with E-Signature
+    verification_url = receipt_data.get("verification_url", f"http://localhost:3000/verify-receipt/{receipt_data.get('receipt_number')}")
     qr_buf = generate_qr_code_image(verification_url)
-    qr_img = RLImage(qr_buf, width=1.1 * inch, height=1.1 * inch)
+    qr_img = RLImage(qr_buf, width=1.05 * inch, height=1.05 * inch)
+
+    # Authorized Signature Flowable
+    signatory_name = receipt_data.get("signatory_name", "Director / Authorized Signatory")
+    signatory_designation = receipt_data.get("signatory_designation", "Authorized Signatory")
+    sig_img_path = receipt_data.get("signature_image_path")
+    sig_flowable = get_signature_flowable(sig_img_path) if receipt_data.get("signature_enabled") else None
+
+    if sig_flowable:
+        sig_cell = [
+            sig_flowable,
+            Paragraph("<b>_____________________</b>", ParagraphStyle("Line", parent=value_style, alignment=1)),
+            Paragraph(f"<b>{signatory_name}</b>", ParagraphStyle("SigN", parent=bold_label, alignment=1, fontSize=8)),
+            Paragraph(f"<font size=7 color='#64748b'>{signatory_designation}</font>", ParagraphStyle("SigD", parent=value_style, alignment=1)),
+        ]
+    else:
+        sig_cell = [
+            Paragraph("<br/><br/><b>_____________________</b>", ParagraphStyle("Line", parent=value_style, alignment=1)),
+            Paragraph(f"<b>{signatory_name}</b>", ParagraphStyle("SigN", parent=bold_label, alignment=1, fontSize=8)),
+            Paragraph(f"<font size=7 color='#64748b'>{signatory_designation}</font>", ParagraphStyle("SigD", parent=value_style, alignment=1)),
+        ]
 
     footer_data = [
         [
@@ -250,17 +330,14 @@ def create_receipt_pdf(
             Paragraph(
                 f"<b>Scan to Verify Online:</b><br/>"
                 f"<font size=8 color='#64748b'>Receipt Verification Code: {receipt_data.get('receipt_number')}<br/>"
-                f"This document is digitally validated by {receipt_data.get('institute_name')}.<br/>"
-                f"Authorized Signatory: {receipt_data.get('collected_by', 'Administration Desk')}</font>",
+                f"This document is electronically verified by {receipt_data.get('institute_name')}.<br/>"
+                f"Generated by: {receipt_data.get('collected_by', 'Administration Desk')}</font>",
                 value_style
             ),
-            Paragraph(
-                "<br/><br/><b>_____________________</b><br/><b>Authorized Signature</b><br/><font size=7 color='#64748b'>Cashier / Finance Officer</font>",
-                ParagraphStyle("Sig", parent=value_style, alignment=1)
-            )
+            sig_cell
         ]
     ]
-    t_footer = Table(footer_data, colWidths=[1.3 * inch, 3.9 * inch, 2.0 * inch])
+    t_footer = Table(footer_data, colWidths=[1.2 * inch, 3.9 * inch, 2.1 * inch])
     t_footer.setStyle(TableStyle([
         ('VALIGN', (0,0), (-1,-1), 'MIDDLE'),
         ('BOTTOMPADDING', (0,0), (-1,-1), 4),

@@ -18,6 +18,10 @@ class Payment(Base, UUIDPrimaryKeyMixin, TimestampMixin):
     proof_image_url = Column(String(500), nullable=True) # uploaded screenshot
     payment_date = Column(Date, default=date.today, nullable=False)
     
+    # Store receiving UPI account snapshot
+    recipient_upi_id = Column(String(100), nullable=True)
+    recipient_upi_name = Column(String(150), nullable=True)
+    
     status = Column(String(30), default="verified", nullable=False) # verified, pending_verification, rejected, reversed
     rejection_reason = Column(Text, nullable=True)
     reversal_reason = Column(Text, nullable=True)
@@ -46,6 +50,17 @@ class Receipt(Base, UUIDPrimaryKeyMixin, TimestampMixin):
     receipt_number = Column(String(50), unique=True, nullable=False, index=True) # REC-2026-0001
     amount_paid = Column(Numeric(12, 2), nullable=False)
     balance_after = Column(Numeric(12, 2), nullable=False)
+    
+    # Financial breakdowns for transparent receipt presentation
+    original_amount = Column(Numeric(12, 2), nullable=True)
+    discount_amount = Column(Numeric(12, 2), nullable=True)
+    final_payable = Column(Numeric(12, 2), nullable=True)
+    
+    # Immutable historical signature snapshot
+    signatory_name = Column(String(150), nullable=True)
+    signatory_designation = Column(String(100), nullable=True)
+    signature_image_path = Column(String(500), nullable=True)
+
     qr_code_data = Column(Text, nullable=False)
     pdf_filename = Column(String(255), nullable=True)
     generated_at = Column(DateTime, default=datetime.utcnow, nullable=False)

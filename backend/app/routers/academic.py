@@ -9,7 +9,7 @@ from app.schemas.academic import (
     AcademicYearCreate, AcademicYearOut,
     CourseCreate, CourseOut,
     SchoolClassCreate, SchoolClassOut,
-    BatchCreate, BatchOut
+    BatchCreate, BatchUpdate, BatchOut
 )
 from app.utils.dependencies import get_current_user, require_roles
 
@@ -134,6 +134,7 @@ async def list_batches(
         .join(SchoolClass)
         .join(Course)
         .where(Course.institute_id == current_user.institute_id)
+        .order_by(Batch.created_at.desc())
     )
     res = await db.execute(stmt)
     batches = res.scalars().all()
@@ -145,6 +146,15 @@ async def list_batches(
             name=b.name,
             code=b.code,
             max_capacity=b.max_capacity,
+            subject=b.subject,
+            start_date=b.start_date,
+            end_date=b.end_date,
+            start_time=b.start_time,
+            end_time=b.end_time,
+            batch_days=b.batch_days,
+            assigned_staff_name=b.assigned_staff_name,
+            description=b.description,
+            status=b.status or "active",
             class_name=b.school_class.name if b.school_class else None,
             course_name=b.school_class.course.name if (b.school_class and b.school_class.course) else None,
             created_at=b.created_at
@@ -179,13 +189,44 @@ async def create_batch(
                 await db.flush()
             target_class_id = found_sc.id
         else:
-            raise HTTPException(status_code=404, detail="Selected Class or Course not found")
+            # Fallback to first existing class of institute
+            sc_any = await db.execute(
+                select(SchoolClass).join(Course).where(Course.institute_id == current_user.institute_id)
+            )
+            default_sc = sc_any.scalars().first()
+            if default_sc:
+                target_class_id = default_sc.id
+            else:
+                # Create a default course and class
+                c_new = Course(
+                    institute_id=current_user.institute_id,
+                    name="General Coaching",
+                    code="GEN-01",
+                    description="General Coaching Program",
+                    duration_months=12
+                )
+                db.add(c_new)
+                await db.flush()
+                sc_new = SchoolClass(course_id=c_new.id, name="Standard (Main)", code="GEN-SEC")
+                db.add(sc_new)
+                await db.flush()
+                target_class_id = sc_new.id
 
     b = Batch(
         class_id=target_class_id,
         name=payload.name,
         code=payload.code,
-        max_capacity=payload.max_capacity
+        max_capacity=payload.max_capacity,
+        subject=payload.subject,
+        start_date=payload.start_date,
+        end_date=payload.end_date,
+        start_time=payload.start_time,
+        end_time=payload.end_time,
+        batch_days=payload.batch_days,
+        assigned_staff_name=payload.assigned_staff_name,
+        description=payload.description,
+        status=payload.status or "active",
+        created_by=current_user.id
     )
     db.add(b)
     await db.commit()
@@ -196,5 +237,84 @@ async def create_batch(
         name=b.name,
         code=b.code,
         max_capacity=b.max_capacity,
+        subject=b.subject,
+        start_date=b.start_date,
+        end_date=b.end_date,
+        start_time=b.start_time,
+        end_time=b.end_time,
+        batch_days=b.batch_days,
+        assigned_staff_name=b.assigned_staff_name,
+        description=b.description,
+        status=b.status or "active",
         created_at=b.created_at
     )
+
+@router.put("/batches/{batch_id}", response_model=BatchOut)
+async def update_batch(
+    batch_id: str,
+    payload: BatchUpdate,
+    current_user: User = Depends(require_roles(["admin"])),
+    db: AsyncSession = Depends(get_db)
+):
+    stmt = select(Batch).where(Batch.id == batch_id)
+    res = await db.execute(stmt)
+    b = res.scalar_one_or_none()
+    if not b:
+        raise HTTPException(status_code=404, detail="Batch not found")
+
+    if payload.name is not None:
+        b.name = payload.name
+    if payload.code is not None:
+        b.code = payload.code
+    if payload.max_capacity is not None:
+        b.max_capacity = payload.max_capacity
+    if payload.subject is not None:
+        b.subject = payload.subject
+    if payload.start_time is not None:
+        b.start_time = payload.start_time
+    if payload.end_time is not None:
+        b.end_time = payload.end_time
+    if payload.batch_days is not None:
+        b.batch_days = payload.batch_days
+    if payload.assigned_staff_name is not None:
+        b.assigned_staff_name = payload.assigned_staff_name
+    if payload.description is not None:
+        b.description = payload.description
+    if payload.status is not None:
+        b.status = payload.status
+
+    await db.commit()
+    await db.refresh(b)
+    return BatchOut(
+        id=b.id,
+        class_id=b.class_id,
+        name=b.name,
+        code=b.code,
+        max_capacity=b.max_capacity,
+        subject=b.subject,
+        start_date=b.start_date,
+        end_date=b.end_date,
+        start_time=b.start_time,
+        end_time=b.end_time,
+        batch_days=b.batch_days,
+        assigned_staff_name=b.assigned_staff_name,
+        description=b.description,
+        status=b.status or "active",
+        created_at=b.created_at
+    )
+
+@router.delete("/batches/{batch_id}")
+async def delete_batch(
+    batch_id: str,
+    current_user: User = Depends(require_roles(["admin"])),
+    db: AsyncSession = Depends(get_db)
+):
+    stmt = select(Batch).where(Batch.id == batch_id)
+    res = await db.execute(stmt)
+    b = res.scalar_one_or_none()
+    if not b:
+        raise HTTPException(status_code=404, detail="Batch not found")
+
+    await db.delete(b)
+    await db.commit()
+    return {"message": "Batch deleted successfully", "id": batch_id}

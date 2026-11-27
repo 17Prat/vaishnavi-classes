@@ -1,6 +1,6 @@
 from decimal import Decimal
-from datetime import date
-from sqlalchemy import Column, String, Numeric, Integer, Date, ForeignKey, Text, Boolean
+from datetime import date, datetime
+from sqlalchemy import Column, String, Numeric, Integer, Date, DateTime, ForeignKey, Text, Boolean
 from sqlalchemy.orm import relationship
 from app.database import Base
 from app.models.base import UUIDPrimaryKeyMixin, TimestampMixin
@@ -22,6 +22,12 @@ class FeePlan(Base, UUIDPrimaryKeyMixin, TimestampMixin):
     custom_fee = Column(Numeric(12, 2), default=Decimal("0.00"), nullable=False)
     total_amount = Column(Numeric(12, 2), default=Decimal("0.00"), nullable=False)
     
+    # Default plan discount (optional)
+    discount_type = Column(String(20), default="none", nullable=False) # none, percentage, fixed
+    discount_value = Column(Numeric(12, 2), default=Decimal("0.00"), nullable=False)
+    discount_amount = Column(Numeric(12, 2), default=Decimal("0.00"), nullable=False)
+    discount_reason = Column(String(255), nullable=True)
+
     installment_frequency = Column(String(20), default="monthly", nullable=False) # full, monthly, quarterly, custom
     number_of_installments = Column(Integer, default=1, nullable=False)
     is_active = Column(Boolean, default=True, nullable=False)
@@ -37,10 +43,15 @@ class StudentFeeAssignment(Base, UUIDPrimaryKeyMixin, TimestampMixin):
     fee_plan_id = Column(String(36), ForeignKey("fee_plans.id", ondelete="RESTRICT"), nullable=False, index=True)
     
     base_amount = Column(Numeric(12, 2), default=Decimal("0.00"), nullable=False)
+    original_fee_amount = Column(Numeric(12, 2), default=Decimal("0.00"), nullable=False)
+    discount_type = Column(String(20), default="none", nullable=False) # none, percentage, fixed
+    discount_value = Column(Numeric(12, 2), default=Decimal("0.00"), nullable=False) # e.g. 10 (%) or 2000 (fixed)
     discount_amount = Column(Numeric(12, 2), default=Decimal("0.00"), nullable=False)
     scholarship_amount = Column(Numeric(12, 2), default=Decimal("0.00"), nullable=False)
     discount_reason = Column(String(255), nullable=True)
     scholarship_reason = Column(String(255), nullable=True)
+    discount_applied_by = Column(String(36), nullable=True)
+    discount_applied_at = Column(DateTime, nullable=True)
     
     net_payable = Column(Numeric(12, 2), default=Decimal("0.00"), nullable=False)
     total_paid = Column(Numeric(12, 2), default=Decimal("0.00"), nullable=False)

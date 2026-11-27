@@ -40,11 +40,20 @@ class FeePlanOut(BaseModel):
 class AssignFeePlanRequest(BaseModel):
     student_id: str # profile id
     fee_plan_id: str
+    original_fee_amount: Optional[float] = None
+    discount_type: Optional[str] = "none" # none, percentage, fixed
+    discount_value: Optional[float] = 0.0
     discount_amount: float = 0.0
     scholarship_amount: float = 0.0
     discount_reason: Optional[str] = None
     scholarship_reason: Optional[str] = None
     custom_first_due_date: Optional[date] = None
+
+class UpdateDiscountRequest(BaseModel):
+    discount_type: str = "none" # none, percentage, fixed
+    discount_value: float = 0.0
+    discount_reason: Optional[str] = None
+    original_fee_amount: Optional[float] = None
 
 class InstallmentOut(BaseModel):
     id: str
@@ -66,13 +75,17 @@ class FeeLedgerOut(BaseModel):
     login_id: str
     fee_plan_name: str
     base_amount: float
+    original_fee_amount: Optional[float] = None
     admission_fee: float
     tuition_fee: float
     examination_fee: float
     library_fee: float
     transport_fee: float
     custom_fee: float
+    discount_type: Optional[str] = "none"
+    discount_value: Optional[float] = 0.0
     discount_amount: float
+    discount_reason: Optional[str] = None
     scholarship_amount: float
     net_payable: float
     total_paid: float

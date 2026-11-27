@@ -10,7 +10,7 @@ from app.models.payment import Payment, PaymentAllocation, Receipt
 from app.models.fee import StudentFeeAssignment, Installment
 from app.models.user import User, StudentProfile
 from app.models.academic import Enrollment, Batch, SchoolClass, Course
-from app.models.institute import Institute
+from app.models.institute import Institute, InstituteSettings
 from app.models.audit import AuditLog
 from app.schemas.payment import (
     PaymentRecordRequest, StudentUPIPaymentRequest,
@@ -39,6 +39,10 @@ async def generate_receipt_for_payment(payment: Payment, db: AsyncSession) -> Re
     inst_res = await db.execute(inst_stmt)
     institute = inst_res.scalar_one()
 
+    # Load institute settings for signature
+    sett_res = await db.execute(select(InstituteSettings).where(InstituteSettings.institute_id == institute.id))
+    sett = sett_res.scalar_one_or_none()
+
     # Get collector name
     collected_by = "Admin / Accounts"
     if payment.collected_by_user_id:
@@ -54,10 +58,16 @@ async def generate_receipt_for_payment(payment: Payment, db: AsyncSession) -> Re
 
     enr = student.enrollments[0] if student.enrollments else None
     batch_name = enr.batch.name if enr and enr.batch else "Regular"
-    course_name = enr.batch.school_class.course.name if enr and enr.batch and enr.batch.school_class and enr.batch.school_class.course else "General"
+    course_name = enr.batch.school_class.course.name if enr and enr.batch and enr.batch.school_class and enr.batch.school_class.course else "General Coaching"
 
     fee_asgn = student.fee_assignments[0] if student.fee_assignments else None
     rem_balance = float(fee_asgn.remaining_balance) if fee_asgn else 0.0
+    orig_fee = float(fee_asgn.original_fee_amount or fee_asgn.base_amount) if fee_asgn else float(payment.amount)
+    disc_amt = float(fee_asgn.discount_amount) if fee_asgn else 0.0
+    disc_type = fee_asgn.discount_type if fee_asgn else "none"
+    disc_val = float(fee_asgn.discount_value or 0.0) if fee_asgn else 0.0
+    disc_reason = fee_asgn.discount_reason if fee_asgn else None
+    net_payable = float(fee_asgn.net_payable) if fee_asgn else float(payment.amount)
 
     pdf_filename = f"{receipt_num}.pdf"
     receipt_dict = {
@@ -67,17 +77,27 @@ async def generate_receipt_for_payment(payment: Payment, db: AsyncSession) -> Re
         "institute_code": institute.code,
         "institute_address": institute.address,
         "institute_phone": institute.phone,
-        "currency_symbol": institute.currency_symbol,
+        "currency_symbol": "₹",
         "student_name": student.user.full_name,
         "student_id": student.student_id,
         "course_name": course_name,
         "batch_name": batch_name,
+        "original_fees": orig_fee,
+        "discount_amount": disc_amt,
+        "discount_type": disc_type,
+        "discount_value": disc_val,
+        "discount_reason": disc_reason,
+        "net_payable": net_payable,
         "amount_paid": float(payment.amount),
         "balance_after": rem_balance,
         "payment_method": payment.payment_method.replace("_", " ").title(),
         "transaction_ref": payment.transaction_ref or "N/A",
-        "installment_title": "Fee Installment",
+        "installment_title": "Academic & Tuition Installment",
         "collected_by": collected_by,
+        "signatory_name": sett.signatory_name if sett else "Director / Authorized Signatory",
+        "signatory_designation": sett.signatory_designation if sett else "Authorized Signatory",
+        "signature_image_path": sett.signature_image_path if (sett and sett.signature_enabled) else None,
+        "signature_enabled": bool(sett.signature_enabled) if sett else False,
         "verification_url": f"http://localhost:3000/verify-receipt/{receipt_num}"
     }
 
@@ -86,8 +106,14 @@ async def generate_receipt_for_payment(payment: Payment, db: AsyncSession) -> Re
     receipt = Receipt(
         payment_id=payment.id,
         receipt_number=receipt_num,
+        original_amount=Decimal(str(orig_fee)),
+        discount_amount=Decimal(str(disc_amt)),
+        final_payable=Decimal(str(net_payable)),
         amount_paid=payment.amount,
         balance_after=Decimal(str(rem_balance)),
+        signatory_name=sett.signatory_name if sett else None,
+        signatory_designation=sett.signatory_designation if sett else None,
+        signature_image_path=sett.signature_image_path if (sett and sett.signature_enabled) else None,
         qr_code_data=f"http://localhost:3000/verify-receipt/{receipt_num}",
         pdf_filename=pdf_filename,
         generated_at=datetime.utcnow()

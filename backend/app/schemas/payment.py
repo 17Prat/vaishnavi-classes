@@ -82,3 +82,73 @@ class ReminderOut(BaseModel):
 
     class Config:
         from_attributes = True
+
+class UpiAccountCreate(BaseModel):
+    account_holder_name: str
+    upi_id: str
+    display_name: Optional[str] = None
+    is_default: bool = False
+    is_active: bool = True
+
+class UpiAccountUpdate(BaseModel):
+    account_holder_name: Optional[str] = None
+    upi_id: Optional[str] = None
+    display_name: Optional[str] = None
+    is_default: Optional[bool] = None
+    is_active: Optional[bool] = None
+
+class UpiAccountOut(BaseModel):
+    id: str
+    institute_id: str
+    account_holder_name: str
+    upi_id: str
+    display_name: Optional[str] = None
+    is_default: bool
+    is_active: bool
+    created_at: datetime
+
+    class Config:
+        from_attributes = True
+
+class SignatureSettingsUpdate(BaseModel):
+    signatory_name: Optional[str] = None
+    signatory_designation: Optional[str] = None
+    signature_image_path: Optional[str] = None
+    signature_data_url: Optional[str] = None
+    signature_enabled: Optional[bool] = None
+
+class SignatureSettingsOut(BaseModel):
+    signatory_name: str
+    signatory_designation: str
+    signature_image_path: Optional[str] = None
+    signature_data_url: Optional[str] = None
+    signature_enabled: bool
+    signature_version: int
+
+class InstituteSettingsUpdate(BaseModel):
+    name: Optional[str] = None
+    code: Optional[str] = None
+    email: Optional[str] = None
+    phone: Optional[str] = None
+    address: Optional[str] = None
+    currency_symbol: Optional[str] = None
+    upi_id: Optional[str] = None
+    receipt_prefix: Optional[str] = None
+    signatory_name: Optional[str] = None
+    signatory_designation: Optional[str] = None
+    signature_enabled: Optional[bool] = None
+
+class InstituteSettingsOut(BaseModel):
+    name: str
+    code: str
+    email: Optional[str] = None
+    phone: Optional[str] = None
+    address: Optional[str] = None
+    currency_symbol: str
+    upi_id: Optional[str] = None
+    receipt_prefix: str
+    signatory_name: Optional[str] = None
+    signatory_designation: Optional[str] = None
+    signature_image_path: Optional[str] = None
+    signature_data_url: Optional[str] = None
+    signature_enabled: bool

@@ -6,10 +6,11 @@ from fastapi.staticfiles import StaticFiles
 from app.config import settings
 from app.database import engine, Base, AsyncSessionLocal
 from app.services.seed_service import seed_initial_data
+from app.services.migration_service import run_safe_schema_migrations
 from app.routers import (
     auth, dashboard, academic, students, staff,
     fees, payments, receipts, reminders, chat,
-    reports, notifications, enquiries
+    reports, notifications, enquiries, settings as app_settings
 )
 
 @asynccontextmanager
@@ -18,8 +19,9 @@ async def lifespan(app: FastAPI):
     async with engine.begin() as conn:
         await conn.run_sync(Base.metadata.create_all)
     
-    # Run production seed data
+    # Run safe schema migrations & seed data
     async with AsyncSessionLocal() as session:
+        await run_safe_schema_migrations(session)
         await seed_initial_data(session)
 
     yield
@@ -60,6 +62,7 @@ app.include_router(chat.router, prefix=settings.API_V1_STR)
 app.include_router(reports.router, prefix=settings.API_V1_STR)
 app.include_router(notifications.router, prefix=settings.API_V1_STR)
 app.include_router(enquiries.router, prefix=settings.API_V1_STR)
+app.include_router(app_settings.router, prefix=settings.API_V1_STR)
 
 @app.get("/")
 async def root():

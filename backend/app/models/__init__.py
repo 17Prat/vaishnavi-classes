@@ -1,6 +1,6 @@
 # Export all models for Alembic and SQLAlchemy metadata
 from app.models.base import Base, UUIDPrimaryKeyMixin, TimestampMixin, generate_uuid
-from app.models.institute import Institute, InstituteSettings
+from app.models.institute import Institute, InstituteSettings, UpiAccount
 from app.models.user import User, StaffProfile, StaffPermission, StudentProfile, SessionLog
 from app.models.academic import AcademicYear, Course, SchoolClass, Batch, Enrollment, StaffBatchAssignment
 from app.models.fee import FeePlan, StudentFeeAssignment, Installment
@@ -16,6 +16,7 @@ __all__ = [
     "generate_uuid",
     "Institute",
     "InstituteSettings",
+    "UpiAccount",
     "User",
     "StaffProfile",
     "StaffPermission",

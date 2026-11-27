@@ -13,6 +13,11 @@ import { QrCode, Send, CheckCircle2, ShieldAlert } from "lucide-react";
 
 export default function StudentPaymentsPage() {
   const [payments, setPayments] = useState<Payment[]>([]);
+  const [activeUpi, setActiveUpi] = useState<any>({
+    upi_id: "vaishnaviclasses@upi",
+    account_holder_name: "Vaishnavi Classes",
+    display_name: "Vaishnavi Classes Official"
+  });
   const [amount, setAmount] = useState("");
   const [ref, setRef] = useState("");
   const [notes, setNotes] = useState("");
@@ -20,17 +25,24 @@ export default function StudentPaymentsPage() {
   const [success, setSuccess] = useState(false);
   const [error, setError] = useState("");
 
-  const loadPayments = async () => {
+  const loadData = async () => {
     try {
-      const data = await apiFetch("/payments");
-      setPayments(data);
+      const [payList, upiList] = await Promise.all([
+        apiFetch("/payments"),
+        apiFetch("/settings/upi-accounts").catch(() => []),
+      ]);
+      setPayments(payList || []);
+      if (upiList && upiList.length > 0) {
+        const def = upiList.find((u: any) => u.is_default) || upiList[0];
+        setActiveUpi(def);
+      }
     } catch {
       // Ignore
     }
   };
 
   useEffect(() => {
-    loadPayments();
+    loadData();
   }, []);
 
   const handleSubmitUpi = async (e: React.FormEvent) => {
@@ -51,7 +63,7 @@ export default function StudentPaymentsPage() {
       setAmount("");
       setRef("");
       setNotes("");
-      loadPayments();
+      loadData();
       setTimeout(() => setSuccess(false), 5000);
     } catch (err: any) {
       setError(err.message || "Failed to submit UPI payment");
@@ -80,20 +92,27 @@ export default function StudentPaymentsPage() {
             </CardHeader>
             <CardContent className="p-5 space-y-4 text-xs">
               <div className="p-3 bg-white rounded-xl border border-indigo-200">
-                <span className="text-slate-500 block">Official Institute UPI ID:</span>
-                <span className="font-mono font-bold text-indigo-700 text-sm select-all">
-                  vaishnaviclasses@upi
+                <span className="text-slate-500 block text-[11px] font-semibold">Official Institute UPI ID (VPA):</span>
+                <span className="font-mono font-extrabold text-indigo-700 text-sm select-all block mt-0.5">
+                  {activeUpi.upi_id}
+                </span>
+                <span className="text-[10px] text-slate-500 mt-0.5 block">
+                  Name: {activeUpi.account_holder_name}
                 </span>
               </div>
 
               <div className="space-y-2 text-slate-600">
-                <p className="font-semibold text-slate-800">Payment Instructions:</p>
+                <p className="font-bold text-slate-800">Payment Instructions:</p>
                 <ol className="list-decimal pl-4 space-y-1">
-                  <li>Open Google Pay, PhonePe, Paytm, or your banking app.</li>
-                  <li>Transfer the exact installment amount to <b>apexinstitute@upi</b>.</li>
+                  <li>Open Google Pay, PhonePe, Paytm, or BHIM UPI app.</li>
+                  <li>Transfer installment amount to <b className="text-indigo-900">{activeUpi.upi_id}</b>.</li>
                   <li>Copy the 12-digit UPI Reference Number / UTR.</li>
-                  <li>Submit the form with your UTR. Accounts staff will verify and release your official receipt within 24 hours.</li>
+                  <li>Submit the form with your UTR. Accounts staff will verify and release your official receipt with authorized e-signature.</li>
                 </ol>
+              </div>
+
+              <div className="pt-1 border-t border-indigo-100 text-[11px] text-slate-500">
+                <span>WhatsApp Helpline: <b>+91 96642 57346</b></span>
               </div>
             </CardContent>
           </Card>
